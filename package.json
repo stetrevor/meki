@@ -23,7 +23,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "storybook": "start-storybook -p 9081 -c .storybook"
   },
   "dependencies": {
     "vue": "^2.3.3",
@@ -32,6 +33,15 @@
     "vuex": "^2.3.1"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-backgrounds": "^3.4.10",
+    "@storybook/addon-knobs": "^3.4.10",
+    "@storybook/addon-links": "^3.4.10",
+    "@storybook/addon-notes": "^3.4.10",
+    "@storybook/addon-options": "^3.4.10",
+    "@storybook/addon-storysource": "^3.4.10",
+    "@storybook/addon-viewport": "^3.4.10",
+    "@storybook/vue": "^3.4.10",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.1",
