@@ -6,7 +6,11 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import path from 'path'
 
+import VueMDCAdapter from 'vue-mdc-adapter'
+import '../src/renderer/theme.scss'
+
 Vue.use(Vuex)
+Vue.use(VueMDCAdapter)
 
 const requireComponent = require.context(
   '../src/renderer/components',

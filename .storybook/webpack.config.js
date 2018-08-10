@@ -20,6 +20,20 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
     },
   })
 
+  defaultConfig.module.rules.push({
+    test: /\.scss$/,
+    use: [
+      "vue-style-loader",
+      "css-loader",
+      {
+        loader: "sass-loader",
+        options: {
+          includePaths: [path.resolve(__dirname, '../node_modules')],
+        }
+      }
+    ]
+  })
+
   defaultConfig.resolve = {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
