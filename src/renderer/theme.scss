@@ -3,7 +3,63 @@ $mdc-theme-accent: #F9AA33; // Reply Orange
 $mdc-theme-background: #FAFAFA;
 $mdc-theme-surface: #FAFAFA;
 
-@import url('https://fonts.googleapis.com/css?family=Rubik');
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,500');
 $mdc-typography-font-family: Rubik, sans-serif;
+
+$mdc-typography-styles-headline1: (
+  font-size: 97.54px,
+  letter-spacing: -1.5px,
+);
+$mdc-typography-styles-headline2: (
+  font-size: 60.96px,
+  letter-spacing: -0.5px,
+);
+$mdc-typography-styles-headline3: (
+  font-size: 48.77px,
+  letter-spacing: 0px,
+);
+$mdc-typography-styles-headline4: (
+  font-size: 34.54px,
+  letter-spacing: -0.25px,
+);
+$mdc-typography-styles-headline5: (
+  font-size: 24.38px,
+  letter-spacing: 0px,
+);
+$mdc-typography-styles-headline6: (
+  font-weight: 500,
+  font-size: 20.32px,
+  letter-spacing: 0.25px,
+);
+$mdc-typography-styles-body1: (
+  font-size: 16.26px,
+  letter-spacing: 0.5px,
+);
+$mdc-typography-styles-body2: (
+  font-size: 14.22px,
+  letter-spacing: 0.25px,
+);
+$mdc-typography-styles-subtitle1: (
+  font-size: 16.26px,
+  letter-spacing: 0.15px,
+);
+$mdc-typography-styles-subtitle2: (
+  font-weight: 500,
+  font-size: 14.22px,
+  letter-spacing: 0.1px,
+);
+$mdc-typography-styles-button: (
+  font-weight: 500,
+  font-size: 14.22px,
+  letter-spacing: 1.25px,
+);
+$mdc-typography-styles-caption: (
+  font-size: 12.19px,
+  letter-spacing: 0.4px,
+);
+$mdc-typography-styles-overline: (
+  font-size: 12.19px,
+  letter-spacing: 2px,
+);
 
 @import "vue-mdc-adapter/dist/styles";
