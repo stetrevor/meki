@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = (storybookBaseConfig, configType, defaultConfig) => {
   defaultConfig.module.rules.push({
@@ -41,6 +42,8 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
     },
     extensions: ['.js', '.vue', '.json', '.css', '.node'],
   }
+
+  defaultConfig.plugins.push(new VueLoaderPlugin())
 
   return defaultConfig
 }
