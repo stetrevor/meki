@@ -3,4 +3,7 @@ $mdc-theme-accent: #F9AA33; // Reply Orange
 $mdc-theme-background: #FAFAFA;
 $mdc-theme-surface: #FAFAFA;
 
+@import url('https://fonts.googleapis.com/css?family=Rubik');
+$mdc-typography-font-family: Rubik, sans-serif;
+
 @import "vue-mdc-adapter/dist/styles";
