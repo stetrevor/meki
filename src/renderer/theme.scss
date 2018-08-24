@@ -1,65 +1,154 @@
-$mdc-theme-primary: #344955; // Reply Blue
-$mdc-theme-accent: #F9AA33; // Reply Orange
-$mdc-theme-background: #FAFAFA;
-$mdc-theme-surface: #FAFAFA;
+// Colors
+$theme-color-primary: #263238;
+$theme-color-secondary: #FF9800;
+$theme-color-primary-lighter: #37474F;
+$theme-color-background: #FFFFFF;
 
+@mixin color-primary() {
+  color: $theme-color-primary;
+}
+@mixin color-primary-lighter() {
+  color: $theme-color-primary-lighter;
+}
+@mixin color-secondary() {
+  color: $theme-color-secondary;
+}
+@mixin color-background() {
+  color: $theme-color-background;
+}
+
+@mixin bg-color-primary() {
+  background-color: $theme-color-primary;
+}
+@mixin bg-color-primary-lighter() {
+  background-color: $theme-color-primary-lighter;
+}
+@mixin bg-color-secondary() {
+  background-color: $theme-color-secondary;
+}
+@mixin bg-color-background() {
+  background-color: $theme-color-background;
+}
+
+.color--primary {
+  @include color-primary();
+}
+.color--primary-lighter {
+  @include color-primary-lighter();
+}
+.color--secondary {
+  @include color-secondary();
+}
+.color--background {
+  @include color-background();
+}
+
+.bg-color--primary {
+  @include bg-color-primary();
+}
+.bg-color--primary-lighter {
+  @include bg-color-primary-lighter();
+}
+.bg-color--secondary {
+  @include bg-color-secondary();
+}
+.bg-color--background {
+  @include bg-color-background();
+}
+
+// Typograhpy
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500');
-$mdc-typography-font-family: Rubik, sans-serif;
+$theme-typography-font-family: Rubik, sans-serif;
 
-$mdc-typography-styles-headline1: (
-  font-size: 97.54px,
-  letter-spacing: -1.5px,
-);
-$mdc-typography-styles-headline2: (
-  font-size: 60.96px,
-  letter-spacing: -0.5px,
-);
-$mdc-typography-styles-headline3: (
-  font-size: 48.77px,
-  letter-spacing: 0px,
-);
-$mdc-typography-styles-headline4: (
-  font-size: 34.54px,
-  letter-spacing: -0.25px,
-);
-$mdc-typography-styles-headline5: (
-  font-size: 24.38px,
-  letter-spacing: 0px,
-);
-$mdc-typography-styles-headline6: (
-  font-weight: 500,
-  font-size: 20.32px,
-  letter-spacing: 0.25px,
-);
-$mdc-typography-styles-body1: (
-  font-size: 16.26px,
-  letter-spacing: 0.5px,
-);
-$mdc-typography-styles-body2: (
-  font-size: 14.22px,
-  letter-spacing: 0.25px,
-);
-$mdc-typography-styles-subtitle1: (
-  font-size: 16.26px,
-  letter-spacing: 0.15px,
-);
-$mdc-typography-styles-subtitle2: (
-  font-weight: 500,
-  font-size: 14.22px,
-  letter-spacing: 0.1px,
-);
-$mdc-typography-styles-button: (
-  font-weight: 500,
-  font-size: 14.22px,
-  letter-spacing: 1.25px,
-);
-$mdc-typography-styles-caption: (
-  font-size: 12.19px,
-  letter-spacing: 0.4px,
-);
-$mdc-typography-styles-overline: (
-  font-size: 12.19px,
-  letter-spacing: 2px,
-);
+@mixin theme-typography-styles-headline1() {
+  font-size: 72px;
+  font-weight: 500;
+  letter-spacing: 9px;
+}
 
-@import "vue-mdc-adapter/dist/styles";
+@mixin theme-typography-styles-headline2() {
+  font-size: 48px;
+  letter-spacing: -0.5px;
+}
+
+@mixin theme-typography-styles-headline3() {
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+
+@mixin theme-typography-styles-headline4() {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+}
+
+@mixin theme-typography-styles-headline5() {
+  font-size: 18px;
+  letter-spacing: 0px;
+}
+
+// @mixin theme-typography-styles-headline6() {
+// }
+
+@mixin theme-typography-styles-body1() {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+@mixin theme-typography-styles-body2() {
+  font-size: 14px;
+  letter-spacing: 0.25px;
+}
+// @mixin theme-typography-styles-subtitle1() {
+// }
+// @mixin theme-typography-styles-subtitle2() {
+// }
+// @mixin theme-typography-styles-button() {
+// }
+// @mixin theme-typography-styles-caption() {
+// }
+@mixin theme-typography-styles-overline() {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.typography-headline1 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-headline1();
+}
+
+.typography-headline2 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-headline2();
+}
+
+.typography-headline3 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-headline3();
+}
+
+.typography-headline4 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-headline4();
+}
+
+.typography-headline5 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-headline5();
+}
+
+.typography-body1 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-body1();
+}
+
+.typography-body2 {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-body2();
+}
+
+.typography-overline {
+  font-family: $theme-typography-font-family;
+  @include theme-typography-styles-overline();
+}
