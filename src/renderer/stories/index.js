@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/vue'
 
-const homePage = storiesOf('Meki', module)
+const homePage = storiesOf('Paw', module)
 
-homePage.add('App Name', () => ({ template: '<h1>Meki: Media Manager</h1>' }))
+homePage.add('App Name', () => ({ template: '<h1>Paw: Media Manager</h1>' }))
