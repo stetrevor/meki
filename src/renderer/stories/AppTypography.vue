@@ -1,18 +1,13 @@
 <template>
   <div :class="['app-typography', ...colorClasses]">
-    <mdc-text typo="headline1">Headline 1</mdc-text>
-    <mdc-text typo="headline2">Headline 2</mdc-text>
-    <mdc-text typo="headline3">Headline 3</mdc-text>
-    <mdc-text typo="headline4">Headline 4</mdc-text>
-    <mdc-text typo="headline5">Headline 5</mdc-text>
-    <mdc-text typo="headline6">Headline 6</mdc-text>
-    <mdc-text typo="subtitle1">Subtitle 1</mdc-text>
-    <mdc-text typo="subtitle2">Subtitle 2</mdc-text>
-    <mdc-text typo="body1">Body 1</mdc-text>
-    <mdc-text typo="body2">Body 2</mdc-text>
-    <mdc-text typo="caption">Caption</mdc-text>
-    <mdc-text typo="button">Button</mdc-text>
-    <mdc-text typo="overline">Overline</mdc-text>
+    <p class="typography-headline1">Headline 1</p>
+    <p class="typography-headline2">Headline 2</p>
+    <p class="typography-headline3">Headline 3</p>
+    <p class="typography-headline4">Headline 4</p>
+    <p class="typography-headline5">Headline 5</p>
+    <p class="typography-body1">Body 1</p>
+    <p class="typography-body2">Body 2</p>
+    <p class="typography-overline">Overline</p>
   </div>
 </template>
 
@@ -23,14 +18,15 @@ export default {
   props: {
     colors: {
       type: String,
-      default: 'background background',
+      default: 'primary background',
     },
   },
 
   computed: {
     colorClasses() {
-      const [bg, fg] = this.colors.split(' ')
-      return [`mdc-theme--${bg}`, `mdc-theme--on-${fg}`]
+      const [fg, bg] = this.colors.split(' ')
+      console.log(fg, bg)
+      return [`color--${fg}`, `bg-color--${bg}`]
     },
   },
 }
@@ -38,7 +34,9 @@ export default {
 
 <style lang="scss">
 .app-typography {
+  margin: 20px;
   border-radius: 4px;
   padding: 40px;
+  box-shadow: 0 0 4px;
 }
 </style>
