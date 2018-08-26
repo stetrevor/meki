@@ -3,62 +3,88 @@ $theme-color-primary: #263238;
 $theme-color-secondary: #FF9800;
 $theme-color-primary-lighter: #37474F;
 $theme-color-background: #FFFFFF;
+$theme-color-text-primary: $theme-color-primary;
+$theme-color-text-primary-lighter: $theme-color-primary-lighter;
+$theme-color-text-secondary: $theme-color-secondary;
+$theme-color-text-on-primary: #FFFFFF;
+$theme-color-text-on-primary-lighter: #FFFFFF;
+$theme-color-text-on-secondary: $theme-color-primary;
+$theme-color-text-on-background: $theme-color-primary;
 
-@mixin color-primary() {
-  color: $theme-color-primary;
+@mixin theme-text-color-primary() {
+  color: $theme-color-text-primary;
 }
-@mixin color-primary-lighter() {
-  color: $theme-color-primary-lighter;
+@mixin theme-text-color-primary-lighter() {
+  color: $theme-color-text-primary-lighter;
 }
-@mixin color-secondary() {
-  color: $theme-color-secondary;
+@mixin theme-text-color-secondary() {
+  color: $theme-color-text-secondary;
 }
-@mixin color-background() {
-  color: $theme-color-background;
+@mixin theme-text-color-on-primary() {
+  color: $theme-color-text-on-primary;
+}
+@mixin theme-text-color-on-primary-lighter() {
+  color: $theme-color-text-on-primary-lighter;
+}
+@mixin theme-text-color-on-secondary() {
+  color: $theme-color-text-on-secondary;
+}
+@mixin theme-text-color-on-background() {
+  color: $theme-color-text-on-background;
 }
 
-@mixin bg-color-primary() {
+@mixin theme-bg-color-primary() {
   background-color: $theme-color-primary;
 }
-@mixin bg-color-primary-lighter() {
+@mixin theme-bg-color-primary-lighter() {
   background-color: $theme-color-primary-lighter;
 }
-@mixin bg-color-secondary() {
+@mixin theme-bg-color-secondary() {
   background-color: $theme-color-secondary;
 }
-@mixin bg-color-background() {
+@mixin theme-bg-color-background() {
   background-color: $theme-color-background;
 }
 
-.color--primary {
-  @include color-primary();
+.text-color-primary {
+  @include theme-text-color-primary();
 }
-.color--primary-lighter {
-  @include color-primary-lighter();
+.text-color-primary-lighter {
+  @include theme-text-color-primary-lighter();
 }
-.color--secondary {
-  @include color-secondary();
+.text-color-secondary {
+  @include theme-text-color-secondary();
 }
-.color--background {
-  @include color-background();
+.text-color-on-primary {
+  @include theme-text-color-on-primary();
+}
+.text-color-on-primary-lighter {
+  @include theme-text-color-on-primary-lighter();
+}
+.text-color-on-secondary {
+  @include theme-text-color-on-secondary();
+}
+.text-color-on-background {
+  @include theme-text-color-on-background();
 }
 
-.bg-color--primary {
-  @include bg-color-primary();
+
+.bg-color-primary {
+  @include theme-bg-color-primary();
 }
-.bg-color--primary-lighter {
-  @include bg-color-primary-lighter();
+.bg-color-primary-lighter {
+  @include theme-bg-color-primary-lighter();
 }
-.bg-color--secondary {
-  @include bg-color-secondary();
+.bg-color-secondary {
+  @include theme-bg-color-secondary();
 }
-.bg-color--background {
-  @include bg-color-background();
+.bg-color-background {
+  @include theme-bg-color-background();
 }
 
 // Typograhpy
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500');
-$theme-typography-font-family: Rubik, sans-serif;
+$typography-font-family: Rubik, sans-serif;
 
 @mixin theme-typography-styles-headline1() {
   font-size: 72px;
@@ -114,41 +140,41 @@ $theme-typography-font-family: Rubik, sans-serif;
 }
 
 .typography-headline1 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-headline1();
 }
 
 .typography-headline2 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-headline2();
 }
 
 .typography-headline3 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-headline3();
 }
 
 .typography-headline4 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-headline4();
 }
 
 .typography-headline5 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-headline5();
 }
 
 .typography-body1 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-body1();
 }
 
 .typography-body2 {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-body2();
 }
 
 .typography-overline {
-  font-family: $theme-typography-font-family;
+  font-family: $typography-font-family;
   @include theme-typography-styles-overline();
 }
