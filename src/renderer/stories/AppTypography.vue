@@ -26,7 +26,7 @@ export default {
     colorClasses() {
       const [fg, bg] = this.colors.split(' ')
       console.log(fg, bg)
-      return [`color--${fg}`, `bg-color--${bg}`]
+      return [`text-color-${fg}`, `bg-color-${bg}`]
     },
   },
 }

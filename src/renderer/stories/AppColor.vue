@@ -1,9 +1,9 @@
 <template>
   <div class="app-color">
-    <div class="app-color__color app-color__color--primary">Primary</div>
-    <div class="app-color__color app-color__color--primary-lighter">Primary Lighter</div>
-    <div class="app-color__color app-color__color--secondary">Secondary</div>
-    <div class="app-color__color app-color__color--background">Background</div>
+    <div class="app-color__color app-color__color--primary">Text on Primary</div>
+    <div class="app-color__color app-color__color--primary-lighter">Text on Primary Lighter</div>
+    <div class="app-color__color app-color__color--secondary">Text on Secondary</div>
+    <div class="app-color__color app-color__color--background">Text on Background</div>
   </div>
 </template>
 
@@ -41,19 +41,19 @@ body {
   justify-content: center;
 }
 .app-color__color--primary {
-  background-color: $theme-color-primary;
-  color: $theme-color-background;
+  @include theme-text-color-on-primary;
+  @include theme-bg-color-primary;
 }
 .app-color__color--primary-lighter {
-  background-color: $theme-color-primary-lighter;
-  color: $theme-color-background;
+  @include theme-text-color-on-primary-lighter;
+  @include theme-bg-color-primary-lighter;
 }
 .app-color__color--secondary {
-  background-color: $theme-color-secondary;
-  color: $theme-color-background;
+  @include theme-text-color-on-secondary;
+  @include theme-bg-color-secondary;
 }
 .app-color__color--background {
-  background-color: $theme-color-background;
-  color: $theme-color-primary;
+  @include theme-text-color-on-background;
+  @include theme-bg-color-background;
 }
 </style>
