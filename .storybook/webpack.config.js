@@ -43,17 +43,20 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
 
   defaultConfig.module.rules.push({
     test: /\.svg$/,
-    use: {
-      loader: "vue-svg-loader",
-      options: {
-        svgo: {
-          plugins: [
-            { removeViewBox: false }
-          ]
-        }
-      }
-    },
+    loader: ["svg-sprite-loader", "svgo-loader"],
   })
+
+  // defaultConfig.module.rules.push({
+  //   test: /\.svg$/,
+  //   loader: "vue-svg-loader",
+  //   options: {
+  //     svgo: {
+  //       plugins: [
+  //         { removeViewBox: false }
+  //       ]
+  //     }
+  //   },
+  // })
 
   defaultConfig.resolve = {
     alias: {
