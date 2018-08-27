@@ -7,10 +7,10 @@ homePage.addDecorator(centered)
 
 homePage.add('App Name', () => ({ template: '<h1>Paw: Media Manager</h1>' }))
 homePage.add('App Logo', () => {
-  const Logo = require('../assets/logo.svg')
+  require('../assets/logo.svg')
 
   return {
-    template: '<logo width="256" height="256" />',
-    components: { Logo },
+    template:
+      '<svg width="256" height="256" class="theme-text-color-secondary"><use xlink:href="#logo"></use></svg>',
   }
 })
