@@ -38,6 +38,7 @@
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.10",
     "@storybook/addon-backgrounds": "^3.4.10",
+    "@storybook/addon-centered": "^3.4.10",
     "@storybook/addon-knobs": "^3.4.10",
     "@storybook/addon-links": "^3.4.10",
     "@storybook/addon-notes": "^3.4.10",
@@ -91,6 +92,9 @@
     "require-dir": "^0.3.0",
     "spectron": "^3.7.1",
     "style-loader": "^0.18.2",
+    "svg-sprite-loader": "^3.9.2",
+    "svgo": "^1.0.5",
+    "svgo-loader": "^2.1.0",
     "url-loader": "^0.5.9",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^15.3.0",

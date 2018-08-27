@@ -11,26 +11,38 @@ $theme-color-text-on-primary-lighter: #FFFFFF;
 $theme-color-text-on-secondary: $theme-color-primary;
 $theme-color-text-on-background: $theme-color-primary;
 
+
+@mixin theme-fill-current-color() {
+  fill: currentColor;
+}
+
 @mixin theme-text-color-primary() {
   color: $theme-color-text-primary;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-primary-lighter() {
   color: $theme-color-text-primary-lighter;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-secondary() {
   color: $theme-color-text-secondary;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-on-primary() {
   color: $theme-color-text-on-primary;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-on-primary-lighter() {
   color: $theme-color-text-on-primary-lighter;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-on-secondary() {
   color: $theme-color-text-on-secondary;
+  @include theme-fill-current-color();
 }
 @mixin theme-text-color-on-background() {
   color: $theme-color-text-on-background;
+  @include theme-fill-current-color();
 }
 
 @mixin theme-bg-color-primary() {
@@ -46,39 +58,39 @@ $theme-color-text-on-background: $theme-color-primary;
   background-color: $theme-color-background;
 }
 
-.text-color-primary {
+.theme-text-color-primary {
   @include theme-text-color-primary();
 }
-.text-color-primary-lighter {
+.theme-text-color-primary-lighter {
   @include theme-text-color-primary-lighter();
 }
-.text-color-secondary {
+.theme-text-color-secondary {
   @include theme-text-color-secondary();
 }
-.text-color-on-primary {
+.theme-text-color-on-primary {
   @include theme-text-color-on-primary();
 }
-.text-color-on-primary-lighter {
+.theme-text-color-on-primary-lighter {
   @include theme-text-color-on-primary-lighter();
 }
-.text-color-on-secondary {
+.theme-text-color-on-secondary {
   @include theme-text-color-on-secondary();
 }
-.text-color-on-background {
+.theme-text-color-on-background {
   @include theme-text-color-on-background();
 }
 
 
-.bg-color-primary {
+.theme-bg-color-primary {
   @include theme-bg-color-primary();
 }
-.bg-color-primary-lighter {
+.theme-bg-color-primary-lighter {
   @include theme-bg-color-primary-lighter();
 }
-.bg-color-secondary {
+.theme-bg-color-secondary {
   @include theme-bg-color-secondary();
 }
-.bg-color-background {
+.theme-bg-color-background {
   @include theme-bg-color-background();
 }
 
@@ -139,42 +151,42 @@ $typography-font-family: Rubik, sans-serif;
   letter-spacing: 2px;
 }
 
-.typography-headline1 {
+.theme-typography-headline1 {
   font-family: $typography-font-family;
   @include theme-typography-styles-headline1();
 }
 
-.typography-headline2 {
+.theme-typography-headline2 {
   font-family: $typography-font-family;
   @include theme-typography-styles-headline2();
 }
 
-.typography-headline3 {
+.theme-typography-headline3 {
   font-family: $typography-font-family;
   @include theme-typography-styles-headline3();
 }
 
-.typography-headline4 {
+.theme-typography-headline4 {
   font-family: $typography-font-family;
   @include theme-typography-styles-headline4();
 }
 
-.typography-headline5 {
+.theme-typography-headline5 {
   font-family: $typography-font-family;
   @include theme-typography-styles-headline5();
 }
 
-.typography-body1 {
+.theme-typography-body1 {
   font-family: $typography-font-family;
   @include theme-typography-styles-body1();
 }
 
-.typography-body2 {
+.theme-typography-body2 {
   font-family: $typography-font-family;
   @include theme-typography-styles-body2();
 }
 
-.typography-overline {
+.theme-typography-overline {
   font-family: $typography-font-family;
   @include theme-typography-styles-overline();
 }

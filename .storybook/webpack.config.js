@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = (storybookBaseConfig, configType, defaultConfig) => {
@@ -34,6 +33,30 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
       }
     ]
   })
+
+  const svgRuleIndex = defaultConfig.module.rules.findIndex(rule => rule.test.test('.svg'))
+  defaultConfig.module.rules.splice(svgRuleIndex, 1, {
+    test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
+    loader: 'file-loader',
+    query: { name: 'static/media/[name].[hash:8].[ext]'
+  }})
+
+  defaultConfig.module.rules.push({
+    test: /\.svg$/,
+    loader: ["svg-sprite-loader", "svgo-loader"],
+  })
+
+  // defaultConfig.module.rules.push({
+  //   test: /\.svg$/,
+  //   loader: "vue-svg-loader",
+  //   options: {
+  //     svgo: {
+  //       plugins: [
+  //         { removeViewBox: false }
+  //       ]
+  //     }
+  //   },
+  // })
 
   defaultConfig.resolve = {
     alias: {
