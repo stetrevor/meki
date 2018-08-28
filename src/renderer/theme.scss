@@ -11,7 +11,6 @@ $theme-color-text-on-primary-lighter: #FFFFFF;
 $theme-color-text-on-secondary: $theme-color-primary;
 $theme-color-text-on-background: $theme-color-primary;
 
-
 @mixin theme-fill-current-color() {
   fill: currentColor;
 }
@@ -79,7 +78,6 @@ $theme-color-text-on-background: $theme-color-primary;
 .theme-text-color-on-background {
   @include theme-text-color-on-background();
 }
-
 
 .theme-bg-color-primary {
   @include theme-bg-color-primary();

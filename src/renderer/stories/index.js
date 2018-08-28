@@ -6,6 +6,7 @@ const homePage = storiesOf('Paw', module)
 homePage.addDecorator(centered)
 
 homePage.add('App Name', () => ({ template: '<h1>Paw: Media Manager</h1>' }))
+
 homePage.add('App Logo', () => {
   require('../assets/logo.svg')
 
