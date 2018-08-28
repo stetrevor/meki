@@ -46,18 +46,6 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
     loader: ["svg-sprite-loader", "svgo-loader"],
   })
 
-  // defaultConfig.module.rules.push({
-  //   test: /\.svg$/,
-  //   loader: "vue-svg-loader",
-  //   options: {
-  //     svgo: {
-  //       plugins: [
-  //         { removeViewBox: false }
-  //       ]
-  //     }
-  //   },
-  // })
-
   defaultConfig.resolve = {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
