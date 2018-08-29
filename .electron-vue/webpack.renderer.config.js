@@ -92,7 +92,7 @@ let rendererConfig = {
         }
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(png|jpe?g|gif)(\?.*)?$/,
         use: {
           loader: "url-loader",
           query: {
@@ -100,6 +100,21 @@ let rendererConfig = {
             name: "imgs/[name]--[folder].[ext]"
           }
         }
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          { loader: "svg-sprite-loader"},
+          { 
+            loader: "svgo-loader",
+            options: {
+              plugins: [
+                { removeUselessStrokeAndFill: true },
+                { removeAttrs: { attrs: '(fill|stroke|opacity)' } }
+              ]
+            }
+          }
+        ],
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
