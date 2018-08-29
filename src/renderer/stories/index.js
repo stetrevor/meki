@@ -16,7 +16,7 @@ homePage.add('App Logo', () => {
   }
 })
 
-homePage.add('Initial Screen', () => {
+homePage.add('Splash Screen', () => {
   require('../assets/logo.svg')
 
   return {
