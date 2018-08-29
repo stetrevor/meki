@@ -18,6 +18,7 @@
     "e2e": "npm run pack && mocha test/e2e",
     "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src test",
     "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test",
+    "lint:fixall": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src test .electron-vue .storybook vue.config.js",
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
