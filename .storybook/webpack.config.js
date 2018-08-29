@@ -23,37 +23,41 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
   defaultConfig.module.rules.push({
     test: /\.scss$/,
     use: [
-      "vue-style-loader",
-      "css-loader",
+      'vue-style-loader',
+      'css-loader',
       {
-        loader: "sass-loader",
+        loader: 'sass-loader',
         options: {
           includePaths: [path.resolve(__dirname, '../node_modules')],
-        }
-      }
-    ]
+        },
+      },
+    ],
   })
 
-  const svgRuleIndex = defaultConfig.module.rules.findIndex(rule => rule.test.test('.svg'))
+  const svgRuleIndex = defaultConfig.module.rules.findIndex(rule =>
+    rule.test.test('.svg'),
+  )
   defaultConfig.module.rules.splice(svgRuleIndex, 1, {
     test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|ttf|woff|woff2)(\?.*)?$/,
     loader: 'file-loader',
-    query: { name: 'static/media/[name].[hash:8].[ext]'
-  }})
+    query: {
+      name: 'static/media/[name].[hash:8].[ext]',
+    },
+  })
 
   defaultConfig.module.rules.push({
     test: /\.svg$/,
     use: [
-      { loader: "svg-sprite-loader"},
-      { 
-        loader: "svgo-loader",
+      { loader: 'svg-sprite-loader' },
+      {
+        loader: 'svgo-loader',
         options: {
           plugins: [
             { removeUselessStrokeAndFill: true },
-            { removeAttrs: { attrs: '(fill|stroke|opacity)' } }
-          ]
-        }
-      }
+            { removeAttrs: { attrs: '(fill|stroke|opacity)' } },
+          ],
+        },
+      },
     ],
   })
 
