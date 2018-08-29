@@ -1,13 +1,13 @@
 <template>
   <div :class="['app-typography', ...colorClasses]">
-    <p class="typography-headline1">Headline 1</p>
-    <p class="typography-headline2">Headline 2</p>
-    <p class="typography-headline3">Headline 3</p>
-    <p class="typography-headline4">Headline 4</p>
-    <p class="typography-headline5">Headline 5</p>
-    <p class="typography-body1">Body 1</p>
-    <p class="typography-body2">Body 2</p>
-    <p class="typography-overline">Overline</p>
+    <p class="theme-typography-headline1">Headline 1</p>
+    <p class="theme-typography-headline2">Headline 2</p>
+    <p class="theme-typography-headline3">Headline 3</p>
+    <p class="theme-typography-headline4">Headline 4</p>
+    <p class="theme-typography-headline5">Headline 5</p>
+    <p class="theme-typography-body1">Body 1</p>
+    <p class="theme-typography-body2">Body 2</p>
+    <p class="theme-typography-overline">Overline</p>
   </div>
 </template>
 
