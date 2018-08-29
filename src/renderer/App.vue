@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'Meki',
+  name: 'Paw',
 }
 </script>
 
-<style>
+<style lang="scss">
 /* CSS */
 </style>

@@ -3,12 +3,14 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+import SplashScreen from '@/components/SplashScreen'
+
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default,
+      name: 'splash-screen',
+      component: SplashScreen,
     },
     {
       path: '*',

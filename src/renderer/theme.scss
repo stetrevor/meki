@@ -11,7 +11,6 @@ $theme-color-text-on-primary-lighter: #FFFFFF;
 $theme-color-text-on-secondary: $theme-color-primary;
 $theme-color-text-on-background: $theme-color-primary;
 
-
 @mixin theme-fill-current-color() {
   fill: currentColor;
 }
@@ -80,7 +79,6 @@ $theme-color-text-on-background: $theme-color-primary;
   @include theme-text-color-on-background();
 }
 
-
 .theme-bg-color-primary {
   @include theme-bg-color-primary();
 }
@@ -97,6 +95,11 @@ $theme-color-text-on-background: $theme-color-primary;
 // Typograhpy
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500');
 $typography-font-family: Rubik, sans-serif;
+
+* {
+  margin: 0;
+  padding: 0;
+}
 
 @mixin theme-typography-styles-headline1() {
   font-size: 72px;
