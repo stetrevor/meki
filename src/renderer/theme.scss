@@ -193,3 +193,6 @@ $typography-font-family: Rubik, sans-serif;
   font-family: $typography-font-family;
   @include theme-typography-styles-overline();
 }
+
+// Motions
+@import '@material/animation/variables';
