@@ -41,3 +41,22 @@ base.add('Icon Button', () => {
     </div>`,
   }
 })
+
+base.add('Icon Toggle Button', () => {
+  require('../assets/icons/icon-settings.svg')
+  require('../assets/icons/icon-search.svg')
+  require('../assets/icons/icon-selection-mode.svg')
+  require('../assets/icons/icon-fullscreen.svg')
+  require('../assets/icons/icon-fullscreen-exit.svg')
+
+  return {
+    template: `
+    <div class="theme-bg-color-primary"
+         style="height: calc(100vh - 24px * 2); padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 48px); grid-auto-rows: 48px; justify-content: center">
+         <icon-toggle-button icon-normal="fullscreen" icon-toggled="fullscreen-exit"/>
+         <icon-toggle-button icon-normal="search" icon-toggled="settings"/>
+         <icon-toggle-button icon-normal="selection-mode" icon-toggled="fullscreen-exit"/>
+         <icon-toggle-button icon-normal="settings" icon-toggled="fullscreen-exit"/>
+    </div>`,
+  }
+})
