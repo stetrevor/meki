@@ -15,46 +15,46 @@ $theme-color-text-on-background: $theme-color-primary;
   fill: currentColor;
 }
 
-@mixin theme-text-color-primary() {
-  color: $theme-color-text-primary;
+@mixin theme-text-color-primary($opacity: 1) {
+  color: rgba($theme-color-text-primary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-primary-lighter() {
-  color: $theme-color-text-primary-lighter;
+@mixin theme-text-color-primary-lighter($opacity: 1) {
+  color: rgba($theme-color-text-primary-lighter, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-secondary() {
-  color: $theme-color-text-secondary;
+@mixin theme-text-color-secondary($opacity: 1) {
+  color: rgba($theme-color-text-secondary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-primary() {
-  color: $theme-color-text-on-primary;
+@mixin theme-text-color-on-primary($opacity: 1) {
+  color: rgba($theme-color-text-on-primary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-primary-lighter() {
-  color: $theme-color-text-on-primary-lighter;
+@mixin theme-text-color-on-primary-lighter($opacity: 1) {
+  color: rgba($theme-color-text-on-primary-lighter, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-secondary() {
-  color: $theme-color-text-on-secondary;
+@mixin theme-text-color-on-secondary($opacity: 1) {
+  color: rgba($theme-color-text-on-secondary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-background() {
-  color: $theme-color-text-on-background;
+@mixin theme-text-color-on-background($opacity: 1) {
+  color: rgba($theme-color-text-on-background, $opacity);
   @include theme-fill-current-color();
 }
 
-@mixin theme-bg-color-primary() {
-  background-color: $theme-color-primary;
+@mixin theme-bg-color-primary($opacity: 1) {
+  background-color: rgba($theme-color-primary, $opacity);
 }
-@mixin theme-bg-color-primary-lighter() {
-  background-color: $theme-color-primary-lighter;
+@mixin theme-bg-color-primary-lighter($opacity: 1) {
+  background-color: rgba($theme-color-primary-lighter, $opacity);
 }
-@mixin theme-bg-color-secondary() {
-  background-color: $theme-color-secondary;
+@mixin theme-bg-color-secondary($opacity: 1) {
+  background-color: rgba($theme-color-secondary, $opacity);
 }
-@mixin theme-bg-color-background() {
-  background-color: $theme-color-background;
+@mixin theme-bg-color-background($opacity: 1) {
+  background-color: rgba($theme-color-background, $opacity);
 }
 
 .theme-text-color-primary {
