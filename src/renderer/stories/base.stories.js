@@ -21,3 +21,23 @@ base.add('Icon', () => {
       </div>`,
   }
 })
+
+base.add('Icon Button', () => {
+  require('../assets/icons/icon-settings.svg')
+  require('../assets/icons/icon-search.svg')
+  require('../assets/icons/icon-selection-mode.svg')
+  require('../assets/icons/icon-fullscreen.svg')
+  require('../assets/icons/icon-fullscreen-exit.svg')
+
+  return {
+    template: `
+    <div class="theme-bg-color-primary"
+         style="height: calc(100vh - 24px * 2); padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 48px); grid-auto-rows: 48px; justify-content: center">
+      <icon-button icon="settings"/>
+      <icon-button icon="search"/>
+      <icon-button icon="selection-mode"/>
+      <icon-button icon="fullscreen"/>
+      <icon-button icon="fullscreen-exit"/>
+    </div>`,
+  }
+})
