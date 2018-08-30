@@ -52,10 +52,7 @@ module.exports = (storybookBaseConfig, configType, defaultConfig) => {
       {
         loader: 'svgo-loader',
         options: {
-          plugins: [
-            { removeUselessStrokeAndFill: true },
-            { removeAttrs: { attrs: '(fill|stroke|opacity)' } },
-          ],
+          plugins: [{ removeUselessStrokeAndFill: true }],
         },
       },
     ],

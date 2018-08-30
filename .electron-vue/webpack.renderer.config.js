@@ -108,10 +108,7 @@ let rendererConfig = {
           {
             loader: 'svgo-loader',
             options: {
-              plugins: [
-                { removeUselessStrokeAndFill: true },
-                { removeAttrs: { attrs: '(fill|stroke|opacity)' } },
-              ],
+              plugins: [{ removeUselessStrokeAndFill: true }],
             },
           },
         ],
