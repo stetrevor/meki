@@ -1,5 +1,4 @@
 import { storiesOf } from '@storybook/vue'
-import centered from '@storybook/addon-centered'
 
 const homepage = storiesOf('Home Page', module)
 
