@@ -23,7 +23,7 @@ export default {
   box-sizing: border-box;
   border-radius: 8px;
   border: 4px solid;
-  width: 216px;
+  width: 220px;
   height: 64px;
   display: flex;
   align-items: center;
