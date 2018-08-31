@@ -20,3 +20,9 @@ nav.add('NavBar', () => ({
       <nav-bar :nav-items="['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private']"/>
     </div>`,
 }))
+
+const back = storiesOf('Home Page | Backdrop')
+
+back.add('Back Layer', () => ({
+  template: '<home-page/>',
+}))
