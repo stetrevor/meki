@@ -14,7 +14,7 @@ export default {
 @import '../../theme';
 
 .nav-item {
-  margin-left: 56px;
+  padding-left: 56px;
   width: 100%;
   height: 48px;
   display: inline-flex;
@@ -38,7 +38,7 @@ export default {
     height: 48px;
     @include theme-bg-color-secondary();
     position: absolute;
-    left: -64px;
+    left: -8px;
     opacity: 0;
     transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
     will-change: opacity;
