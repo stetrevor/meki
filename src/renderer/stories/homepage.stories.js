@@ -13,3 +13,10 @@ nav.add('NavItem', () => ({
       <nav-item class="nav-item--active">Movies</nav-item>
     </div>`,
 }))
+
+nav.add('NavBar', () => ({
+  template: `
+    <div class="theme-bg-color-primary" style="width: 100vw; height: 100vh; padding: 48px 0">
+      <nav-bar :nav-items="['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private']"/>
+    </div>`,
+}))
