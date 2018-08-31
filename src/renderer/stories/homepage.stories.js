@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/vue'
 
-const homepage = storiesOf('Home Page', module)
+const amb = storiesOf('Home Page | Add Media Button', module)
 
-homepage.add('Add Media Button', () => ({ template: '<add-media-button/>' }))
+amb.add('Add Media Button', () => ({ template: '<add-media-button/>' }))
