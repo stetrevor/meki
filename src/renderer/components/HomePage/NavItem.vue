@@ -21,6 +21,7 @@ export default {
   align-items: center;
   text-transform: uppercase;
   position: relative;
+  cursor: pointer;
 
   &__text {
     @include theme-typography-headline3();
