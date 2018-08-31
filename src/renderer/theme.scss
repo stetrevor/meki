@@ -15,46 +15,46 @@ $theme-color-text-on-background: $theme-color-primary;
   fill: currentColor;
 }
 
-@mixin theme-text-color-primary() {
-  color: $theme-color-text-primary;
+@mixin theme-text-color-primary($opacity: 1) {
+  color: rgba($theme-color-text-primary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-primary-lighter() {
-  color: $theme-color-text-primary-lighter;
+@mixin theme-text-color-primary-lighter($opacity: 1) {
+  color: rgba($theme-color-text-primary-lighter, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-secondary() {
-  color: $theme-color-text-secondary;
+@mixin theme-text-color-secondary($opacity: 1) {
+  color: rgba($theme-color-text-secondary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-primary() {
-  color: $theme-color-text-on-primary;
+@mixin theme-text-color-on-primary($opacity: 1) {
+  color: rgba($theme-color-text-on-primary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-primary-lighter() {
-  color: $theme-color-text-on-primary-lighter;
+@mixin theme-text-color-on-primary-lighter($opacity: 1) {
+  color: rgba($theme-color-text-on-primary-lighter, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-secondary() {
-  color: $theme-color-text-on-secondary;
+@mixin theme-text-color-on-secondary($opacity: 1) {
+  color: rgba($theme-color-text-on-secondary, $opacity);
   @include theme-fill-current-color();
 }
-@mixin theme-text-color-on-background() {
-  color: $theme-color-text-on-background;
+@mixin theme-text-color-on-background($opacity: 1) {
+  color: rgba($theme-color-text-on-background, $opacity);
   @include theme-fill-current-color();
 }
 
-@mixin theme-bg-color-primary() {
-  background-color: $theme-color-primary;
+@mixin theme-bg-color-primary($opacity: 1) {
+  background-color: rgba($theme-color-primary, $opacity);
 }
-@mixin theme-bg-color-primary-lighter() {
-  background-color: $theme-color-primary-lighter;
+@mixin theme-bg-color-primary-lighter($opacity: 1) {
+  background-color: rgba($theme-color-primary-lighter, $opacity);
 }
-@mixin theme-bg-color-secondary() {
-  background-color: $theme-color-secondary;
+@mixin theme-bg-color-secondary($opacity: 1) {
+  background-color: rgba($theme-color-secondary, $opacity);
 }
-@mixin theme-bg-color-background() {
-  background-color: $theme-color-background;
+@mixin theme-bg-color-background($opacity: 1) {
+  background-color: rgba($theme-color-background, $opacity);
 }
 
 .theme-text-color-primary {
@@ -94,102 +94,109 @@ $theme-color-text-on-background: $theme-color-primary;
 
 // Typograhpy
 @import url('https://fonts.googleapis.com/css?family=Rubik:400,500');
-$typography-font-family: Rubik, sans-serif;
+$theme-typography-font-family: Rubik, sans-serif;
 
 * {
   margin: 0;
   padding: 0;
 }
 
-@mixin theme-typography-styles-headline1() {
+@mixin theme-typography-base() {
+  font-family: $theme-typography-font-family;
+}
+
+@mixin theme-typography-headline1() {
+  @include theme-typography-base();
   font-size: 72px;
   font-weight: 500;
   letter-spacing: 9px;
 }
 
-@mixin theme-typography-styles-headline2() {
+@mixin theme-typography-headline2() {
+  @include theme-typography-base();
   font-size: 48px;
   letter-spacing: -0.5px;
 }
 
-@mixin theme-typography-styles-headline3() {
+@mixin theme-typography-headline3() {
+  @include theme-typography-base();
   font-size: 26px;
   font-weight: 500;
   letter-spacing: 0px;
 }
 
-@mixin theme-typography-styles-headline4() {
+@mixin theme-typography-headline4() {
+  @include theme-typography-base();
   font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.25px;
 }
 
-@mixin theme-typography-styles-headline5() {
+@mixin theme-typography-headline5() {
+  @include theme-typography-base();
   font-size: 18px;
   letter-spacing: 0px;
 }
 
-// @mixin theme-typography-styles-headline6() {
+// @mixin theme-typography-headline6() {
 // }
 
-@mixin theme-typography-styles-body1() {
+@mixin theme-typography-body1() {
+  @include theme-typography-base();
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.5px;
 }
-@mixin theme-typography-styles-body2() {
+@mixin theme-typography-body2() {
+  @include theme-typography-base();
   font-size: 14px;
   letter-spacing: 0.25px;
 }
-// @mixin theme-typography-styles-subtitle1() {
+// @mixin theme-typography-subtitle1() {
 // }
-// @mixin theme-typography-styles-subtitle2() {
+// @mixin theme-typography-subtitle2() {
 // }
-// @mixin theme-typography-styles-button() {
+// @mixin theme-typography-button() {
 // }
-// @mixin theme-typography-styles-caption() {
+// @mixin theme-typography-caption() {
 // }
-@mixin theme-typography-styles-overline() {
+@mixin theme-typography-overline() {
+  @include theme-typography-base();
   font-size: 12px;
   letter-spacing: 2px;
 }
 
 .theme-typography-headline1 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-headline1();
+  @include theme-typography-headline1();
 }
 
 .theme-typography-headline2 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-headline2();
+  @include theme-typography-headline2();
 }
 
 .theme-typography-headline3 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-headline3();
+  @include theme-typography-headline3();
 }
 
 .theme-typography-headline4 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-headline4();
+  @include theme-typography-headline4();
 }
 
 .theme-typography-headline5 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-headline5();
+  @include theme-typography-headline5();
 }
 
 .theme-typography-body1 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-body1();
+  @include theme-typography-body1();
 }
 
 .theme-typography-body2 {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-body2();
+  @include theme-typography-body2();
 }
 
 .theme-typography-overline {
-  font-family: $typography-font-family;
-  @include theme-typography-styles-overline();
+  @include theme-typography-overline();
 }
+
+// Motions
+@import '@material/animation/variables';
