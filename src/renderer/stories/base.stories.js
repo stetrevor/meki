@@ -61,6 +61,20 @@ base.add('Icon Toggle Button', () => {
   }
 })
 
+base.add('Overlay Icon Button', () => {
+  require('../assets/icons/icon-play.svg')
+  require('../assets/icons/icon-selection-mode.svg')
+
+  return {
+    template: `
+    <div style="background-image: url('https://placekitten.com/3000/2000'); height: calc(100vh - 24px * 2); padding: 24px; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fit, 96px); justify-items: center; align-items: center; grid-auto-rows: 96px">
+      <overlay-icon-button icon="play" style="width: 48px; height: 48px"/>
+      <overlay-icon-button icon="play" style="width: 96px; height: 96px"/>
+      <overlay-icon-button icon="selection-mode" style="width: 48px; height: 48px"/>
+    </div>`,
+  }
+})
+
 base.add('Progress Bar', () => ({
   template: `
   <div class="theme-bg-color-primary" style="padding: 48px; width: calc(100vw - 48px * 2); height: calc(100vh - 48px * 2); display: grid; grid-gap: 24px; just">
