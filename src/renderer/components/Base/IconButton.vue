@@ -24,27 +24,50 @@ export default {
 
 .icon-button {
   border-radius: 8px;
+  overflow: hidden;
   width: 48px;
   height: 48px;
-  @include theme-text-color-on-primary(0.54);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 100ms $mdc-animation-standard-curve-timing-function;
+  position: relative;
   cursor: pointer;
 
   &__icon {
     width: 24px;
     height: 24px;
+    @include theme-text-color-on-primary();
+    opacity: 0.54;
+    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
+    will-change: opacity;
+    position: relative;
+  }
+
+  &::before {
+    content: '';
+    width: 48px;
+    height: 48px;
+    position: absolute;
+    @include theme-bg-color-background();
+    opacity: 0;
+    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
+    will-change: opacity;
   }
 
   &:hover {
-    @include theme-text-color-on-primary();
-    @include theme-bg-color-background(0.38);
+    &::before {
+      opacity: 0.38;
+    }
+
+    .icon-button__icon {
+      opacity: 1;
+    }
   }
 
   &:active {
-    @include theme-bg-color-background(0.54);
+    &::before {
+      opacity: 0.54;
+    }
   }
 }
 </style>
