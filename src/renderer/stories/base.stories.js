@@ -60,3 +60,14 @@ base.add('Icon Toggle Button', () => {
     </div>`,
   }
 })
+
+base.add('Progress Bar', () => ({
+  template: `
+  <div class="theme-bg-color-primary" style="padding: 48px; width: calc(100vw - 48px * 2); height: calc(100vh - 48px * 2); display: grid; grid-gap: 24px; just">
+    <progress-bar :progress="32" :max="100"/>
+    <progress-bar :colored="true" :progress="64" :max="100"/>
+    <progress-bar :colored="true" :progress="64" :max="100" class="theme-bg-color-background"/>
+    <progress-bar :colored="true" :progress="64" :max="100" class="theme-bg-color-background" style="border-radius: 2px"/>
+  </div>
+  `,
+}))
