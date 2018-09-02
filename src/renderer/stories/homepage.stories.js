@@ -26,3 +26,21 @@ const back = storiesOf('Home Page | Backdrop', module)
 back.add('Back Layer', () => ({
   template: '<home-page/>',
 }))
+
+const video = storiesOf('Home Page | Video', module)
+
+video.add('VideoItem', () => ({
+  data() {
+    return {
+      selectionMode: false,
+    }
+  },
+
+  template: `
+  <div>
+    <button @click="selectionMode = !selectionMode">Toggle Selection Mode</button>
+    <div>Selection Mode {{ selectionMode }}</div>
+    <video-item :selection-mode="selectionMode"/>
+  </div>
+  `,
+}))
