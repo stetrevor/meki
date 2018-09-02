@@ -4,7 +4,7 @@ const amb = storiesOf('Home Page | Add Media Button', module)
 
 amb.add('Add Media Button', () => ({ template: '<add-media-button/>' }))
 
-const nav = storiesOf('Home Page | Navigation')
+const nav = storiesOf('Home Page | Navigation', module)
 
 nav.add('NavItem', () => ({
   template: `
@@ -21,7 +21,7 @@ nav.add('NavBar', () => ({
     </div>`,
 }))
 
-const back = storiesOf('Home Page | Backdrop')
+const back = storiesOf('Home Page | Backdrop', module)
 
 back.add('Back Layer', () => ({
   template: '<home-page/>',
