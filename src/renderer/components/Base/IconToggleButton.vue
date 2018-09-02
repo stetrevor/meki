@@ -92,19 +92,4 @@ export default {
     }
   }
 }
-
-.cross-fade-enter,
-.cross-fade-leave-to {
-  opacity: 0;
-}
-.cross-fade-enter-to,
-.cross-fade-leave {
-  opacity: 1;
-}
-.cross-fade-enter-active {
-  transition: opacity 125ms $mdc-animation-deceleration-curve-timing-function;
-}
-.cross-fade-leave-active {
-  transition: opacity 75ms $mdc-animation-acceleration-curve-timing-function;
-}
 </style>
