@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'icon-toggle-button': true, 'icon-toggle-button--toggling': toggling }" 
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling }]" 
        @click="toggled = !toggled">
     <transition name="cross-fade" 
                 mode="out-in"
