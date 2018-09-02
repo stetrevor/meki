@@ -54,6 +54,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   cursor: pointer;
 
   &__icon {
@@ -65,7 +67,6 @@ export default {
 
   &::before {
     content: '';
-    border-radius: 8px;
     width: 48px;
     height: 48px;
     position: absolute;
