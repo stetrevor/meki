@@ -54,7 +54,11 @@ export default {
   name: 'HomePage',
 
   components: {
+    IconButton,
+    IconToggleButton,
     NavBar,
+    AddMediaButton,
+    VideoItem,
   },
 
   data() {

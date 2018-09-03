@@ -86,6 +86,8 @@ export default {
   components: {
     IconButton,
     IconToggleButton,
+    OverlayIconButton,
+    ProgressBar,
   },
 
   props: {
