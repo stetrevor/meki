@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode }]" 
+  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selected': selected }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <img src="https://placekitten.com/300/200" 
@@ -144,6 +144,12 @@ export default {
   display: grid;
   grid-template-columns: 1fr 48px;
   grid-template-rows: 1fr 8px 48px;
+  transition: box-shadow 100ms $mdc-animation-standard-curve-timing-function;
+  will-change: box-shadow;
+
+  &--selected {
+    box-shadow: 0 0 0 4px $theme-color-secondary;
+  }
 
   &__thumbnail {
     grid-column: 1 / span 2;
