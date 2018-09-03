@@ -58,7 +58,7 @@ video.add('VideoItem List', () => ({
     <div>Selection Mode {{ selectionMode }}</div>
     <div style="padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 300px); justify-content: center"
         class="theme-bg-color-primary-lighter">
-      <video-item :selection-mode="selectionMode" v-for="i in new Array(20).fill(0).map((_, i) => i)" :key="i"/>
+      <video-item :selection-mode="selectionMode" v-for="i in 20" :key="i"/>
     </div>
   </div>
   `,
