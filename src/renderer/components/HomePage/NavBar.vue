@@ -2,7 +2,7 @@
   <div class="nav-bar">
     <nav-item v-for="item in navItems" 
               :key="item" 
-              :class="{'nav-item--active': activeNavItem === item}" 
+              :class="{ 'nav-item--active': activeNavItem === item }" 
               @click.native="activeNavItem = item">
       {{ item }}
     </nav-item>
