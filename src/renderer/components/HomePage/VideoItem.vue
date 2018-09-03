@@ -50,7 +50,9 @@
                 mode="out-in">
       <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :key="`${selectionMode}${expanded}`"/> <!-- icon: play big, play, selection-mode -->
+                           :active="selected"
+                           :key="`${selectionMode}${expanded}`" 
+                           @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
 
     <transition name="fade-out-in" 
@@ -101,7 +103,30 @@ export default {
     return {
       expanded: false,
       hovered: false,
+      selected: false,
     }
+  },
+
+  watch: {
+    selectionMode(mode) {
+      if (!mode) {
+        this.selected = false
+      }
+    },
+  },
+
+  methods: {
+    mainActionHandler() {
+      if (this.selectionMode) {
+        this.selected = !this.selected
+        const eventName = this.selected
+          ? 'video-item-selected'
+          : 'video-item-deselected'
+        this.$emit(eventName)
+      } else {
+        this.$emit('video-item-play')
+      }
+    },
   },
 }
 </script>
