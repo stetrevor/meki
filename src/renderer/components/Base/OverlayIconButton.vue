@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay-icon-button">
+  <div :class="['overlay-icon-button', { 'overlay-icon-button--active': active }]">
     <svg class="overlay-icon-button__icon">
       <use :xlink:href="`#icon-${icon}`"/>
     </svg>
@@ -13,6 +13,11 @@ export default {
     icon: {
       type: String,
       required: true,
+    },
+
+    active: {
+      type: Boolean,
+      default: false,
     },
   },
 }
@@ -49,8 +54,9 @@ export default {
     position: absolute;
     @include theme-bg-color-primary();
     opacity: 0.38;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
+    transition: opacity,
+      background-color 100ms $mdc-animation-standard-curve-timing-function;
+    will-change: opacity, background-color;
   }
 
   &:hover {
@@ -67,6 +73,11 @@ export default {
     .overlay-icon-button__icon {
       @include theme-text-color-secondary();
     }
+  }
+
+  &--active &__icon {
+    @include theme-text-color-secondary();
+    opacity: 1;
   }
 }
 </style>
