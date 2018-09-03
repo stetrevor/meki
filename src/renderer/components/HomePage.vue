@@ -10,12 +10,32 @@
                    icon="settings"/>
     </div>
 
-    <div class="home-page__toolbar">
-      <icon-button icon="search"/>
-      <icon-button icon="selection-mode"/>
-      <icon-toggle-button icon-normal="fullscreen" 
-                          icon-toggled="fullscreen-exit"/>
-    </div>
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <div v-if="!selectionMode" 
+           :key="!selectionMode" 
+           class="home-page__toolbar">
+        <icon-button icon="search"/>
+        <icon-button icon="selection-mode" 
+                     @click.native="selectionMode = true"/>
+        <icon-toggle-button icon-normal="fullscreen" 
+                            icon-toggled="fullscreen-exit"/>
+      </div>
+
+      <div v-else 
+           :key="selectionMode" 
+           class="home-page__selection-toolbar">
+        <icon-button icon="cancel" 
+                     class="home-page__selection-mode-exit"
+                     @click.native="selectionMode = false; selectedItems = []"/>
+        <div class="home-page__selection-toolbar-title">{{ selectedItems.length }} Selected</div>
+        <icon-toggle-button icon-normal="favorite" 
+                            icon-toggled="favorited"/>
+        <icon-toggle-button icon-normal="mark-watched" 
+                            icon-toggled="watched"/>
+        <icon-button icon="delete"/>
+      </div>
+    </transition>
 
     <div class="home-page__content">
       <transition name="fade-out-in">
@@ -29,7 +49,9 @@
              class="home-page__media-list">
           <video-item v-for="i in 20" 
                       :key="i"
-                      :selection-mode="selectionMode"/>
+                      :selection-mode="selectionMode"
+                      @video-item-selected="selectedItems.push(i)" 
+                      @video-item-deselected="selectedItems.splice(selectedItems.indexOf(i), 1)"/>
         </div>
       </transition>
     </div>
@@ -49,6 +71,12 @@ import '../assets/icons/icon-search.svg'
 import '../assets/icons/icon-selection-mode.svg'
 import '../assets/icons/icon-fullscreen.svg'
 import '../assets/icons/icon-fullscreen-exit.svg'
+import '../assets/icons/icon-cancel.svg'
+import '../assets/icons/icon-favorite.svg'
+import '../assets/icons/icon-favorited.svg'
+import '../assets/icons/icon-mark-watched.svg'
+import '../assets/icons/icon-watched.svg'
+import '../assets/icons/icon-delete.svg'
 
 export default {
   name: 'HomePage',
@@ -64,6 +92,8 @@ export default {
   data() {
     return {
       currentTab: null,
+      selectionMode: false,
+      selectedItems: [],
     }
   },
 }
@@ -89,15 +119,25 @@ export default {
     grid-template-rows: 196px 64px+24px auto 48px+24px;
     grid-gap: 24px;
   }
-  &__toolbar {
+  &__toolbar,
+  &__selection-toolbar {
     align-self: center;
     display: grid;
     grid-auto-flow: column;
     grid-gap: 8px;
     justify-content: end;
   }
+
+  &__selection-toolbar {
+    border-radius: 8px;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    @include theme-bg-color-primary-lighter();
+  }
+
   &__content {
     border-radius: 8px;
+    border: 1px solid $theme-color-primary-lighter();
     @include theme-bg-color-primary-lighter();
     overflow: scroll;
   }
@@ -119,6 +159,16 @@ export default {
     align-self: end;
     justify-self: end;
     margin-right: 16px;
+  }
+
+  &__selection-mode-exit {
+    justify-self: left;
+  }
+
+  &__selection-toolbar-title {
+    margin-left: 16px;
+    @include theme-typography-headline4();
+    @include theme-text-color-on-primary-lighter();
   }
 
   &__media-list {
