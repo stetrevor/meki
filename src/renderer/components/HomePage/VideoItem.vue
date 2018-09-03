@@ -33,7 +33,7 @@
 
         <transition name="fade-out-in" 
                     mode="out-in">
-          <div v-show="!selectionMode" 
+          <div v-show="!selectionMode && hovered" 
                class="video-item__toolbar">
             <icon-toggle-button icon-normal="favorite" 
                                 icon-toggled="favorited"/>
