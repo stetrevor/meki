@@ -46,12 +46,11 @@
       </div>
     </transition>
 
-    <transition name="cross-fade-delayed" 
-                mode="out-in"
-                appear>
+    <transition name="cross-fade" 
+                mode="out-in">
       <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :key="selectionMode"/> <!-- icon: play big, play, selection-mode -->
+                           :key="`${selectionMode}${expanded}`"/> <!-- icon: play big, play, selection-mode -->
     </transition>
 
     <transition name="cross-fade" 
@@ -219,18 +218,22 @@ export default {
     grid-column: 1 / span 2;
     grid-row: 1 / 2;
     position: absolute;
-    animation: to-big 125ms $mdc-animation-standard-curve-timing-function
-      forwards;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transform: translate(-50%, -50%) scale(4);
   }
 
   &__main-action--expanded {
-    animation: to-small 125ms $mdc-animation-standard-curve-timing-function
-      forwards;
+    top: 0;
+    left: 0;
+    transform: scale(2) translate(12px, 12px);
   }
 
   &__main-action--selection-mode {
-    animation: to-selection-mode 100ms
-      $mdc-animation-standard-curve-timing-function forwards;
+    top: 0;
+    left: 0;
+    transform: scale(2) translate(12px, 12px);
   }
 
   &__expand-toggle {
@@ -238,46 +241,6 @@ export default {
     right: 0;
     bottom: 0;
     border-radius: 8px 0 8px 0;
-  }
-}
-
-@keyframes to-small {
-  from {
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(4);
-  }
-  to {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
-  }
-}
-@keyframes to-big {
-  from {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
-  }
-  to {
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(4);
-  }
-}
-@keyframes to-selection-mode {
-  from {
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(4);
-  }
-  to {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
   }
 }
 </style>
