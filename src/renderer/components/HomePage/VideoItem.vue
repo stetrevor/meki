@@ -48,7 +48,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
+      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
                            :key="`${selectionMode}${expanded}`"/> <!-- icon: play big, play, selection-mode -->
     </transition>
@@ -221,6 +221,11 @@ export default {
     left: 50%;
     transform-origin: center center;
     transform: translate(-50%, -50%) scale(4);
+    visibility: hidden;
+  }
+
+  &__main-action--active {
+    visibility: visible;
   }
 
   &__main-action--expanded {
