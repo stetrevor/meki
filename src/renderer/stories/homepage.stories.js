@@ -40,6 +40,22 @@ video.add('VideoItem', () => ({
   <div>
     <button @click="selectionMode = !selectionMode">Toggle Selection Mode</button>
     <div>Selection Mode {{ selectionMode }}</div>
+    <video-item :selection-mode="selectionMode"/>
+  </div>
+  `,
+}))
+
+video.add('VideoItem List', () => ({
+  data() {
+    return {
+      selectionMode: false,
+    }
+  },
+
+  template: `
+  <div>
+    <button @click="selectionMode = !selectionMode">Toggle Selection Mode</button>
+    <div>Selection Mode {{ selectionMode }}</div>
     <div style="padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 300px); justify-content: center"
         class="theme-bg-color-primary-lighter">
       <video-item :selection-mode="selectionMode" v-for="i in new Array(20).fill(0).map((_, i) => i)" :key="i"/>
