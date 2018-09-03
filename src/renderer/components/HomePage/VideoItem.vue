@@ -55,8 +55,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <icon-toggle-button v-show="!selectionMode" 
-                          class="video-item__expand-toggle" 
+      <icon-toggle-button class="video-item__expand-toggle" 
                           icon-normal="expand"
                           icon-toggled="fold"
                           @click.native="expanded = !expanded"/>
