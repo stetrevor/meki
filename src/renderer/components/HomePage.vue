@@ -4,7 +4,8 @@
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd"/>
       <nav-bar :nav-items="['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private']" 
-               class="home-page__nav"/>
+               class="home-page__nav"
+               @active-nav-item-changed="currentTab = $event"/>
       <icon-button class="home-page__settings" 
                    icon="settings"/>
     </div>
@@ -16,7 +17,22 @@
                           icon-toggled="fullscreen-exit"/>
     </div>
 
-    <div class="home-page__content"/>
+    <div class="home-page__content">
+      <transition name="fade-out-in">
+        <div v-if="currentTab !== 'videos'" 
+             :key="currentTab"
+             class="home-page__media-list">
+          {{ currentTab }}
+        </div>
+        <div v-else 
+             :key="currentTab"
+             class="home-page__media-list">
+          <video-item v-for="i in 20" 
+                      :key="i"
+                      :selection-mode="selectionMode"/>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -25,6 +41,7 @@ import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
+import VideoItem from './HomePage/VideoItem'
 
 import '../assets/logo.svg'
 import '../assets/icons/icon-settings.svg'
@@ -38,6 +55,12 @@ export default {
 
   components: {
     NavBar,
+  },
+
+  data() {
+    return {
+      currentTab: null,
+    }
   },
 }
 </script>
@@ -72,6 +95,7 @@ export default {
   &__content {
     border-radius: 8px;
     @include theme-bg-color-primary-lighter();
+    overflow: scroll;
   }
 
   &__logo {
@@ -91,6 +115,14 @@ export default {
     align-self: end;
     justify-self: end;
     margin-right: 16px;
+  }
+
+  &__media-list {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-gap: 24px;
+    justify-content: center;
   }
 }
 </style>
