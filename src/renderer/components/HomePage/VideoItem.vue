@@ -5,7 +5,7 @@
     <img src="https://placekitten.com/300/200" 
          class="video-item__thumbnail">
 
-    <transition name="cross-fade" 
+    <transition name="fade-out-in" 
                 mode="out-in">
       <div v-if="!expanded" 
            :key="expanded"
@@ -31,7 +31,7 @@
           <div class="video-item__date-added">Added on 2018-08-21 2:53 PM</div>
         </div>
 
-        <transition name="cross-fade" 
+        <transition name="fade-out-in" 
                     mode="out-in">
           <div v-show="!selectionMode" 
                class="video-item__toolbar">
@@ -46,14 +46,14 @@
       </div>
     </transition>
 
-    <transition name="cross-fade" 
+    <transition name="fade-out-in" 
                 mode="out-in">
       <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
                            :key="`${selectionMode}${expanded}`"/> <!-- icon: play big, play, selection-mode -->
     </transition>
 
-    <transition name="cross-fade" 
+    <transition name="fade-out-in" 
                 mode="out-in">
       <icon-toggle-button v-show="!selectionMode" 
                           class="video-item__expand-toggle" 

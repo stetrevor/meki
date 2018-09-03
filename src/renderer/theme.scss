@@ -208,17 +208,17 @@ $theme-typography-font-family: Rubik, sans-serif;
 // Motions
 @import '@material/animation/variables';
 
-.cross-fade-enter,
-.cross-fade-leave-to {
+.fade-out-in-enter,
+.fade-out-in-leave-to {
   opacity: 0;
 }
-.cross-fade-enter-to,
-.cross-fade-leave {
+.fade-out-in-enter-to,
+.fade-out-in-leave {
   opacity: 1;
 }
-.cross-fade-enter-active {
+.fade-out-in-enter-active {
   transition: opacity 125ms $mdc-animation-deceleration-curve-timing-function;
 }
-.cross-fade-leave-active {
+.fade-out-in-leave-active {
   transition: opacity 75ms $mdc-animation-acceleration-curve-timing-function;
 }
