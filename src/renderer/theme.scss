@@ -152,8 +152,11 @@ $theme-typography-font-family: Rubik, sans-serif;
   font-size: 14px;
   letter-spacing: 0.25px;
 }
-// @mixin theme-typography-subtitle1() {
-// }
+@mixin theme-typography-subtitle1() {
+  @include theme-typography-base();
+  font-size: 12px;
+  letter-spacing: 0.25px;
+}
 // @mixin theme-typography-subtitle2() {
 // }
 // @mixin theme-typography-button() {
@@ -194,9 +197,28 @@ $theme-typography-font-family: Rubik, sans-serif;
   @include theme-typography-body2();
 }
 
+.theme-typography-subtitle1 {
+  @include theme-typography-subtitle1();
+}
+
 .theme-typography-overline {
   @include theme-typography-overline();
 }
 
 // Motions
 @import '@material/animation/variables';
+
+.fade-out-in-enter,
+.fade-out-in-leave-to {
+  opacity: 0;
+}
+.fade-out-in-enter-to,
+.fade-out-in-leave {
+  opacity: 1;
+}
+.fade-out-in-enter-active {
+  transition: opacity 125ms $mdc-animation-deceleration-curve-timing-function;
+}
+.fade-out-in-leave-active {
+  transition: opacity 75ms $mdc-animation-acceleration-curve-timing-function;
+}

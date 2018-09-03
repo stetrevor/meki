@@ -1,7 +1,7 @@
 <template>
-  <div :class="{ 'icon-toggle-button': true, 'icon-toggle-button--toggling': toggling }" 
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling }]" 
        @click="toggled = !toggled">
-    <transition name="cross-fade" 
+    <transition name="fade-out-in" 
                 mode="out-in"
                 @before-leave="toggling = true"
                 @after-enter="toggling = false">
@@ -54,6 +54,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 
   &__icon {
     width: 24px;
@@ -64,7 +67,6 @@ export default {
 
   &::before {
     content: '';
-    border-radius: 8px;
     width: 48px;
     height: 48px;
     position: absolute;
@@ -89,20 +91,5 @@ export default {
       opacity: 0.54 !important;
     }
   }
-}
-
-.cross-fade-enter,
-.cross-fade-leave-to {
-  opacity: 0;
-}
-.cross-fade-enter-to,
-.cross-fade-leave {
-  opacity: 1;
-}
-.cross-fade-enter-active {
-  transition: opacity 125ms $mdc-animation-deceleration-curve-timing-function;
-}
-.cross-fade-leave-active {
-  transition: opacity 75ms $mdc-animation-acceleration-curve-timing-function;
 }
 </style>

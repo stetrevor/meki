@@ -1,6 +1,6 @@
 <template>
-  <div class="icon-button">
-    <svg class="icon-button__icon">
+  <div class="overlay-icon-button">
+    <svg class="overlay-icon-button__icon">
       <use :xlink:href="`#icon-${icon}`"/>
     </svg>
   </div>
@@ -8,8 +8,7 @@
 
 <script>
 export default {
-  name: 'IconButton',
-
+  name: 'OverlayIconButton',
   props: {
     icon: {
       type: String,
@@ -22,11 +21,9 @@ export default {
 <style lang="scss">
 @import '../../theme';
 
-.icon-button {
-  border-radius: 8px;
-  overflow: hidden;
-  width: 48px;
-  height: 48px;
+.overlay-icon-button {
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,39 +31,41 @@ export default {
   cursor: pointer;
 
   &__icon {
-    width: 24px;
-    height: 24px;
+    width: 100%;
+    height: 100%;
     @include theme-text-color-on-primary();
     opacity: 0.54;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
+    transition: opacity,
+      background-color 100ms $mdc-animation-standard-curve-timing-function;
     will-change: opacity;
     position: relative;
   }
 
   &::before {
     content: '';
-    width: 48px;
-    height: 48px;
+    border-radius: 50%;
+    width: percentage(16/24);
+    height: percentage(16/24);
     position: absolute;
-    @include theme-bg-color-background();
-    opacity: 0;
+    @include theme-bg-color-primary();
+    opacity: 0.38;
     transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
     will-change: opacity;
   }
 
   &:hover {
     &::before {
-      opacity: 0.38;
+      opacity: 0.54;
     }
 
-    .icon-button__icon {
+    .overlay-icon-button__icon {
       opacity: 1;
     }
   }
 
   &:active {
-    &::before {
-      opacity: 0.54;
+    .overlay-icon-button__icon {
+      @include theme-text-color-secondary();
     }
   }
 }
