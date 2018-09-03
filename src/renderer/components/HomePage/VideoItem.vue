@@ -5,7 +5,7 @@
     <img src="https://placekitten.com/300/200" 
          class="video-item__thumbnail">
 
-    <transition name="cross-fade-delayed" 
+    <transition name="cross-fade" 
                 mode="out-in">
       <div v-if="!expanded" 
            :key="expanded"
