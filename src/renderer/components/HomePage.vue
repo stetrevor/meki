@@ -55,41 +55,42 @@ export default {
   display: grid;
   grid-template-columns: 252px 1fr;
   grid-template-rows: 96px 1fr;
-}
-.home-page__sidebar {
-  grid-row: 1 / span 2;
-  display: grid;
-  grid-template-rows: 196px 64px+24px auto 48px+24px;
-  grid-gap: 24px;
-}
-.home-page__toolbar {
-  align-self: center;
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: 8px;
-  justify-content: end;
-}
-.home-page__content {
-  border-radius: 8px;
-  @include theme-bg-color-primary-lighter();
-}
 
-.home-page__logo {
-  width: 128px;
-  height: 128px;
-  @include theme-text-color-secondary();
-  align-self: center;
-  justify-self: center;
-}
-.home-page__amd {
-  justify-self: center;
-}
-.home-page__nav {
-  align-self: start;
-}
-.home-page__settings {
-  align-self: end;
-  justify-self: end;
-  margin-right: 16px;
+  &__sidebar {
+    grid-row: 1 / span 2;
+    display: grid;
+    grid-template-rows: 196px 64px+24px auto 48px+24px;
+    grid-gap: 24px;
+  }
+  &__toolbar {
+    align-self: center;
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 8px;
+    justify-content: end;
+  }
+  &__content {
+    border-radius: 8px;
+    @include theme-bg-color-primary-lighter();
+  }
+
+  &__logo {
+    width: 128px;
+    height: 128px;
+    @include theme-text-color-secondary();
+    align-self: center;
+    justify-self: center;
+  }
+  &__amd {
+    justify-self: center;
+  }
+  &__nav {
+    align-self: start;
+  }
+  &__settings {
+    align-self: end;
+    justify-self: end;
+    margin-right: 16px;
+  }
 }
 </style>
