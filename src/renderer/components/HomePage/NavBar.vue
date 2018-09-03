@@ -31,6 +31,15 @@ export default {
       activeNavItem: this.navItems[0],
     }
   },
+
+  watch: {
+    activeNavItem: {
+      immediate: true,
+      handler: function(item) {
+        this.$emit('active-nav-item-changed', item)
+      },
+    },
+  },
 }
 </script>
 
