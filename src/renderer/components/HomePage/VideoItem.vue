@@ -8,7 +8,7 @@
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-if="!expanded" 
-           :key="expanded"
+           key="folded"
            :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
         <progress-bar :colored="hovered" 
                       :progress="32"
@@ -18,7 +18,7 @@
       </div>
     
       <div v-else 
-           :key="expanded"
+           key="expanded"
            class="video-item__expanded">
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">Video Title That's Very Long But Now It Can Show All Lines</div>
