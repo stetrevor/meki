@@ -9,6 +9,7 @@
 <script>
 export default {
   name: 'OverlayIconButton',
+
   props: {
     icon: {
       type: String,
