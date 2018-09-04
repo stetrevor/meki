@@ -38,7 +38,8 @@
     </transition>
 
     <div class="home-page__content">
-      <transition name="fade-out-in">
+      <transition name="fade-out-in" 
+                  mode="out-in">
         <div v-if="currentTab !== 'videos'" 
              :key="currentTab"
              class="home-page__media-list">
