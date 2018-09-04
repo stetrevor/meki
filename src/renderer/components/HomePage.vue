@@ -119,6 +119,29 @@ export default {
     grid-template-rows: 196px 64px+24px auto 48px+24px;
     grid-gap: 24px;
   }
+
+  &__logo {
+    width: 128px;
+    height: 128px;
+    @include theme-text-color-secondary();
+    align-self: center;
+    justify-self: center;
+  }
+
+  &__amd {
+    justify-self: center;
+  }
+
+  &__nav {
+    align-self: start;
+  }
+
+  &__settings {
+    align-self: end;
+    justify-self: end;
+    margin-right: 16px;
+  }
+
   &__toolbar,
   &__selection-toolbar {
     align-self: center;
@@ -135,32 +158,6 @@ export default {
     @include theme-bg-color-primary-lighter();
   }
 
-  &__content {
-    border-radius: 8px;
-    border: 1px solid $theme-color-primary-lighter();
-    @include theme-bg-color-primary-lighter();
-    overflow: scroll;
-  }
-
-  &__logo {
-    width: 128px;
-    height: 128px;
-    @include theme-text-color-secondary();
-    align-self: center;
-    justify-self: center;
-  }
-  &__amd {
-    justify-self: center;
-  }
-  &__nav {
-    align-self: start;
-  }
-  &__settings {
-    align-self: end;
-    justify-self: end;
-    margin-right: 16px;
-  }
-
   &__selection-mode-exit {
     justify-self: left;
   }
@@ -169,6 +166,13 @@ export default {
     margin-left: 16px;
     @include theme-typography-headline4();
     @include theme-text-color-on-primary-lighter();
+  }
+
+  &__content {
+    border-radius: 8px;
+    border: 1px solid $theme-color-primary-lighter();
+    @include theme-bg-color-primary-lighter();
+    overflow: scroll;
   }
 
   &__media-list {
