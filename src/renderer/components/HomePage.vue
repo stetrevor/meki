@@ -13,7 +13,7 @@
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-if="!selectionMode" 
-           :key="!selectionMode" 
+           key="normal-mode" 
            class="home-page__toolbar">
         <icon-button icon="search"/>
         <icon-button icon="selection-mode" 
@@ -23,7 +23,7 @@
       </div>
 
       <div v-else 
-           :key="selectionMode" 
+           key="selection-mode" 
            class="home-page__selection-toolbar">
         <icon-button icon="cancel" 
                      class="home-page__selection-mode-exit"
