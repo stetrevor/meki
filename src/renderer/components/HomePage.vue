@@ -25,6 +25,16 @@
         <icon-toggle-button icon-normal="mark-watched" 
                             icon-toggled="watched"/>
         <icon-button icon="delete"/>
+        <icon-button icon="more" 
+                     @click.native.stop="selectionMenu = true"/>
+
+        <transition name="fade-out-in">
+          <selection-menu v-if="selectionMenu" 
+                          class="home-page__selection-toolbar-menu"
+                          @select-all="selectAll = true; selectedItems = new Array(20).fill(0).map((_, i) => i)"
+                          @select-none="selectAll = false; selectedItems = []"
+                          @dismiss="selectionMenu = false"/>
+        </transition>
       </div>
 
       <div v-else 
@@ -51,6 +61,7 @@
              class="home-page__media-list">
           <video-item v-for="i in 20" 
                       :key="i"
+                      :selected="selectAll"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItems.push(i)" 
                       @video-item-deselected="selectedItems.splice(selectedItems.indexOf(i), 1)"/>
@@ -66,6 +77,7 @@ import IconToggleButton from './Base/IconToggleButton'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
 import VideoItem from './HomePage/VideoItem'
+import SelectionMenu from './HomePage/SelectionMenu'
 
 import '../assets/logo.svg'
 import '../assets/icons/icon-settings.svg'
@@ -79,6 +91,7 @@ import '../assets/icons/icon-favorited.svg'
 import '../assets/icons/icon-mark-watched.svg'
 import '../assets/icons/icon-watched.svg'
 import '../assets/icons/icon-delete.svg'
+import '../assets/icons/icon-more.svg'
 
 export default {
   name: 'HomePage',
@@ -96,6 +109,8 @@ export default {
       currentTab: null,
       selectionMode: false,
       selectedItems: [],
+      selectionMenu: false,
+      selectAll: false,
     }
   },
 }
@@ -158,6 +173,7 @@ export default {
     grid-template-columns: auto 1fr;
     align-items: center;
     @include theme-bg-color-primary-lighter();
+    position: relative;
   }
 
   &__selection-mode-exit {
@@ -168,6 +184,13 @@ export default {
     margin-left: 16px;
     @include theme-typography-headline4();
     @include theme-text-color-on-primary-lighter();
+  }
+
+  &__selection-toolbar-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
   }
 
   &__content {
