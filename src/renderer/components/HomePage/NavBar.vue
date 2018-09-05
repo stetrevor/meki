@@ -2,7 +2,7 @@
   <div class="nav-bar">
     <nav-item v-for="item in navItems" 
               :key="item" 
-              :class="{'nav-item--active': activeNavItem === item}" 
+              :class="{ 'nav-item--active': activeNavItem === item }" 
               @click.native="activeNavItem = item">
       {{ item }}
     </nav-item>
@@ -30,6 +30,15 @@ export default {
     return {
       activeNavItem: this.navItems[0],
     }
+  },
+
+  watch: {
+    activeNavItem: {
+      immediate: true,
+      handler: function(item) {
+        this.$emit('active-nav-item-changed', item)
+      },
+    },
   },
 }
 </script>

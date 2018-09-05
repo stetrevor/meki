@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode }]" 
+  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <img src="https://placekitten.com/300/200" 
@@ -8,7 +8,7 @@
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-if="!expanded" 
-           :key="expanded"
+           key="folded"
            :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
         <progress-bar :colored="hovered" 
                       :progress="32"
@@ -18,7 +18,7 @@
       </div>
     
       <div v-else 
-           :key="expanded"
+           key="expanded"
            class="video-item__expanded">
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">Video Title That's Very Long But Now It Can Show All Lines</div>
@@ -33,7 +33,7 @@
 
         <transition name="fade-out-in" 
                     mode="out-in">
-          <div v-show="!selectionMode" 
+          <div v-show="!selectionMode && hovered" 
                class="video-item__toolbar">
             <icon-toggle-button icon-normal="favorite" 
                                 icon-toggled="favorited"/>
@@ -48,15 +48,16 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
+      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :key="`${selectionMode}${expanded}`"/> <!-- icon: play big, play, selection-mode -->
+                           :active="selectedStatus"
+                           :key="`${selectionMode}${expanded}`" 
+                           @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <icon-toggle-button v-show="!selectionMode" 
-                          class="video-item__expand-toggle" 
+      <icon-toggle-button class="video-item__expand-toggle" 
                           icon-normal="expand"
                           icon-toggled="fold"
                           @click.native="expanded = !expanded"/>
@@ -87,10 +88,17 @@ export default {
   components: {
     IconButton,
     IconToggleButton,
+    OverlayIconButton,
+    ProgressBar,
   },
 
   props: {
     selectionMode: {
+      type: Boolean,
+      default: false,
+    },
+
+    selected: {
       type: Boolean,
       default: false,
     },
@@ -100,7 +108,34 @@ export default {
     return {
       expanded: false,
       hovered: false,
+      selectedStatus: false,
     }
+  },
+
+  watch: {
+    selectionMode(mode) {
+      if (!mode) {
+        this.selectedStatus = false
+      }
+    },
+
+    selected(status) {
+      this.selectedStatus = status
+    },
+  },
+
+  methods: {
+    mainActionHandler() {
+      if (this.selectionMode) {
+        this.selectedStatus = !this.selectedStatus
+        const eventName = this.selectedStatus
+          ? 'video-item-selected'
+          : 'video-item-deselected'
+        this.$emit(eventName)
+      } else {
+        this.$emit('video-item-play')
+      }
+    },
   },
 }
 </script>
@@ -118,6 +153,12 @@ export default {
   display: grid;
   grid-template-columns: 1fr 48px;
   grid-template-rows: 1fr 8px 48px;
+  transition: box-shadow 100ms $mdc-animation-standard-curve-timing-function;
+  will-change: box-shadow;
+
+  &--selectedStatus {
+    box-shadow: 0 0 0 4px $theme-color-secondary;
+  }
 
   &__thumbnail {
     grid-column: 1 / span 2;
@@ -222,6 +263,11 @@ export default {
     left: 50%;
     transform-origin: center center;
     transform: translate(-50%, -50%) scale(4);
+    visibility: hidden;
+  }
+
+  &__main-action--active {
+    visibility: visible;
   }
 
   &__main-action--expanded {
