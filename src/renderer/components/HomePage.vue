@@ -12,17 +12,8 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="!selectionMode" 
-           key="normal-mode" 
-           class="home-page__toolbar">
-        <icon-button icon="search"/>
-        <icon-button icon="selection-mode" 
-                     @click.native="selectionMode = true"/>
-        <icon-toggle-button icon-normal="fullscreen" 
-                            icon-toggled="fullscreen-exit"/>
-      </div>
 
-      <div v-else 
+      <div v-if="selectionMode"
            key="selection-mode" 
            class="home-page__selection-toolbar">
         <icon-button icon="cancel" 
@@ -34,6 +25,16 @@
         <icon-toggle-button icon-normal="mark-watched" 
                             icon-toggled="watched"/>
         <icon-button icon="delete"/>
+      </div>
+
+      <div v-else 
+           key="normal-mode" 
+           class="home-page__toolbar">
+        <icon-button icon="search"/>
+        <icon-button icon="selection-mode" 
+                     @click.native="selectionMode = true"/>
+        <icon-toggle-button icon-normal="fullscreen" 
+                            icon-toggled="fullscreen-exit"/>
       </div>
     </transition>
 
