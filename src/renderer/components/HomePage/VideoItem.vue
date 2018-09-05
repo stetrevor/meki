@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selected': selected }]" 
+  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <img src="https://placekitten.com/300/200" 
@@ -50,7 +50,7 @@
                 mode="out-in">
       <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :active="selected"
+                           :active="selectedStatus"
                            :key="`${selectionMode}${expanded}`" 
                            @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
@@ -97,29 +97,38 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
       expanded: false,
       hovered: false,
-      selected: false,
+      selectedStatus: false,
     }
   },
 
   watch: {
     selectionMode(mode) {
       if (!mode) {
-        this.selected = false
+        this.selectedStatus = false
       }
+    },
+
+    selected(status) {
+      this.selectedStatus = status
     },
   },
 
   methods: {
     mainActionHandler() {
       if (this.selectionMode) {
-        this.selected = !this.selected
-        const eventName = this.selected
+        this.selectedStatus = !this.selectedStatus
+        const eventName = this.selectedStatus
           ? 'video-item-selected'
           : 'video-item-deselected'
         this.$emit(eventName)
@@ -147,7 +156,7 @@ export default {
   transition: box-shadow 100ms $mdc-animation-standard-curve-timing-function;
   will-change: box-shadow;
 
-  &--selected {
+  &--selectedStatus {
     box-shadow: 0 0 0 4px $theme-color-secondary;
   }
 
