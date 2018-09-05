@@ -63,3 +63,23 @@ video.add('VideoItem List', () => ({
   </div>
   `,
 }))
+
+const menu = storiesOf('Home Page | Selection Menu', module)
+
+menu.add('SelectionMenu', () => {
+  require('../assets/icons/icon-more.svg')
+
+  return {
+    template: `
+    <div class="theme-bg-color-primary-lighter" style="width: 100vw; height: 100vh; padding: 48px 0; display: flex; align-items: center; justify-content: center">
+      <icon-button icon="more" @click.native.stop="show = true"/>
+      <selection-menu style="position: absolute" v-if="show" @select-all="show = false" @select-none="show = false" @dismiss="show = false"/>
+    </div>`,
+
+    data() {
+      return {
+        show: false,
+      }
+    },
+  }
+})
