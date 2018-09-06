@@ -1,5 +1,5 @@
 <template>
-  <div class="icon-button">
+  <div :class="['icon-button', { 'icon-button--colored': colored }]">
     <svg class="icon-button__icon">
       <use :xlink:href="`#icon-${icon}`"/>
     </svg>
@@ -15,6 +15,11 @@ export default {
       type: String,
       required: true,
     },
+
+    colored: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
@@ -27,19 +32,19 @@ export default {
   overflow: hidden;
   width: 48px;
   height: 48px;
+  @include theme-text-color-on-primary();
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
+  transition: opacity, color 100ms $mdc-animation-standard-curve-timing-function;
+  will-change: opacity, color;
 
   &__icon {
     width: 24px;
     height: 24px;
-    @include theme-text-color-on-primary();
     opacity: 0.54;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
     position: relative;
   }
 
@@ -66,6 +71,18 @@ export default {
 
   &:active {
     &::before {
+      opacity: 0.54;
+    }
+  }
+
+  &--colored {
+    @include theme-text-color-secondary();
+
+    &:hover::before {
+      @include theme-bg-color-secondary();
+    }
+
+    &:active::before {
       opacity: 0.54;
     }
   }
