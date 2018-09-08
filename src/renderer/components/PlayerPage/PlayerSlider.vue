@@ -35,23 +35,23 @@ export default {
     return {
       dragging: false,
       value: this.initialValue,
+      thumbStyle: '',
+      valueStyle: '',
     }
   },
 
-  computed: {
-    thumbStyle() {
-      return `left: ${(this.value / this.max) * 100}%`
-    },
-
-    valueStyle() {
-      return `width: ${(this.value / this.max) * 100}%`
-    },
-  },
-
   watch: {
+    initialValue: {
+      immediate: true,
+      handler(newValue) {
+        this.setThumbAndValueStyle(newValue)
+      },
+    },
+
     value: {
       immediate: true,
       handler(newValue) {
+        this.setThumbAndValueStyle(newValue)
         this.$emit('value-changed', newValue)
       },
     },
@@ -79,6 +79,11 @@ export default {
       const value = (left / this.rect.width) * this.max
 
       this.value = this.discrete ? Math.round(value) : value
+    },
+
+    setThumbAndValueStyle(value) {
+      this.thumbStyle = `left: ${(value / this.max) * 100}%`
+      this.valueStyle = `width: ${(value / this.max) * 100}%`
     },
   },
 }
