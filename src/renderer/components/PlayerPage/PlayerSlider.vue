@@ -1,6 +1,6 @@
 <template>
   <div class="player-slider" 
-       @click="setThumbAndValue">
+       @click="setValue">
     <div :style="valueStyle" 
          class="player-slider__value"/>
     <div ref="thumb" 
@@ -66,13 +66,13 @@ export default {
 
     document.body.addEventListener('mousemove', e => {
       if (this.dragging) {
-        this.setThumbAndValue(e)
+        this.setValue(e)
       }
     })
   },
 
   methods: {
-    setThumbAndValue(e) {
+    setValue(e) {
       const { clientX, clientY } = e
       const movedLeft = clientX - this.rect.left
       const left = Math.min(this.rect.width, Math.max(movedLeft, 0))
