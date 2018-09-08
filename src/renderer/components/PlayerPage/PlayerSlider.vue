@@ -4,7 +4,7 @@
     <div :style="valueStyle" 
          class="player-slider__value"/>
     <div ref="thumb" 
-         :style="initialThumbStyle"
+         :style="thumbStyle"
          class="player-slider__thumb"
          @mousedown="dragging = true"/>
     <div class="player-slider__label"/>
@@ -39,8 +39,8 @@ export default {
   },
 
   computed: {
-    initialThumbStyle() {
-      return `left: ${(this.initialValue / this.max) * 100}%`
+    thumbStyle() {
+      return `left: ${(this.value / this.max) * 100}%`
     },
 
     valueStyle() {
@@ -77,9 +77,8 @@ export default {
       const { clientX, clientY } = e
       const movedLeft = clientX - this.rect.left
       const left = Math.min(this.rect.width, Math.max(movedLeft, 0))
-      this.$refs.thumb.style.left = `${left}px`
-
       const value = (left / this.rect.width) * this.max
+
       this.value = this.discrete ? Math.round(value) : value
     },
   },
