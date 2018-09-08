@@ -30,7 +30,8 @@
       </div>
       <div class="player-page__volume-controls">
         <icon-toggle-button icon-normal="volume" 
-                            icon-toggled="muted"/>
+                            icon-toggled="muted" 
+                            @click.native="$refs.video.muted = !$refs.video.muted"/>
         <progress-bar :interactive="true" 
                       :colored="true" 
                       :progress="75"
