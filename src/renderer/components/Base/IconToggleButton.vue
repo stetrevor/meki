@@ -1,13 +1,13 @@
 <template>
   <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling }]" 
-       @click="toggled = !toggled">
+       @click="toggled_ = !toggled_">
     <transition name="fade-out-in" 
                 mode="out-in"
                 @before-leave="toggling = true"
                 @after-enter="toggling = false">
-      <svg :key="toggled" 
+      <svg :key="toggled_" 
            class="icon-toggle-button__icon">
-        <use :xlink:href="`#icon-${toggled ? iconToggled : iconNormal}`" 
+        <use :xlink:href="`#icon-${toggled_ ? iconToggled : iconNormal}`" 
         />
       </svg>
     </transition>
