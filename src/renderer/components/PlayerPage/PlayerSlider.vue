@@ -52,7 +52,6 @@ export default {
     value: {
       immediate: true,
       handler(newValue) {
-        console.log(this.value)
         this.$emit('value-changed', newValue)
       },
     },
