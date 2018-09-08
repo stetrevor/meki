@@ -90,6 +90,8 @@ export default {
 .player-slider {
   box-sizing: border-box;
   border-radius: 2px;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
   width: 100%;
   height: 48px;
   position: relative;
