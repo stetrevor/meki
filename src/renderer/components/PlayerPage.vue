@@ -32,11 +32,10 @@
         <icon-toggle-button icon-normal="volume" 
                             icon-toggled="muted" 
                             @click.native="$refs.video.muted = !$refs.video.muted"/>
-        <progress-bar :interactive="true" 
-                      :colored="true" 
-                      :progress="75"
-                      :max="100" 
-                      class="player-page__volume"/>
+        <player-slider :initial-value="100"
+                       :max="100" 
+                       class="player-page__volume"
+                       @value-changed="$refs.video.volume = $event / 100"/>
       </div>
       <icon-button icon="subtitle"/>
       <icon-toggle-button icon-normal="fullscreen" 
@@ -50,6 +49,7 @@ import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import OverlayIconButton from './Base/OverlayIconButton'
 import ProgressBar from './Base/ProgressBar'
+import PlayerSlider from './PlayerPage/PlayerSlider'
 
 import '../assets/icons/icon-back.svg'
 import '../assets/icons/icon-logo.svg'
@@ -70,6 +70,7 @@ export default {
     IconToggleButton,
     OverlayIconButton,
     ProgressBar,
+    PlayerSlider,
   },
 
   data() {
@@ -133,14 +134,13 @@ export default {
     bottom: 0;
     background: linear-gradient(to top, $theme-color-primary, transparent);
     display: grid;
-    grid-template-columns: auto 5fr minmax(48px * 2, 48px * 3) 1fr auto auto;
+    grid-template-columns: auto 1fr minmax(48px * 2, 48px * 3) 48px+8px+48 * 3 auto auto;
     grid-gap: 24px;
     grid-auto-columns: 8px;
     align-items: center;
   }
 
-  &__timeline,
-  &__volume {
+  &__timeline {
     border-radius: 2px;
     @include theme-bg-color-background();
   }
