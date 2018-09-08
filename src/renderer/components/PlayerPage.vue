@@ -2,7 +2,9 @@
   <div class="player-page">
     <video ref="video" 
            class="player-page__video"
-           src="http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4"/>
+           src="http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4"
+           @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
+           @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
 
     <div class="player-page__header">
       <icon-button icon="back"/>
@@ -17,16 +19,16 @@
                          icon="play"/>
 
     <div class="player-page__footer">
-      <icon-toggle-button icon-normal="play-arrow" 
-                          icon-toggled="pause" 
+      <icon-toggle-button :toggled="!paused" 
+                          icon-normal="play-arrow" 
+                          icon-toggled="pause"
                           @click.native="$refs.video.paused ? $refs.video.play() : $refs.video.pause(); paused = $refs.video.paused"/>
-      <progress-bar :interactive="true" 
-                    :colored="true" 
-                    :progress="32"
-                    :max="120" 
-                    class="player-page__timeline"/>
+      <player-slider :max="duration" 
+                     :initial-value="progress"
+                     class="player-page__timeline"
+                     @value-changed="seek"/>
       <div class="player-page__progress">
-        89 : 54 / 102 : 37
+        {{ progress }} / {{ duration }}
       </div>
       <div class="player-page__volume-controls">
         <icon-toggle-button icon-normal="volume" 
@@ -48,7 +50,6 @@
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import OverlayIconButton from './Base/OverlayIconButton'
-import ProgressBar from './Base/ProgressBar'
 import PlayerSlider from './PlayerPage/PlayerSlider'
 
 import '../assets/icons/icon-back.svg'
@@ -69,14 +70,26 @@ export default {
     IconButton,
     IconToggleButton,
     OverlayIconButton,
-    ProgressBar,
     PlayerSlider,
   },
 
   data() {
     return {
       paused: true,
+      duration: 0,
+      progress: 0,
     }
+  },
+
+  methods: {
+    seek(value) {
+      this.$refs.video.pause()
+      this.paused = this.$refs.video.paused
+      this.$refs.video.currentTime = value / 1000000
+      this.$refs.video.play().then(() => {
+        this.paused = this.$refs.video.paused
+      })
+    },
   },
 }
 </script>
@@ -138,11 +151,6 @@ export default {
     grid-gap: 24px;
     grid-auto-columns: 8px;
     align-items: center;
-  }
-
-  &__timeline {
-    border-radius: 2px;
-    @include theme-bg-color-background();
   }
 
   &__progress {
