@@ -32,13 +32,27 @@ export default {
       type: String,
       required: true,
     },
+
+    toggled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      toggled: false,
+      toggled_: false,
       toggling: false,
     }
+  },
+
+  watch: {
+    toggled: {
+      immediate: true,
+      handler(newValue) {
+        this.toggled_ = newValue
+      },
+    },
   },
 }
 </script>
