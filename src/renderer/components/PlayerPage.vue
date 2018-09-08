@@ -2,7 +2,7 @@
   <div class="player-page">
     <video ref="video" 
            class="player-page__video"
-           src="http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4"
+           src="http://127.0.0.1:8080/test.mp4"
            @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
            @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
 
@@ -16,7 +16,8 @@
 
     <overlay-icon-button v-show="paused" 
                          class="player-page__main-action"
-                         icon="play"/>
+                         icon="play"
+                         @click.native="play"/>
 
     <div class="player-page__footer">
       <icon-toggle-button :toggled="!paused" 
@@ -86,6 +87,12 @@ export default {
       this.$refs.video.pause()
       this.paused = this.$refs.video.paused
       this.$refs.video.currentTime = value / 1000000
+      this.$refs.video.play().then(() => {
+        this.paused = this.$refs.video.paused
+      })
+    },
+
+    play() {
       this.$refs.video.play().then(() => {
         this.paused = this.$refs.video.paused
       })
