@@ -9,13 +9,16 @@ slider.add('PlayerSlider', () => ({
     {{ value1 + ' / 100' }}
     <player-slider :initial-value="32" :max="100" @value-changed="valueChanged1"/>
     {{ value2 + ' / 100' }}
-    <player-slider :initial-value="64" :max="100" :discrete="false" @value-changed="valueChanged2"/>
+    <player-slider :initial-value="64" :max="100" :discrete="false" @value-changed="value2 = arguments[0]"/>
+    {{ value3 + ' / ' + \`${120 * 60 * 60 * 1000}\` }}
+    <player-slider :initial-value="5 * 60 * 60 * 1000" :max="120 * 60 * 60 * 1000" @value-changed="value3 = $event"/>
   </div>`,
 
   data() {
     return {
       value1: 0,
       value2: 0,
+      value3: 0,
     }
   },
 
