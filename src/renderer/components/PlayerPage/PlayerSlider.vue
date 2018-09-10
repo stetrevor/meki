@@ -1,13 +1,27 @@
 <template>
-  <div class="player-slider" 
-       @click="setValue">
+  <div class="player-slider"
+       @mouseenter.capture="onMouseEnter"
+       @mousemove.capture="onMouseMove"
+       @mouseout.capture="onMouseOut"
+       @click.capture="onClick">
+    {{ hello }}
+    <div ref="track" 
+         class="player-slider__track" />
+
     <div :style="valueStyle" 
          class="player-slider__value"/>
+
     <div ref="thumb" 
          :style="thumbStyle"
          class="player-slider__thumb"
          @mousedown="dragging = true"/>
-    <div class="player-slider__label"/>
+
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <div v-show="hovered" 
+           :style="labelStyle"
+           class="player-slider__label">{{ label }}</div>
+    </transition>
   </div>
 </template>
 
@@ -16,7 +30,7 @@ export default {
   name: 'PlayerSlider',
 
   props: {
-    initialValue: {
+    value: {
       type: Number,
       required: true,
     },
@@ -27,28 +41,37 @@ export default {
 
     discrete: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+
+    format: {
+      type: Function,
+      default: v => v,
     },
   },
 
   data() {
     return {
+      hello: '',
       dragging: false,
-      value: this.initialValue,
+      hovered: false,
+      value_: this.value,
       thumbStyle: '',
       valueStyle: '',
+      labelStyle: '',
+      label: '',
     }
   },
 
   watch: {
-    initialValue: {
+    value: {
       immediate: true,
       handler(newValue) {
         this.setThumbAndValueStyle(newValue)
       },
     },
 
-    value: {
+    value_: {
       immediate: true,
       handler(newValue) {
         this.setThumbAndValueStyle(newValue)
@@ -58,7 +81,7 @@ export default {
   },
 
   mounted() {
-    this.rect = this.$el.getBoundingClientRect()
+    this.rect = this.$refs.track.getBoundingClientRect()
 
     document.body.addEventListener('mouseup', e => {
       this.dragging = false
@@ -72,18 +95,57 @@ export default {
   },
 
   methods: {
-    setValue(e) {
-      const { clientX, clientY } = e
-      const movedLeft = clientX - this.rect.left
+    getValueFromMousePosition(e) {
+      const movedLeft = e.clientX - this.rect.left
       const left = Math.min(this.rect.width, Math.max(movedLeft, 0))
       const value = (left / this.rect.width) * this.max
 
-      this.value = this.discrete ? Math.round(value) : value
+      return this.discrete ? Math.round(value) : value
+    },
+
+    setValue(e) {
+      this.value_ = this.getValueFromMousePosition(e)
     },
 
     setThumbAndValueStyle(value) {
       this.thumbStyle = `left: ${(value / this.max) * 100}%`
       this.valueStyle = `width: ${(value / this.max) * 100}%`
+    },
+
+    setLabel(value) {
+      this.label = this.format(value).toString()
+    },
+
+    setLabelStyle(value) {
+      this.labelStyle = `left: ${(value / this.max) * 100}%`
+    },
+
+    updateLabel(e) {
+      const value = this.getValueFromMousePosition(e)
+      this.setLabel(value)
+      this.setLabelStyle(value)
+    },
+
+    onMouseEnter(e) {
+      if (e.target !== this.$el) {
+        this.hovered = true
+      }
+    },
+
+    onMouseMove(e) {
+      if (e.target !== this.$el) {
+        this.updateLabel(e)
+      }
+    },
+    onMouseOut(e) {
+      if (e.target !== this.$el) {
+        this.hovered = false
+      }
+    },
+    onClick(e) {
+      if (e.target !== this.$el) {
+        this.setValue(e)
+      }
     },
   },
 }
@@ -94,24 +156,21 @@ export default {
 
 .player-slider {
   box-sizing: border-box;
-  border-radius: 2px;
   border-left: 24px solid transparent;
   border-right: 24px solid transparent;
   width: 100%;
   height: 48px;
   position: relative;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
 
-  &::before {
-    position: absolute;
-    top: 20px;
-    left: 0;
-    content: '';
+  &__track {
     border-radius: 2px;
     width: 100%;
     height: 8px;
     @include theme-bg-color-background();
     opacity: 0.54;
+    cursor: pointer;
   }
 
   &__value {
@@ -121,6 +180,7 @@ export default {
     border-radius: 2px;
     height: 8px;
     @include theme-bg-color-secondary();
+    cursor: pointer;
   }
 
   &__thumb {
@@ -130,6 +190,7 @@ export default {
     width: 16px;
     height: 20px;
     transform: translateX(-50%);
+    cursor: pointer;
 
     &::before {
       content: '';
@@ -163,6 +224,23 @@ export default {
     &:active::before {
       opacity: 0.54;
     }
+  }
+
+  &__label {
+    position: absolute;
+    top: -8px;
+    transform: translate(-50%, -100%);
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 0 16px;
+    min-width: 48px;
+    height: 48px;
+    @include theme-typography-body2();
+    @include theme-text-color-on-background();
+    @include theme-bg-color-background();
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
