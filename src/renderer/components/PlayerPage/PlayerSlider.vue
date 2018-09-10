@@ -234,6 +234,7 @@ export default {
     border-radius: 8px;
     padding: 0 16px;
     min-width: 48px;
+    width: fit-content;
     height: 48px;
     @include theme-typography-body2();
     @include theme-text-color-on-background();
