@@ -37,6 +37,7 @@
                             @click.native="$refs.video.muted = !$refs.video.muted"/>
         <player-slider :value="100"
                        :max="100" 
+                       :discrete="true"
                        class="player-page__volume"
                        @value-changed="$refs.video.volume = $event / 100"/>
       </div>
