@@ -100,11 +100,13 @@ export default {
 
   methods: {
     seek(value) {
-      this.$refs.video.pause()
-      this.paused = this.$refs.video.paused
-      this.$refs.video.currentTime = value / 1000000
-      this.$refs.video.play().then(() => {
-        this.paused = this.$refs.video.paused
+      const video = this.$refs.video
+
+      video.pause()
+      this.paused = video.paused
+      video.currentTime = value / 1000000
+      video.play().then(() => {
+        this.paused = video.paused
       })
     },
 
@@ -119,8 +121,10 @@ export default {
     },
 
     play() {
-      this.$refs.video.play().then(() => {
-        this.paused = this.$refs.video.paused
+      const video = this.$refs.video
+
+      video.play().then(() => {
+        this.paused = video.paused
       })
     },
 
