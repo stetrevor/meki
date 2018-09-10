@@ -23,7 +23,7 @@
       <icon-toggle-button :toggled="!paused" 
                           icon-normal="play-arrow" 
                           icon-toggled="pause"
-                          @click.native="$refs.video.paused ? $refs.video.play() : $refs.video.pause(); paused = $refs.video.paused"/>
+                          @click.native="playOrPause"/>
       <player-slider :max="duration" 
                      :value="progress"
                      class="player-page__timeline"
@@ -108,10 +108,31 @@ export default {
       })
     },
 
+    isPlaying() {
+      const video = this.$refs.video
+      return (
+        video.currentTime > 0 &&
+        !video.paused &&
+        !video.ended &&
+        video.readyState > 2
+      )
+    },
+
     play() {
       this.$refs.video.play().then(() => {
         this.paused = this.$refs.video.paused
       })
+    },
+
+    playOrPause() {
+      const video = this.$refs.video
+
+      if (!this.isPlaying()) {
+        this.play()
+      } else {
+        video.pause()
+        this.paused = video.paused
+      }
     },
   },
 }
