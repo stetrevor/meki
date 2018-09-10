@@ -25,7 +25,7 @@
                           icon-toggled="pause"
                           @click.native="$refs.video.paused ? $refs.video.play() : $refs.video.pause(); paused = $refs.video.paused"/>
       <player-slider :max="duration" 
-                     :initial-value="progress"
+                     :value="progress"
                      class="player-page__timeline"
                      @value-changed="seek"/>
       <div class="player-page__progress">
@@ -35,7 +35,7 @@
         <icon-toggle-button icon-normal="volume" 
                             icon-toggled="muted" 
                             @click.native="$refs.video.muted = !$refs.video.muted"/>
-        <player-slider :initial-value="100"
+        <player-slider :value="100"
                        :max="100" 
                        class="player-page__volume"
                        @value-changed="$refs.video.volume = $event / 100"/>
