@@ -182,12 +182,25 @@ export default {
     width: 100%;
     height: 96px;
     @include theme-text-color-on-primary();
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 96px + 48px;
+      z-index: -1;
+    }
   }
 
   &__header {
-    background: linear-gradient(to bottom, $theme-color-primary, transparent);
     display: flex;
     align-items: center;
+
+    &::before {
+      top: 0;
+      background: linear-gradient(to bottom, $theme-color-primary, transparent);
+    }
   }
 
   &__title {
@@ -210,12 +223,16 @@ export default {
 
   &__footer {
     bottom: 0;
-    background: linear-gradient(to top, $theme-color-primary, transparent);
     display: grid;
     grid-template-columns: auto 1fr minmax(48px * 2, 48px * 3) 48px+8px+48 * 3 auto auto;
     grid-gap: 24px;
     grid-auto-columns: 8px;
     align-items: center;
+
+    &::before {
+      bottom: 0;
+      background: linear-gradient(to top, $theme-color-primary, transparent);
+    }
   }
 
   &__progress {
