@@ -45,7 +45,8 @@
       </div>
       <icon-button icon="subtitle"/>
       <icon-toggle-button icon-normal="fullscreen" 
-                          icon-toggled="fullscreen-exit"/>
+                          icon-toggled="fullscreen-exit" 
+                          @click.native="toggleFullscreen"/>
     </div>
   </div>
 </template>
@@ -143,6 +144,15 @@ export default {
       } else {
         video.pause()
         this.paused = video.paused
+      }
+    },
+
+    toggleFullscreen() {
+      const el = this.$el
+      if (document.webkitFullscreenElement) {
+        document.webkitExitFullscreen()
+      } else {
+        el.webkitRequestFullscreen()
       }
     },
   },
