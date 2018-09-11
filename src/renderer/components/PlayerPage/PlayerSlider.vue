@@ -137,11 +137,13 @@ export default {
         this.updateLabel(e)
       }
     },
+
     onMouseOut(e) {
       if (e.target !== this.$el) {
         this.hovered = false
       }
     },
+
     onClick(e) {
       if (e.target !== this.$el) {
         this.setValue(e)
