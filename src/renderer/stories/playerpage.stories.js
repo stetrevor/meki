@@ -36,3 +36,52 @@ slider.add('PlayerSlider', () => ({
 const player = storiesOf('Player Page | Player', module)
 
 player.add('Video Player', () => ({ template: '<player-page/>' }))
+
+const subtitles = storiesOf('Player Page | Subtitles', module)
+
+subtitles.add('Subtitle Menu', () => ({
+  template: `
+    <div class="theme-bg-color-primary-lighter" style="width: 100vw; height: 100vh; padding: 48px 0; display: flex; flex-direction: column; align-items: center; justify-content: center">
+      <subtitle-menu style="margin-bottom: 8px"
+                     v-show="show"
+                     :subtitles="subtitles"
+                     @active-subtitle-changed="setActiveSubtitle"
+                     @dismiss="show = false"/>
+      <icon-button icon="subtitle" @click.native.stop="show = !show" :active="show"/>
+    </div>`,
+
+  data() {
+    return {
+      subtitles: [
+        { _id: '1', default: false, title: 'English', lang: 'en' },
+        { _id: '2', default: true, title: 'English 2', lang: 'en' },
+        { _id: '3', default: false, title: 'Chinese', lang: 'cn' },
+      ],
+      show: false,
+    }
+  },
+
+  methods: {
+    setActiveSubtitle(subtitle) {
+      const oldIndex = this.subtitles.findIndex(s => s.default)
+      const old = this.subtitles[oldIndex]
+      this.subtitles.splice(
+        oldIndex,
+        1,
+        Object.assign({}, old, { default: false }),
+      )
+
+      const index = this.subtitles.findIndex(s => s._id === subtitle._id)
+      this.subtitles.splice(
+        index,
+        1,
+        Object.assign({}, subtitle, { default: true }),
+      )
+
+      console.log(
+        Object.assign({}, old, { default: false }),
+        Object.assign({}, subtitle, { default: true }),
+      )
+    },
+  },
+}))
