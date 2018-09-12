@@ -1,6 +1,6 @@
 <template>
-  <div :class="['icon-button', { 'icon-button--colored': colored }]">
-    <svg class="icon-button__icon">
+  <div :class="['icon-button', { 'icon-button--colored': colored, 'icon-button--active': active }]">
+    <svg :class="['icon-button__icon', { 'icon-button__icon--active': active }]">
       <use :xlink:href="`#icon-${icon}`"/>
     </svg>
   </div>
@@ -17,6 +17,11 @@ export default {
     },
 
     colored: {
+      type: Boolean,
+      default: false,
+    },
+
+    active: {
       type: Boolean,
       default: false,
     },
@@ -85,6 +90,16 @@ export default {
     &:active::before {
       opacity: 0.54;
     }
+  }
+
+  &--active {
+    &::before {
+      opacity: 0.54;
+    }
+  }
+
+  &__icon--active {
+    opacity: 1;
   }
 }
 </style>
