@@ -43,7 +43,16 @@
                        class="player-page__volume"
                        @value-changed="$refs.video.volume = $event / 100"/>
       </div>
-      <icon-button icon="subtitle"/>
+
+      <icon-button :active="subtitleMenuShow" 
+                   icon="subtitle"
+                   @click.native.stop="subtitleMenuShow = !subtitleMenuShow"/>
+      <subtitle-menu v-show="subtitleMenuShow" 
+                     :subtitles="subtitles"
+                     class="player-page__subtitle-menu"
+                     @active-subtitle-changed="setActiveSubtitle"
+                     @dismiss="subtitleMenuShow = false"/>
+
       <icon-toggle-button icon-normal="fullscreen" 
                           icon-toggled="fullscreen-exit" 
                           @click.native="toggleFullscreen"/>
@@ -56,6 +65,7 @@ import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import OverlayIconButton from './Base/OverlayIconButton'
 import PlayerSlider from './PlayerPage/PlayerSlider'
+import SubtitleMenu from './PlayerPage/SubtitleMenu'
 
 import '../assets/icons/icon-back.svg'
 import '../assets/icons/icon-logo.svg'
@@ -101,6 +111,12 @@ export default {
       paused: true,
       duration: 0,
       progress: 0,
+      subtitleMenuShow: false,
+      subtitles: [
+        { _id: '1', default: false, title: 'English', lang: 'en' },
+        { _id: '2', default: true, title: 'English 2', lang: 'en' },
+        { _id: '3', default: false, title: 'Chinese', lang: 'cn' },
+      ],
     }
   },
 
@@ -154,6 +170,28 @@ export default {
       } else {
         el.webkitRequestFullscreen()
       }
+    },
+
+    setActiveSubtitle(subtitle) {
+      const oldIndex = this.subtitles.findIndex(s => s.default)
+      const old = this.subtitles[oldIndex]
+      this.subtitles.splice(
+        oldIndex,
+        1,
+        Object.assign({}, old, { default: false }),
+      )
+
+      const index = this.subtitles.findIndex(s => s._id === subtitle._id)
+      this.subtitles.splice(
+        index,
+        1,
+        Object.assign({}, subtitle, { default: true }),
+      )
+
+      console.log(
+        Object.assign({}, old, { default: false }),
+        Object.assign({}, subtitle, { default: true }),
+      )
     },
   },
 }
@@ -244,6 +282,12 @@ export default {
     grid-template-columns: auto 1fr;
     grid-gap: 8px;
     align-items: center;
+  }
+
+  &__subtitle-menu {
+    position: fixed;
+    right: 16px;
+    bottom: 80px;
   }
 }
 </style>
