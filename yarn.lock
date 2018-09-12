@@ -9156,6 +9156,12 @@ rxjs@^6.1.0:
   dependencies:
     tslib "^1.9.0"
 
+rxjs@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.3.2.tgz#6a688b16c4e6e980e62ea805ec30648e1c60907f"
+  dependencies:
+    tslib "^1.9.0"
+
 safe-buffer@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
@@ -10609,6 +10615,10 @@ vue-mdc-adapter@^0.18.1:
 vue-router@^2.5.3:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.8.1.tgz#9833c9ee57ac83beb0269056fefee71713f20695"
+
+vue-rx@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/vue-rx/-/vue-rx-6.0.1.tgz#4e4e9234339cbfa4e1968d67595cfe00293c6edc"
 
 vue-style-loader@^3.0.1:
   version "3.1.2"
