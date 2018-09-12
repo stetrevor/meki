@@ -1,5 +1,5 @@
 <template>
-  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling }]" 
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio }]" 
        @click="toggled_ = !toggled_">
     <transition name="fade-out-in" 
                 mode="out-in"
@@ -34,6 +34,11 @@ export default {
     },
 
     toggled: {
+      type: Boolean,
+      default: false,
+    },
+
+    radio: {
       type: Boolean,
       default: false,
     },
@@ -103,6 +108,14 @@ export default {
   &--toggling {
     &::before {
       opacity: 0.54 !important;
+    }
+  }
+
+  &--radio {
+    @include theme-text-color-on-background();
+
+    &::before {
+      @include theme-bg-color-primary();
     }
   }
 }
