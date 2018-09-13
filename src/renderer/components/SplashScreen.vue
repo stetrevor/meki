@@ -31,9 +31,10 @@ export default {
 
   @include theme-text-color-secondary();
   @include theme-bg-color-primary();
-}
-.splash-screen__logo {
-  width: 192px;
-  height: 288px;
+
+  &__logo {
+    width: 192px;
+    height: 288px;
+  }
 }
 </style>
