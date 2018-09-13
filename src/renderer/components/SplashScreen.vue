@@ -1,5 +1,5 @@
 <template>
-  <div class="splash-screen theme-bg-color-primary theme-text-color-secondary">
+  <div class="splash-screen">
     <svg class="splash-screen__logo">
       <use xlink:href="#logo"/>
     </svg>
@@ -19,6 +19,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import '../theme';
+
 .splash-screen {
   position: absolute;
   width: 100%;
@@ -26,6 +28,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @include theme-text-color-secondary();
+  @include theme-bg-color-primary();
 }
 .splash-screen__logo {
   width: 192px;
