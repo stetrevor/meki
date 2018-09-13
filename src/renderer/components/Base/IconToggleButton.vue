@@ -1,13 +1,13 @@
 <template>
-  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling }]" 
-       @click="toggled = !toggled">
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio }]" 
+       @click="toggled_ = !toggled_">
     <transition name="fade-out-in" 
                 mode="out-in"
                 @before-leave="toggling = true"
                 @after-enter="toggling = false">
-      <svg :key="toggled" 
+      <svg :key="toggled_" 
            class="icon-toggle-button__icon">
-        <use :xlink:href="`#icon-${toggled ? iconToggled : iconNormal}`" 
+        <use :xlink:href="`#icon-${toggled_ ? iconToggled : iconNormal}`" 
         />
       </svg>
     </transition>
@@ -32,13 +32,32 @@ export default {
       type: String,
       required: true,
     },
+
+    toggled: {
+      type: Boolean,
+      default: false,
+    },
+
+    radio: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      toggled: false,
+      toggled_: false,
       toggling: false,
     }
+  },
+
+  watch: {
+    toggled: {
+      immediate: true,
+      handler(newValue) {
+        this.toggled_ = newValue
+      },
+    },
   },
 }
 </script>
@@ -89,6 +108,14 @@ export default {
   &--toggling {
     &::before {
       opacity: 0.54 !important;
+    }
+  }
+
+  &--radio {
+    @include theme-text-color-on-background();
+
+    &::before {
+      @include theme-bg-color-primary();
     }
   }
 }

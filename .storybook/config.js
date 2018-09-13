@@ -2,21 +2,17 @@ import { configure } from '@storybook/vue'
 import { setOptions } from '@storybook/addon-options'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueRx from 'vue-rx'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import path from 'path'
 
-import VueMDCAdapter from 'vue-mdc-adapter'
 import '../src/renderer/theme.scss'
 
 Vue.use(Vuex)
-Vue.use(VueMDCAdapter)
+Vue.use(VueRx)
 
-const requireComponent = require.context(
-  '../src/renderer/components',
-  true,
-  /\.vue$/,
-)
+const requireComponent = require.context('../src/renderer', true, /\.vue$/)
 
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName)

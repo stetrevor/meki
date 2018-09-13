@@ -1,6 +1,6 @@
 <template>
-  <div class="icon-button">
-    <svg class="icon-button__icon">
+  <div :class="['icon-button', { 'icon-button--colored': colored, 'icon-button--active': active }]">
+    <svg :class="['icon-button__icon', { 'icon-button__icon--active': active }]">
       <use :xlink:href="`#icon-${icon}`"/>
     </svg>
   </div>
@@ -15,6 +15,16 @@ export default {
       type: String,
       required: true,
     },
+
+    colored: {
+      type: Boolean,
+      default: false,
+    },
+
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>
@@ -27,19 +37,19 @@ export default {
   overflow: hidden;
   width: 48px;
   height: 48px;
+  @include theme-text-color-on-primary();
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
+  transition: opacity, color 100ms $mdc-animation-standard-curve-timing-function;
+  will-change: opacity, color;
 
   &__icon {
     width: 24px;
     height: 24px;
-    @include theme-text-color-on-primary();
     opacity: 0.54;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
     position: relative;
   }
 
@@ -68,6 +78,28 @@ export default {
     &::before {
       opacity: 0.54;
     }
+  }
+
+  &--colored {
+    @include theme-text-color-secondary();
+
+    &:hover::before {
+      @include theme-bg-color-secondary();
+    }
+
+    &:active::before {
+      opacity: 0.54;
+    }
+  }
+
+  &--active {
+    &::before {
+      opacity: 0.54;
+    }
+  }
+
+  &__icon--active {
+    opacity: 1;
   }
 }
 </style>

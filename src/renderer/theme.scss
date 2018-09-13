@@ -103,6 +103,7 @@ $theme-typography-font-family: Rubik, sans-serif;
 
 @mixin theme-typography-base() {
   font-family: $theme-typography-font-family;
+  font-weight: 400;
 }
 
 @mixin theme-typography-headline1() {
