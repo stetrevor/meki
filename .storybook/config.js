@@ -2,6 +2,7 @@ import { configure } from '@storybook/vue'
 import { setOptions } from '@storybook/addon-options'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VueRx from 'vue-rx'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import path from 'path'
@@ -9,6 +10,7 @@ import path from 'path'
 import '../src/renderer/theme.scss'
 
 Vue.use(Vuex)
+Vue.use(VueRx)
 
 const requireComponent = require.context(
   '../src/renderer/components',
