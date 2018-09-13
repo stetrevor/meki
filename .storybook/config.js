@@ -12,11 +12,7 @@ import '../src/renderer/theme.scss'
 Vue.use(Vuex)
 Vue.use(VueRx)
 
-const requireComponent = require.context(
-  '../src/renderer/components',
-  true,
-  /\.vue$/,
-)
+const requireComponent = require.context('../src/renderer', true, /\.vue$/)
 
 requireComponent.keys().forEach(fileName => {
   const componentConfig = requireComponent(fileName)
