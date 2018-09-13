@@ -134,7 +134,7 @@ export default {
           filters: [{ name: 'Videos', extensions: ['mp4'] }],
           properties: ['openFile'],
         },
-        path => this.addMedia({ type: 'video', path }),
+        ([path]) => this.addMedia({ type: 'video', path }),
       )
     },
 
