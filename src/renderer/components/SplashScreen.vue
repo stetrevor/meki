@@ -11,6 +11,10 @@ import '../assets/logo.svg'
 
 export default {
   name: 'SplashScreen',
+
+  created() {
+    setTimeout(() => this.$router.push({ name: 'home' }), 1000)
+  },
 }
 </script>
 
