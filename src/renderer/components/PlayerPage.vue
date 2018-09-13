@@ -1,66 +1,77 @@
 <template>
-  <div class="player-page">
+  <div v-stream:mousemove="{ subject: mousemove$, options: { capture: true } }" 
+       v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
+       :class="['player-page', { 'player-page--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            class="player-page__video"
            src="http://127.0.0.1:8080/test.mp4"
            @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
            @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
 
-    <div class="player-page__header">
-      <icon-button icon="back"/>
-      <h5 class="player-page__title">Big Bunny</h5>
-      <icon-button :colored="true" 
-                   class="player-page__home" 
-                   icon="logo"/>
-    </div>
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <div v-show="controlsShow$ || paused" 
+           class="player-page__controls">
+        <div class="player-page__header">
+          <icon-button icon="back"/>
+          <h5 class="player-page__title">Big Bunny</h5>
+          <icon-button :colored="true" 
+                       class="player-page__home" 
+                       icon="logo"/>
+        </div>
 
-    <overlay-icon-button v-show="paused" 
-                         class="player-page__main-action"
-                         icon="play"
-                         @click.native="play"/>
+        <overlay-icon-button v-show="paused" 
+                             class="player-page__main-action"
+                             icon="play"
+                             @click.native="play"/>
+    
+        <div class="player-page__footer">
+          <icon-toggle-button :toggled="!paused" 
+                              icon-normal="play-arrow" 
+                              icon-toggled="pause"
+                              @click.native="playOrPause"/>
+          <player-slider :max="duration" 
+                         :value="progress"
+                         :format="toTime"
+                         class="player-page__timeline"
+                         @value-changed="seek"/>
+          <div class="player-page__progress">
+            {{ progress | toTime }} / {{ duration | toTime }}
+          </div>
+          <div class="player-page__volume-controls">
+            <icon-toggle-button icon-normal="volume" 
+                                icon-toggled="muted" 
+                                @click.native="$refs.video.muted = !$refs.video.muted"/>
+            <player-slider :value="100"
+                           :max="100" 
+                           :discrete="true"
+                           :format="v => `${v}%`"
+                           class="player-page__volume"
+                           @value-changed="$refs.video.volume = $event / 100"/>
+          </div>
 
-    <div class="player-page__footer">
-      <icon-toggle-button :toggled="!paused" 
-                          icon-normal="play-arrow" 
-                          icon-toggled="pause"
-                          @click.native="playOrPause"/>
-      <player-slider :max="duration" 
-                     :value="progress"
-                     :format="toTime"
-                     class="player-page__timeline"
-                     @value-changed="seek"/>
-      <div class="player-page__progress">
-        {{ progress | toTime }} / {{ duration | toTime }}
+          <icon-button :active="subtitleMenuShow" 
+                       icon="subtitle"
+                       @click.native.stop="subtitleMenuShow = !subtitleMenuShow"/>
+          <subtitle-menu v-show="subtitleMenuShow" 
+                         :subtitles="subtitles"
+                         class="player-page__subtitle-menu"
+                         @active-subtitle-changed="setActiveSubtitle"
+                         @dismiss="subtitleMenuShow = false"/>
+
+          <icon-toggle-button icon-normal="fullscreen" 
+                              icon-toggled="fullscreen-exit" 
+                              @click.native="toggleFullscreen"/>
+        </div>
       </div>
-      <div class="player-page__volume-controls">
-        <icon-toggle-button icon-normal="volume" 
-                            icon-toggled="muted" 
-                            @click.native="$refs.video.muted = !$refs.video.muted"/>
-        <player-slider :value="100"
-                       :max="100" 
-                       :discrete="true"
-                       :format="v => `${v}%`"
-                       class="player-page__volume"
-                       @value-changed="$refs.video.volume = $event / 100"/>
-      </div>
-
-      <icon-button :active="subtitleMenuShow" 
-                   icon="subtitle"
-                   @click.native.stop="subtitleMenuShow = !subtitleMenuShow"/>
-      <subtitle-menu v-show="subtitleMenuShow" 
-                     :subtitles="subtitles"
-                     class="player-page__subtitle-menu"
-                     @active-subtitle-changed="setActiveSubtitle"
-                     @dismiss="subtitleMenuShow = false"/>
-
-      <icon-toggle-button icon-normal="fullscreen" 
-                          icon-toggled="fullscreen-exit" 
-                          @click.native="toggleFullscreen"/>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import { merge, of } from 'rxjs'
+import { mapTo, switchMap, delay, startWith } from 'rxjs/operators'
+
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import OverlayIconButton from './Base/OverlayIconButton'
@@ -194,6 +205,20 @@ export default {
       )
     },
   },
+
+  domStreams: ['mousemove$', 'mouseup$'],
+
+  subscriptions() {
+    const events$ = merge(this.mousemove$, this.mouseup$).pipe(startWith(null))
+    const show$ = events$.pipe(mapTo(true))
+    const hide$ = events$.pipe(
+      startWith(false),
+      switchMap(() => of(false).pipe(delay(5000))),
+    )
+    const controlsShow$ = merge(show$, hide$)
+
+    return { controlsShow$ }
+  },
 }
 </script>
 
@@ -204,6 +229,10 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
+
+  &--do-not-disturb {
+    cursor: none;
+  }
 
   &__video {
     position: absolute;
