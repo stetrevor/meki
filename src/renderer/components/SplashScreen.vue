@@ -1,5 +1,5 @@
 <template>
-  <div class="splash-screen theme-bg-color-primary theme-text-color-secondary">
+  <div class="splash-screen">
     <svg class="splash-screen__logo">
       <use xlink:href="#logo"/>
     </svg>
@@ -11,10 +11,16 @@ import '../assets/logo.svg'
 
 export default {
   name: 'SplashScreen',
+
+  created() {
+    setTimeout(() => this.$router.push({ name: 'home' }), 1000)
+  },
 }
 </script>
 
 <style lang="scss">
+@import '../theme';
+
 .splash-screen {
   position: absolute;
   width: 100%;
@@ -22,9 +28,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.splash-screen__logo {
-  width: 192px;
-  height: 288px;
+
+  @include theme-text-color-secondary();
+  @include theme-bg-color-primary();
+
+  &__logo {
+    width: 192px;
+    height: 288px;
+  }
 }
 </style>

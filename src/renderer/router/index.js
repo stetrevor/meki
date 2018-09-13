@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import SplashScreen from '@/components/SplashScreen'
+import HomePage from '@/components/HomePage'
 
 export default new Router({
   routes: [
@@ -13,8 +14,9 @@ export default new Router({
       component: SplashScreen,
     },
     {
-      path: '*',
-      redirect: '/',
+      path: '/home',
+      name: 'home',
+      component: HomePage,
     },
   ],
 })
