@@ -2,7 +2,8 @@
   <div class="home-page">
     <div class="home-page__sidebar">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
-      <add-media-button class="home-page__amd"/>
+      <add-media-button class="home-page__amd" 
+                        @click.native="showAddMediaDialog"/>
       <nav-bar :nav-items="['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private']" 
                class="home-page__nav"
                @active-nav-item-changed="currentTab = $event"/>
@@ -72,6 +73,8 @@
 </template>
 
 <script>
+const { dialog, getCurrentWindow } = require('electron').remote
+
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import NavBar from './HomePage/NavBar'
@@ -113,6 +116,25 @@ export default {
       selectionMenu: false,
       selectAll: false,
     }
+  },
+
+  methods: {
+    showAddMediaDialog() {
+      dialog.showOpenDialog(
+        getCurrentWindow(),
+        {
+          title: 'Pick A .mp4 File',
+          buttonLabel: 'Add Media',
+          filters: [{ name: 'Videos', extensions: ['mp4'] }],
+          properties: ['openFile'],
+        },
+        path => this.addMedia({ type: 'video', path }),
+      )
+    },
+
+    addMedia(media) {
+      console.log('HomePage addMedia', media)
+    },
   },
 }
 </script>
