@@ -85,3 +85,11 @@ subtitles.add('Subtitle Menu', () => ({
     },
   },
 }))
+
+const hover = storiesOf('Player Page | Hover Behavior', module)
+
+hover.add('Hover To Show Controls', () => ({
+  template: `
+  <hover-control style="width: 100vw; height: 100vh"/>
+  `,
+}))
