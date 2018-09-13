@@ -75,6 +75,8 @@
 <script>
 const { dialog, getCurrentWindow } = require('electron').remote
 
+import { mapGetters, mapActions } from 'vuex'
+
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
 import NavBar from './HomePage/NavBar'
@@ -118,6 +120,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['videos']),
+  },
+
   methods: {
     showAddMediaDialog() {
       dialog.showOpenDialog(
@@ -132,9 +138,7 @@ export default {
       )
     },
 
-    addMedia(media) {
-      console.log('HomePage addMedia', media)
-    },
+    ...mapActions(['addMedia']),
   },
 }
 </script>
