@@ -30,8 +30,7 @@
   },
   "lint-staged": {
     "*.{js,vue}": [
-      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix --no-ignore",
-      "git add"
+      "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix --no-ignore"
     ]
   },
   "dependencies": {
