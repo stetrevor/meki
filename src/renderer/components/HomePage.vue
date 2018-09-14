@@ -142,7 +142,7 @@ export default {
           filters: [{ name: 'Videos', extensions: ['mp4'] }],
           properties: ['openFile'],
         },
-        ([path]) => this.addMedia({ type: 'video', path }),
+        ([path]) => this.addMediaItem({ type: 'video', path }),
       )
     },
 
@@ -167,7 +167,7 @@ export default {
       )
     },
 
-    ...mapActions(['addMedia', 'deleteMedia']),
+    ...mapActions(['addMediaItem', 'deleteMedia']),
   },
 }
 </script>

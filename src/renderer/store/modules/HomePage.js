@@ -11,7 +11,7 @@ const getters = {
 }
 
 const mutations = {
-  ADD_MEDIA(state, mediaItem) {
+  ADD_MEDIA_ITEM(state, mediaItem) {
     const m = Object.assign({}, mediaItem, {
       title: path.basename(mediaItem.path, '.mp4'),
     })
@@ -27,8 +27,8 @@ const mutations = {
 }
 
 const actions = {
-  addMedia({ commit }, mediaItem) {
-    commit('ADD_MEDIA', mediaItem)
+  addMediaItem({ commit }, mediaItem) {
+    commit('ADD_MEDIA_ITEM', mediaItem)
   },
 
   deleteMedia({ commit }, items) {
