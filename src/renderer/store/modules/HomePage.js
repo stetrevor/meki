@@ -14,13 +14,14 @@ const mutations = {
   ADD_MEDIA_ITEM(state, mediaItem) {
     const m = Object.assign({}, mediaItem, {
       title: path.basename(mediaItem.path, '.mp4'),
+      _id: Date.now(),
     })
     state.media.push(m)
   },
 
   DELETE_MEDIA_ITEMS(state, items) {
     items.forEach(item => {
-      const index = state.media.findIndex(m => m.path === item.path)
+      const index = state.media.findIndex(m => m._id === item._id)
       state.media.splice(index, 1)
     })
   },

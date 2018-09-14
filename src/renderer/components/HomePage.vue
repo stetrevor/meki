@@ -73,7 +73,7 @@
                       :selected="selectAll"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItems.push(video)" 
-                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item.path === video.path), 1)"/>
+                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"/>
         </div>
       </transition>
     </div>
