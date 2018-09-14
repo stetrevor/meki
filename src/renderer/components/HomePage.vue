@@ -25,7 +25,14 @@
                             icon-toggled="favorited"/>
         <icon-toggle-button icon-normal="mark-watched" 
                             icon-toggled="watched"/>
-        <icon-button icon="delete"/>
+
+        <transition name="fade-out-in" 
+                    mode="out-in">
+          <icon-button v-show="selectedItems.length" 
+                       icon="delete"
+                       @click.native="showDeleteDialog"/>
+        </transition>
+
         <icon-button icon="more" 
                      @click.native.stop="selectionMenu = true"/>
 
@@ -139,7 +146,28 @@ export default {
       )
     },
 
-    ...mapActions(['addMedia']),
+    showDeleteDialog() {
+      if (!this.selectedItems.length) return
+
+      dialog.showMessageBox(
+        getCurrentWindow(),
+        {
+          type: 'warning',
+          buttons: ['Delete', 'Cancel'],
+          defaultId: 1,
+          title: 'Delete Media',
+          message: `This will delete ${this.selectedItems.length} media items.`,
+          cancelId: 1,
+        },
+        response => {
+          if (response === 0) {
+            this.deleteMedia(this.selectedItems)
+          }
+        },
+      )
+    },
+
+    ...mapActions(['addMedia', 'deleteMedia']),
   },
 }
 </script>
