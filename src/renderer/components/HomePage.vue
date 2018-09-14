@@ -32,7 +32,7 @@
         <transition name="fade-out-in">
           <selection-menu v-if="selectionMenu" 
                           class="home-page__selection-toolbar-menu"
-                          @select-all="selectAll = true; selectedItems = new Array(20).fill(0).map((_, i) => i)"
+                          @select-all="selectAll = true; selectedItems = videos"
                           @select-none="selectAll = false; selectedItems = []"
                           @dismiss="selectionMenu = false"/>
         </transition>
@@ -60,12 +60,13 @@
         <div v-else 
              :key="currentTab"
              class="home-page__media-list">
-          <video-item v-for="i in 20" 
-                      :key="i"
+          <video-item v-for="video in videos" 
+                      :key="video.path"
+                      :video="video"
                       :selected="selectAll"
                       :selection-mode="selectionMode"
-                      @video-item-selected="selectedItems.push(i)" 
-                      @video-item-deselected="selectedItems.splice(selectedItems.indexOf(i), 1)"/>
+                      @video-item-selected="selectedItems.push(video)" 
+                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item.path === video.path), 1)"/>
         </div>
       </transition>
     </div>
