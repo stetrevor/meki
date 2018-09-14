@@ -17,12 +17,22 @@ const mutations = {
     })
     state.media.push(m)
   },
+
+  DELETE_MEDIA_ITEMS(state, items) {
+    items.forEach(item => {
+      const index = state.media.findIndex(m => m.path === item.path)
+      state.media.splice(index, 1)
+    })
+  },
 }
 
 const actions = {
   addMedia({ commit }, mediaItem) {
-    // do something async
     commit('ADD_MEDIA', mediaItem)
+  },
+
+  deleteMedia({ commit }, items) {
+    commit('DELETE_MEDIA_ITEMS', items)
   },
 }
 
