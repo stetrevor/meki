@@ -187,6 +187,9 @@ export default {
     opacity: 0.54;
     transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
     will-change: opacity;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   &__title--active {
@@ -222,6 +225,8 @@ export default {
     grid-column: 1 / span 2;
     margin: 0;
     opacity: 1;
+    white-space: normal;
+    overflow-wrap: break-word;
   }
 
   &__progress-bar--expanded {
