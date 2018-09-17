@@ -25,14 +25,21 @@
                             icon-toggled="favorited"/>
         <icon-toggle-button icon-normal="mark-watched" 
                             icon-toggled="watched"/>
-        <icon-button icon="delete"/>
+
+        <transition name="fade-out-in" 
+                    mode="out-in">
+          <icon-button v-show="selectedItems.length" 
+                       icon="delete"
+                       @click.native="showDeleteDialog"/>
+        </transition>
+
         <icon-button icon="more" 
                      @click.native.stop="selectionMenu = true"/>
 
         <transition name="fade-out-in">
           <selection-menu v-if="selectionMenu" 
                           class="home-page__selection-toolbar-menu"
-                          @select-all="selectAll = true; selectedItems = new Array(20).fill(0).map((_, i) => i)"
+                          @select-all="selectAll = true; selectedItems = videos"
                           @select-none="selectAll = false; selectedItems = []"
                           @dismiss="selectionMenu = false"/>
         </transition>
@@ -44,8 +51,7 @@
         <icon-button icon="search"/>
         <icon-button icon="selection-mode" 
                      @click.native="selectionMode = true"/>
-        <icon-toggle-button icon-normal="fullscreen" 
-                            icon-toggled="fullscreen-exit"/>
+        <fullscreen-toggle/>
       </div>
     </transition>
 
@@ -60,12 +66,14 @@
         <div v-else 
              :key="currentTab"
              class="home-page__media-list">
-          <video-item v-for="i in 20" 
-                      :key="i"
+          <video-item v-for="video in videos" 
+                      :key="video.path"
+                      :video="video"
                       :selected="selectAll"
                       :selection-mode="selectionMode"
-                      @video-item-selected="selectedItems.push(i)" 
-                      @video-item-deselected="selectedItems.splice(selectedItems.indexOf(i), 1)"/>
+                      @video-item-selected="selectedItems.push(video)" 
+                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"
+                      @video-item-play="$router.push({ name: 'player' })"/>
         </div>
       </transition>
     </div>
@@ -75,8 +83,11 @@
 <script>
 const { dialog, getCurrentWindow } = require('electron').remote
 
+import { mapGetters, mapActions } from 'vuex'
+
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
+import FullscreenToggle from './Base/FullscreenToggle'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
 import VideoItem from './HomePage/VideoItem'
@@ -86,8 +97,6 @@ import '../assets/logo.svg'
 import '../assets/icons/icon-settings.svg'
 import '../assets/icons/icon-search.svg'
 import '../assets/icons/icon-selection-mode.svg'
-import '../assets/icons/icon-fullscreen.svg'
-import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-cancel.svg'
 import '../assets/icons/icon-favorite.svg'
 import '../assets/icons/icon-favorited.svg'
@@ -102,6 +111,7 @@ export default {
   components: {
     IconButton,
     IconToggleButton,
+    FullscreenToggle,
     NavBar,
     AddMediaButton,
     VideoItem,
@@ -118,6 +128,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(['videos']),
+  },
+
   methods: {
     showAddMediaDialog() {
       dialog.showOpenDialog(
@@ -128,13 +142,37 @@ export default {
           filters: [{ name: 'Videos', extensions: ['mp4'] }],
           properties: ['openFile'],
         },
-        path => this.addMedia({ type: 'video', path }),
+        paths => {
+          if (paths) {
+            this.addMediaItem({ mediaType: 'video', filePath: paths[0] })
+          }
+        },
       )
     },
 
-    addMedia(media) {
-      console.log('HomePage addMedia', media)
+    showDeleteDialog() {
+      if (!this.selectedItems.length) return
+
+      dialog.showMessageBox(
+        getCurrentWindow(),
+        {
+          type: 'warning',
+          buttons: ['Delete', 'Cancel'],
+          defaultId: 1,
+          title: 'Delete Media',
+          message: `This will delete ${this.selectedItems.length} media items.`,
+          cancelId: 1,
+        },
+        response => {
+          if (response === 0) {
+            this.deleteMedia(this.selectedItems.map(({ _id }) => _id))
+            this.selectedItems = []
+          }
+        },
+      )
     },
+
+    ...mapActions(['addMediaItem', 'deleteMedia']),
   },
 }
 </script>

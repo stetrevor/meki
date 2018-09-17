@@ -1,13 +1,12 @@
 <template>
-  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio }]" 
-       @click="toggled_ = !toggled_">
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio }]">
     <transition name="fade-out-in" 
                 mode="out-in"
                 @before-leave="toggling = true"
                 @after-enter="toggling = false">
-      <svg :key="toggled_" 
+      <svg :key="toggled" 
            class="icon-toggle-button__icon">
-        <use :xlink:href="`#icon-${toggled_ ? iconToggled : iconNormal}`" 
+        <use :xlink:href="`#icon-${toggled ? iconToggled : iconNormal}`" 
         />
       </svg>
     </transition>
@@ -46,18 +45,8 @@ export default {
 
   data() {
     return {
-      toggled_: false,
       toggling: false,
     }
-  },
-
-  watch: {
-    toggled: {
-      immediate: true,
-      handler(newValue) {
-        this.toggled_ = newValue
-      },
-    },
   },
 }
 </script>

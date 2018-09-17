@@ -59,9 +59,7 @@
                          @active-subtitle-changed="setActiveSubtitle"
                          @dismiss="subtitleMenuShow = false"/>
 
-          <icon-toggle-button icon-normal="fullscreen" 
-                              icon-toggled="fullscreen-exit" 
-                              @click.native="toggleFullscreen"/>
+          <fullscreen-toggle/>
         </div>
       </div>
     </transition>
@@ -74,6 +72,7 @@ import { mapTo, switchMap, delay, startWith } from 'rxjs/operators'
 
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
+import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
 import PlayerSlider from './PlayerPage/PlayerSlider'
 import SubtitleMenu from './PlayerPage/SubtitleMenu'
@@ -109,6 +108,7 @@ export default {
   components: {
     IconButton,
     IconToggleButton,
+    FullscreenToggle,
     OverlayIconButton,
     PlayerSlider,
   },

@@ -42,7 +42,7 @@ export default {
   overflow: hidden;
 
   &__progress {
-    @include theme-bg-color-background(0.54);
+    @include theme-bg-color-background();
     transition: background-color 100ms
       $mdc-animation-standard-curve-timing-function;
     will-change: background-color;
