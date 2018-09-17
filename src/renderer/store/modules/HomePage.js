@@ -6,7 +6,9 @@ const state = {
 
 const getters = {
   videos(state) {
-    return state.media.filter(mediaItem => mediaItem.type === 'video')
+    return state.media.filter(
+      mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
+    )
   },
 }
 
