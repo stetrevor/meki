@@ -72,7 +72,8 @@
                       :selected="selectAll"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItems.push(video)" 
-                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"/>
+                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"
+                      @video-item-play="$router.push({ name: 'player' })"/>
         </div>
       </transition>
     </div>
@@ -164,7 +165,8 @@ export default {
         },
         response => {
           if (response === 0) {
-            this.deleteMedia(this.selectedItems)
+            this.deleteMedia(this.selectedItems.map(({ _id }) => _id))
+            this.selectedItems = []
           }
         },
       )
