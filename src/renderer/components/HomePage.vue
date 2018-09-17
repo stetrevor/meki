@@ -51,8 +51,7 @@
         <icon-button icon="search"/>
         <icon-button icon="selection-mode" 
                      @click.native="selectionMode = true"/>
-        <icon-toggle-button icon-normal="fullscreen" 
-                            icon-toggled="fullscreen-exit"/>
+        <fullscreen-toggle/>
       </div>
     </transition>
 
@@ -87,6 +86,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
+import FullscreenToggle from './Base/FullscreenToggle'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
 import VideoItem from './HomePage/VideoItem'
@@ -112,6 +112,7 @@ export default {
   components: {
     IconButton,
     IconToggleButton,
+    FullscreenToggle,
     NavBar,
     AddMediaButton,
     VideoItem,
