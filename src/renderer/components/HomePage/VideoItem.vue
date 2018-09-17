@@ -2,7 +2,7 @@
   <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
-    <img src="https://placekitten.com/300/200" 
+    <img :src="'http://127.0.0.1:8080' + video.backdropPath" 
          class="video-item__thumbnail">
 
     <transition name="fade-out-in" 
@@ -10,39 +10,43 @@
       <div v-if="!expanded" 
            key="folded"
            :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
-        <progress-bar :colored="hovered" 
-                      :progress="32"
-                      :max="100" 
-                      class="video-item__progress-bar theme-bg-color-primary"/>
-        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">Video Title</p>
+        <progress-bar v-if="video.progress" 
+                      :colored="hovered" 
+                      :progress="video.progress"
+                      :max="video.runtime" 
+                      class="video-item__progress-bar"/>
+        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
       </div>
     
       <div v-else 
            key="expanded"
            class="video-item__expanded">
         <div class="video-item__info">
-          <div class="video-item__title video-item__title--expanded">Video Title That's Very Long But Now It Can Show All Lines</div>
-          <progress-bar :progress="32" 
-                        :max="100" 
+          <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
+          <progress-bar v-if="video.progress"
+                        :progress="video.progress" 
+                        :max="video.runtime" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
-          <div class="video-item__runtime-left">12m Left</div>
-          <div class="video-item__runtime">22m34s</div>
-          <div class="video-item__date-added">Added on 2018-08-21 2:53 PM</div>
+          <div v-if="video.progress" 
+               class="video-item__runtime-left">{{ (video.runtime - video.progress) | toTime('m Left') }}</div>
+          <div class="video-item__runtime">{{ video.runtime | toTime('m') }}</div>
+          <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
 
-        <transition name="fade-out-in" 
-                    mode="out-in">
-          <div v-show="!selectionMode && hovered" 
-               class="video-item__toolbar">
-            <icon-toggle-button icon-normal="favorite" 
-                                icon-toggled="favorited"/>
-            <icon-toggle-button icon-normal="mark-watched" 
-                                icon-toggled="watched"/>
-            <icon-button icon="folder"/>
-          </div>
-        </transition>
-
+        <div class="video-item__toolbar">
+          <icon-button v-show="!selectionMode && hovered" 
+                       icon="folder"
+                       @click.native="showInFolder"/>
+          <icon-toggle-button :toggled="video.favorite" 
+                              icon-normal="favorite"
+                              icon-toggled="favorited"
+                              @click.native="updateMediaItem(video._id, { favorite: !video.favorite })"/>
+          <icon-toggle-button :toggled="!!video.lastWatched" 
+                              icon-normal="mark-watched"
+                              icon-toggled="watched"
+                              @click.native="updateMediaItem(video._id, { lastWatched: video.lastWatched ? 0 : Date.now(), progress: 0 })"/>
+        </div>
       </div>
     </transition>
 
@@ -62,11 +66,14 @@
                           icon-toggled="fold"
                           @click.native="expanded = !expanded"/>
     </transition>
-
   </div>
 </template>
 
 <script>
+import { shell } from 'electron'
+
+import { mapActions } from 'vuex'
+
 import IconButton from '../Base/IconButton'
 import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
@@ -92,6 +99,17 @@ export default {
     ProgressBar,
   },
 
+  filters: {
+    toTime(seconds, string) {
+      const minutes = parseInt(seconds / 60)
+      return `${minutes}${string}`
+    },
+
+    toDate(milliseconds) {
+      return new Date(milliseconds).toLocaleString()
+    },
+  },
+
   props: {
     selectionMode: {
       type: Boolean,
@@ -101,6 +119,11 @@ export default {
     selected: {
       type: Boolean,
       default: false,
+    },
+
+    video: {
+      type: Object,
+      required: true,
     },
   },
 
@@ -136,6 +159,12 @@ export default {
         this.$emit('video-item-play')
       }
     },
+
+    showInFolder() {
+      shell.showItemInFolder(this.video.filePath)
+    },
+
+    ...mapActions(['updateMediaItem']),
   },
 }
 </script>
@@ -162,7 +191,9 @@ export default {
 
   &__thumbnail {
     grid-column: 1 / span 2;
-    grid-row: 1 / 2;
+    grid-row: 1 / span 2;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -176,10 +207,12 @@ export default {
 
   &__progress-bar {
     grid-column: 1 / span 2;
+    @include theme-bg-color-primary(0.54);
   }
 
   &__title {
     grid-column: 1 / 2;
+    grid-row: 2 / 3;
     @include theme-typography-body1();
     @include theme-text-color-on-primary();
     align-self: center;
@@ -223,6 +256,7 @@ export default {
 
   &__title--expanded {
     grid-column: 1 / span 2;
+    grid-row: 1 / 2;
     margin: 0;
     opacity: 1;
     white-space: normal;
