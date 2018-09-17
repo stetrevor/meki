@@ -142,7 +142,11 @@ export default {
           filters: [{ name: 'Videos', extensions: ['mp4'] }],
           properties: ['openFile'],
         },
-        ([path]) => this.addMediaItem({ type: 'video', path }),
+        paths => {
+          if (paths) {
+            this.addMediaItem({ mediaType: 'video', filePath: paths[0] })
+          }
+        },
       )
     },
 
