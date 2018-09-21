@@ -155,6 +155,11 @@ let rendererConfig = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new VueLoaderPlugin(),
+    new webpack.DefinePlugin(
+      Object.assign({}, process.env.stringified, {
+        'process.env.FLUENTFFMPEG_COV': false,
+      }),
+    ),
   ],
   output: {
     filename: '[name].js',
