@@ -50,7 +50,10 @@ module.exports = config => {
     preprocessors: {
       './index.js': ['webpack', 'sourcemap'],
     },
-    reporters: ['spec', 'coverage'],
+    reporters: ['mocha', 'coverage'],
+    mochaReporter: {
+      showDiff: true,
+    },
     // singleRun: true,
     singleRun: false,
     webpack: webpackConfig,
