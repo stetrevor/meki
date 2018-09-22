@@ -1,4 +1,6 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+
+import { setup as videoInfoSetup } from './video-info'
 
 /**
  * Set `__static` path to static files in production
@@ -30,6 +32,22 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+
+  mainWindow.on('ready-to-show', () => {
+    const dirname =
+      process.env.NODE_ENV === 'production' ? 'userData' : 'temp/paw'
+    const output = app.getPath(dirname)
+
+    videoInfoSetup(
+      output,
+      videoFiles$ => {
+        ipcMain.on('video-info-request', (_, videoData) =>
+          videoFiles$.next(videoData),
+        )
+      },
+      info => mainWindow.contents.send('video-info-response', info),
+    )
   })
 }
 
