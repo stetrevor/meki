@@ -1,5 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 
+import path from 'path'
+import fs from 'fs'
+
 import { setup as videoInfoSetup } from './video-info'
 
 /**
@@ -33,11 +36,19 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+}
 
-  mainWindow.on('ready-to-show', () => {
-    const dirname =
-      process.env.NODE_ENV === 'production' ? 'userData' : 'temp/paw'
-    const output = app.getPath(dirname)
+function setupVideoInfo() {
+  const dirname = process.env.NODE_ENV === 'production' ? 'userData' : 'temp'
+  const dir = app.getPath(dirname)
+  const output =
+    process.env.NODE_ENV === 'production'
+      ? path.join(dir, 'images')
+      : path.join(dir, 'paw-images')
+
+  fs.existsSync(output) ? '' : fs.mkdirSync(output)
+
+  console.log('output dir', output)
 
     videoInfoSetup(
       output,
@@ -46,12 +57,14 @@ function createWindow() {
           videoFiles$.next(videoData),
         )
       },
-      info => mainWindow.contents.send('video-info-response', info),
+    info => mainWindow.webContents.send('video-info-response', info),
     )
-  })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  setupVideoInfo()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
