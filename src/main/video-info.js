@@ -2,6 +2,8 @@ import ffmpeg from 'fluent-ffmpeg'
 import ffmpegBin from 'ffmpeg-static'
 import ffprobeBin from 'ffprobe-static'
 import hash from 'hash.js'
+import { Subject } from 'rxjs'
+import { mergeMap } from 'rxjs/operators'
 
 ffmpeg.setFfmpegPath(ffmpegBin.path)
 ffmpeg.setFfprobePath(ffprobeBin.path)
@@ -45,6 +47,19 @@ const getVideoInfo = (videoData, output) => {
 }
 
 const setup = (
+  output,
+  inputFunc,
+  outputFunc,
+  errFunc = null,
+  completeFunc = null,
+) => {
+  const videoFiles$ = new Subject()
+
+  videoFiles$
+    .pipe(mergeMap(videoData => getVideoInfo(videoData, output)))
+    .subscribe(outputFunc, errFunc, completeFunc)
+
+  inputFunc(videoFiles$)
 }
 
-export default getVideoInfo
+export { getVideoInfo, setup }
