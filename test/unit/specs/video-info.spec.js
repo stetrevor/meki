@@ -76,19 +76,20 @@ describe('hash.js', () => {
 
 describe('video-info', function() {
   it('should get video info: runtime and thumbnail', function() {
-    return getVideoInfo(
-      path.join(__dirname, 'test.mp4'),
-      path.join(__dirname, 'temp'),
-    ).then(info => {
+    const videData = { _id: '1234', filePath: path.join(__dirname, 'test.mp4') }
+    return getVideoInfo(videData, path.join(__dirname, 'temp')).then(info => {
       const h =
         hash
           .sha256()
           .update(path.join(__dirname, 'test.mp4'))
           .digest('hex') + '.png'
 
-      expect(info).to.deep.equal({
+      expect(info).to.deep.equal(
+        Object.assign({}, videData, {
         runtime: 10.022,
         backdropPath: h,
+        }),
+      )
       })
     })
   })
