@@ -34,11 +34,17 @@ const getVideoRuntime = filePath => {
   })
 }
 
-const getVideoInfo = (filePath, output) => {
+const getVideoInfo = (videoData, output) => {
+  const { filePath } = videoData
   return Promise.all([
     getVideoRuntime(filePath),
     generateThumbnail(filePath, output),
-  ]).then(([runtime, backdropPath]) => ({ runtime, backdropPath }))
+  ]).then(([runtime, backdropPath]) =>
+    Object.assign({}, videoData, { runtime, backdropPath }),
+  )
+}
+
+const setup = (
 }
 
 export default getVideoInfo
