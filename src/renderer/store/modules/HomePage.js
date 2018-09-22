@@ -57,16 +57,14 @@ const completeMediaData = mediaData => {
 
 const actions = {
   async addMediaItem({ dispatch, commit }, mediaData) {
-    // api.addMediaItem will add basic info, and resolve.
-    // api.getMediaItemMetadata will use actions.updateMediaItem to update
-    // store state.
     const data = completeMediaData(mediaData)
     const mediaItem = await api.addMediaItem(data)
     commit('ADD_MEDIA_ITEM', mediaItem)
 
-    api.getMediaItemMetadata(mediaItem.filePath, updates =>
-      dispatch('updateMediaItem', updates),
-    )
+    const { _id, filePath } = mediaItem
+    api.getVideoInfo({ _id, filePath }, updates => {
+      dispatch('updateMediaItem', [updates._id, updates])
+    })
   },
 
   async updateMediaItem({ commit }, [id, updates]) {
