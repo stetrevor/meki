@@ -69,12 +69,12 @@ const actions = {
     )
   },
 
-  async updateMediaItem({ commit }, id, updates) {
+  async updateMediaItem({ commit }, { id, updates }) {
     const mediaItem = await api.updateMedia([id], updates)
     commit('UPDATE_MEDIA_ITEM', mediaItem)
   },
 
-  async updateMedia({ commit }, ids, updates) {
+  async updateMedia({ commit }, { ids, updates }) {
     const items = await api.updateMedia(ids, updates)
     commit('UPDATE_MEDIA', items)
   },
