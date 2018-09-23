@@ -23,12 +23,17 @@ function promisifyUpdate(dbCollection) {
 }
 
 const media = {
+  find: promisify((...params) => db.media.find(...params)),
   insert: promisify((...params) => db.media.insert(...params)),
   update: promisifyUpdate(db.media),
   deleteMedia: promisify((...params) => db.media.remove(...params)),
 }
 
 export default {
+  async getMedia(query) {
+    return await media.find(query)
+  },
+
   async addMediaItem(data) {
     return await media.insert(data)
   },
