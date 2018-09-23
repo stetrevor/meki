@@ -39,16 +39,12 @@ function createWindow() {
 }
 
 function setupVideoInfo() {
-  const dirname = process.env.NODE_ENV === 'production' ? 'userData' : 'temp'
-  const dir = app.getPath(dirname)
   const output =
     process.env.NODE_ENV === 'production'
-      ? path.join(dir, 'images')
-      : path.join(dir, 'paw-images')
+      ? path.join(app.getPath('userData'), 'images')
+      : path.join(__dirname, '../../temp', 'images')
 
   fs.existsSync(output) ? '' : fs.mkdirSync(output)
-
-  console.log('output dir', output)
 
     videoInfoSetup(
       output,
