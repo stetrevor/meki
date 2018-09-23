@@ -1,4 +1,9 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+
+import path from 'path'
+import fs from 'fs'
+
+import { setup as videoInfoSetup } from './video-info'
 
 /**
  * Set `__static` path to static files in production
@@ -33,7 +38,33 @@ function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+function setupVideoInfo() {
+  const dirname = process.env.NODE_ENV === 'production' ? 'userData' : 'temp'
+  const dir = app.getPath(dirname)
+  const output =
+    process.env.NODE_ENV === 'production'
+      ? path.join(dir, 'images')
+      : path.join(dir, 'paw-images')
+
+  fs.existsSync(output) ? '' : fs.mkdirSync(output)
+
+  console.log('output dir', output)
+
+    videoInfoSetup(
+      output,
+      videoFiles$ => {
+        ipcMain.on('video-info-request', (_, videoData) =>
+          videoFiles$.next(videoData),
+        )
+      },
+    info => mainWindow.webContents.send('video-info-response', info),
+    )
+}
+
+app.on('ready', () => {
+  createWindow()
+  setupVideoInfo()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -42,7 +42,7 @@ module.exports = config => {
     customLaunchers: {
       visibleElectron: {
         base: 'Electron',
-        flags: ['--show'],
+        // flags: ['--show'],
       },
     },
     frameworks: ['mocha', 'chai'],
@@ -50,8 +50,12 @@ module.exports = config => {
     preprocessors: {
       './index.js': ['webpack', 'sourcemap'],
     },
-    reporters: ['spec', 'coverage'],
-    singleRun: true,
+    reporters: ['mocha', 'coverage'],
+    mochaReporter: {
+      showDiff: true,
+    },
+    // singleRun: true,
+    singleRun: false,
     webpack: webpackConfig,
     webpackMiddleware: {
       noInfo: true,

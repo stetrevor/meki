@@ -144,7 +144,9 @@ export default {
         },
         paths => {
           if (paths) {
-            this.addMediaItem({ mediaType: 'video', filePath: paths[0] })
+            this.$nextTick(() =>
+              this.addMediaItem({ mediaType: 'video', filePath: paths[0] }),
+            )
           }
         },
       )
