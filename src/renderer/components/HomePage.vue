@@ -4,9 +4,9 @@
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd" 
                         @click.native="showAddMediaDialog"/>
-      <nav-bar :nav-items="['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private']" 
+      <nav-bar :nav-items="navItems" 
                class="home-page__nav"
-               @active-nav-item-changed="currentTab = $event"/>
+               @active-nav-item-changed="navItemChanged"/>
       <icon-button class="home-page__settings" 
                    icon="settings"/>
     </div>
@@ -119,7 +119,24 @@ export default {
   },
 
   data() {
+    const queries = {
+      recents: {
+        $and: [
+          { recentEpisodeId: { $exists: true } },
+          { recentEpisodeId: { $ne: null } },
+        ],
+      },
+      favorites: { favorite: true },
+      movies: { mediaType: 'movie' },
+      'tv shows': { mediaType: 'tvshow' },
+      videos: { mediaType: { $in: ['folder', 'video'] } },
+      private: { private: true },
+    }
+
     return {
+      navItems: Object.keys(queries),
+      queries,
+      fetched: [],
       currentTab: null,
       selectionMode: false,
       selectedItems: [],
@@ -133,6 +150,13 @@ export default {
   },
 
   methods: {
+    navItemChanged(item) {
+      this.currentTab = item
+      if (this.fetched.indexOf(item) > -1) return
+
+      this.getMedia(this.queries[item]).then(() => this.fetched.push(item))
+    },
+
     showAddMediaDialog() {
       dialog.showOpenDialog(
         getCurrentWindow(),
@@ -174,7 +198,7 @@ export default {
       )
     },
 
-    ...mapActions(['addMediaItem', 'deleteMedia']),
+    ...mapActions(['getMedia', 'addMediaItem', 'deleteMedia']),
   },
 }
 </script>
