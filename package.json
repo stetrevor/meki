@@ -39,6 +39,7 @@
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "hash.js": "^1.1.5",
+    "nedb": "^1.8.0",
     "node-sass": "^4.9.3",
     "rxjs": "^6.3.2",
     "sass-loader": "^7.1.0",
