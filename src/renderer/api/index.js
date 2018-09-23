@@ -26,7 +26,7 @@ const media = {
   find: promisify((...params) => db.media.find(...params)),
   insert: promisify((...params) => db.media.insert(...params)),
   update: promisifyUpdate(db.media),
-  deleteMedia: promisify((...params) => db.media.remove(...params)),
+  delete: promisify((...params) => db.media.remove(...params)),
 }
 
 export default {
@@ -51,7 +51,7 @@ export default {
   },
 
   async deleteMedia(ids) {
-    const numRemoved = await media.deleteMedia(
+    const numRemoved = await media.delete(
       { _id: { $in: ids } },
       { multi: true },
     )
