@@ -8,19 +8,31 @@ describe('api', function() {
     })
 
     it('getMedia', function() {
-      return api
-        .addMediaItem({ _id: '1', filePath: 'abc.mp4', mediaType: 'video' })
-        .then(() => {
-          return api.getMedia({ mediaType: 'video' }).then(items => {
+      return Promise.all([
+        api.addMediaItem({ _id: '1', filePath: 'abc.mp4', mediaType: 'video' }),
+        api.addMediaItem({
+          _id: '2',
+          filePath: 'abc.mp4',
+          mediaType: 'folder',
+        }),
+      ]).then(() => {
+        return api
+          .getMedia({ mediaType: { $in: ['folder', 'video'] } })
+          .then(items => {
             expect(items).to.deep.equal([
               {
                 _id: '1',
                 filePath: 'abc.mp4',
                 mediaType: 'video',
               },
+              {
+                _id: '2',
+                filePath: 'abc.mp4',
+                mediaType: 'folder',
+              },
             ])
           })
-        })
+      })
     })
 
     it('addMediaItem', function() {
