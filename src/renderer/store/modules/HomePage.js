@@ -9,42 +9,39 @@ const state = {
 const getters = {
   videos(state) {
     return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
+      mediaItem =>
+        ['folder', 'video'].indexOf(mediaItem.mediaType) > -1 &&
+        !mediaItem.private,
     )
   },
 }
 
 const mutations = {
+  RECEIVE_MEDIA(state, items) {
+    state.media = state.media.concat(items)
+  },
+
   ADD_MEDIA_ITEM(state, mediaItem) {
     state.media.push(mediaItem)
   },
 
-  UPDATE_MEDIA_ITEM(state, mediaItem) {
-    const index = state.media.findIndex(item => item._id === mediaItem._id)
-    state.media.splice(index, 1, mediaItem)
-  },
-
   UPDATE_MEDIA(state, items) {
     const ids = items.map(({ _id }) => _id)
-    const media = items.filter(({ _id }) => !(_id in ids))
-    state.media = media.concat(items)
+    const unchanged = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
+    state.media = unchanged.concat(items)
   },
 
-  DELETE_MEDIA_ITEMS(state, items) {
-    const ids = items.map(({ _id }) => _id)
-    state.media = items.filter(({ _id }) => !(_id in ids))
+  DELETE_MEDIA(state, ids) {
+    state.media = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
   },
 }
 
 const completeMediaData = mediaData => {
-  let data, _id
+  let data
 
   switch (mediaData.mediaType) {
     case 'video':
-      // TODO: Faking it for now. Remove when database is implemented.
-      _id = Date.now().toString()
       data = Object.assign({}, mediaData, {
-        _id,
         title: path.basename(mediaData.filePath, '.mp4'),
       })
       break
@@ -56,6 +53,11 @@ const completeMediaData = mediaData => {
 }
 
 const actions = {
+  async getMedia({ commit }, query) {
+    const media = await api.getMedia(query)
+    commit('RECEIVE_MEDIA', media)
+  },
+
   async addMediaItem({ dispatch, commit }, mediaData) {
     const data = completeMediaData(mediaData)
     const mediaItem = await api.addMediaItem(data)
@@ -63,13 +65,8 @@ const actions = {
 
     const { _id, filePath } = mediaItem
     api.getVideoInfo({ _id, filePath }, updates => {
-      dispatch('updateMediaItem', [updates._id, updates])
+      dispatch('updateMedia', [[updates._id], updates])
     })
-  },
-
-  async updateMediaItem({ commit }, [id, updates]) {
-    const mediaItem = await api.updateMedia([id], updates)
-    commit('UPDATE_MEDIA_ITEM', mediaItem)
   },
 
   async updateMedia({ commit }, [ids, updates]) {
@@ -78,8 +75,8 @@ const actions = {
   },
 
   async deleteMedia({ commit }, ids) {
-    const deleted = await api.deleteMedia(ids)
-    commit('DELETE_MEDIA_ITEMS', deleted)
+    const [deletedIds, _] = await api.deleteMedia(ids)
+    commit('DELETE_MEDIA', deletedIds)
   },
 }
 
