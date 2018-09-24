@@ -31,9 +31,8 @@ const mutations = {
     state.media = unchanged.concat(items)
   },
 
-  DELETE_MEDIA(state, items) {
-    const ids = items.map(({ _id }) => _id)
-    state.media = items.filter(({ _id }) => ids.indexOf(_id) < 0)
+  DELETE_MEDIA(state, ids) {
+    state.media = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
   },
 }
 
@@ -76,8 +75,8 @@ const actions = {
   },
 
   async deleteMedia({ commit }, ids) {
-    const [deleted, _] = await api.deleteMedia(ids)
-    commit('DELETE_MEDIA', deleted)
+    const [deletedIds, _] = await api.deleteMedia(ids)
+    commit('DELETE_MEDIA', deletedIds)
   },
 }
 
