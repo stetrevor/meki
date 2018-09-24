@@ -27,7 +27,7 @@ const mutations = {
 
   UPDATE_MEDIA(state, items) {
     const ids = items.map(({ _id }) => _id)
-    const unchanged = items.filter(({ _id }) => ids.indexOf(_id) < 0)
+    const unchanged = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
     state.media = unchanged.concat(items)
   },
 
