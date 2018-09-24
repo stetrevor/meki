@@ -9,7 +9,9 @@ const state = {
 const getters = {
   videos(state) {
     return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
+      mediaItem =>
+        ['folder', 'video'].indexOf(mediaItem.mediaType) > -1 &&
+        !mediaItem.private,
     )
   },
 }
