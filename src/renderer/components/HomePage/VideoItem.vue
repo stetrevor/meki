@@ -2,7 +2,7 @@
   <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
-    <img :src="'http://127.0.0.1:8080' + video.backdropPath" 
+    <img :src="thumbnailPath" 
          class="video-item__thumbnail">
 
     <transition name="fade-out-in" 
@@ -70,7 +70,9 @@
 </template>
 
 <script>
-import { shell } from 'electron'
+import { shell, remote } from 'electron'
+
+import path from 'path'
 
 import { mapActions } from 'vuex'
 
@@ -88,6 +90,11 @@ import '../../assets/icons/icon-watched.svg'
 import '../../assets/icons/icon-folder.svg'
 import '../../assets/icons/icon-play.svg'
 import '../../assets/icons/icon-selection-mode.svg'
+
+const base =
+  process.env.NODE_ENV === 'production'
+    ? path.join(remote.app.getPath('userData'), 'images')
+    : path.resolve(__dirname, '../../../../temp', 'images')
 
 export default {
   name: 'VideoItem',
@@ -133,6 +140,14 @@ export default {
       hovered: false,
       selectedStatus: false,
     }
+  },
+
+  computed: {
+    thumbnailPath() {
+      return this.video.backdropPath
+        ? this.$serverAddress + path.resolve(base, this.video.backdropPath)
+        : ''
+    },
   },
 
   watch: {
