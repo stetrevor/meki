@@ -4,6 +4,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { setup as videoInfoSetup } from './video-info'
+import createServer from './server'
 
 /**
  * Set `__static` path to static files in production
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV !== 'development') {
     .replace(/\\/g, '\\\\')
 }
 
-let mainWindow
+let mainWindow, server, serverAddress
 const winURL =
   process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
@@ -26,9 +27,21 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 1000,
     useContentSize: true,
-    width: 1000,
+    width: 2000,
+  })
+
+  mainWindow.webContents.on('dom-ready', () => {
+    if (!server) {
+      server = createServer()
+      const port = process.env.NODE_ENV === 'production' ? 0 : 3000
+
+      server.listen(port, 'localhost', () => {
+        serverAddress = server.address()
+        mainWindow.webContents.send('server-address', serverAddress)
+      })
+    }
   })
 
   mainWindow.loadURL(winURL)
@@ -46,20 +59,26 @@ function setupVideoInfo() {
 
   fs.existsSync(output) ? '' : fs.mkdirSync(output)
 
-    videoInfoSetup(
-      output,
-      videoFiles$ => {
-        ipcMain.on('video-info-request', (_, videoData) =>
-          videoFiles$.next(videoData),
-        )
-      },
+  videoInfoSetup(
+    output,
+    videoFiles$ => {
+      ipcMain.on('video-info-request', (_, videoData) =>
+        videoFiles$.next(videoData),
+      )
+    },
     info => mainWindow.webContents.send('video-info-response', info),
-    )
+  )
 }
 
 app.on('ready', () => {
   createWindow()
   setupVideoInfo()
+
+  ipcMain.on('server-address-request', event => {
+    if (serverAddress) {
+      event.sender.send('server-address', serverAddress)
+    }
+  })
 })
 
 app.on('window-all-closed', () => {
