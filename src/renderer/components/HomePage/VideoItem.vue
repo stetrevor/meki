@@ -2,8 +2,14 @@
   <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
-    <img :src="thumbnailPath" 
-         class="video-item__thumbnail">
+    <div class="video-item__thumbnail-container">
+      <transition name="fade-out-in" 
+                  mode="out-in">
+        <img v-if="video.backdropPath" 
+             :src="thumbnailPath" 
+             class="video-item__thumbnail">
+      </transition>
+    </div>
 
     <transition name="fade-out-in" 
                 mode="out-in">
@@ -144,9 +150,7 @@ export default {
 
   computed: {
     thumbnailPath() {
-      return this.video.backdropPath
-        ? this.$serverAddress + path.resolve(base, this.video.backdropPath)
-        : ''
+      return this.$serverAddress + path.resolve(base, this.video.backdropPath)
     },
   },
 
@@ -204,9 +208,19 @@ export default {
     box-shadow: 0 0 0 4px $theme-color-secondary;
   }
 
-  &__thumbnail {
+  &__thumbnail-container {
     grid-column: 1 / span 2;
     grid-row: 1 / span 2;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      rgba($theme-color-background, 0.54),
+      rgba($theme-color-secondary, 0.54)
+    );
+  }
+
+  &__thumbnail {
     width: 100%;
     height: 100%;
     object-fit: cover;
