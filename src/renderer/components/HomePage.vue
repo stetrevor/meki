@@ -66,7 +66,7 @@
         <div v-else 
              :key="currentTab"
              class="home-page__media-list">
-          <video-item v-for="video in videos" 
+          <video-item v-for="video in videos.sort(sortVideosByTitle)" 
                       :key="video.path"
                       :video="video"
                       :selected="selectAll"
@@ -201,6 +201,17 @@ export default {
     play(video) {
       this.switchCurrentPlayingEpisode(video)
       this.$router.push({ name: 'player' })
+    },
+
+    sortVideosByTitle(v1, v2) {
+      const [t1, t2] = [v1.title, v2.title]
+      if (t1 == t2) return 0
+
+      if (typeof t1 === typeof t2) {
+        return t1 < t2 ? -1 : 1
+      }
+
+      return typeof a < typeof b ? -1 : 1
     },
 
     ...mapActions([
