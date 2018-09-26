@@ -3,8 +3,8 @@
        v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
        :class="['player-page', { 'player-page--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
+           :src="videoPath"
            class="player-page__video"
-           src="http://127.0.0.1:8080/test.mp4"
            @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
            @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
 
@@ -13,8 +13,9 @@
       <div v-show="controlsShow$ || paused" 
            class="player-page__controls">
         <div class="player-page__header">
-          <icon-button icon="back"/>
-          <h5 class="player-page__title">Big Bunny</h5>
+          <icon-button icon="back" 
+                       @click.native="exit"/>
+          <h5 class="player-page__title">{{ video.title }}</h5>
           <icon-button :colored="true" 
                        class="player-page__home" 
                        icon="logo"/>
@@ -70,6 +71,8 @@
 <script>
 import { merge, of } from 'rxjs'
 import { mapTo, switchMap, delay, startWith } from 'rxjs/operators'
+
+import { mapState, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
@@ -133,8 +136,27 @@ export default {
     }
   },
 
+  computed: {
+    videoPath() {
+      return this.$serverAddress + this.video.filePath
+    },
+
+    ...mapState({ video: 'currentPlayingEpisode' }),
+  },
+
   methods: {
     toTime,
+
+    exit() {
+      // Unload video
+      this.$refs.video.src = ''
+
+      const progress =
+        this.progress === this.duration ? 0 : this.progress / 1000000
+      const lastWatched = new Date()
+      this.updateMedia([[this.video._id], { progress, lastWatched }])
+      this.$router.push({ name: 'home' })
+    },
 
     seek(value) {
       const video = this.$refs.video
@@ -206,6 +228,8 @@ export default {
         Object.assign({}, subtitle, { default: true }),
       )
     },
+
+    ...mapActions(['updateMedia']),
   },
 
   domStreams: ['mousemove$', 'mouseup$'],
