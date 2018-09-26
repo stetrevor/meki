@@ -2,7 +2,7 @@
   <div id="app">
     <transition name="fade-out-in" 
                 mode="out-in">
-      <keep-alive>
+      <keep-alive include="HomePage">
         <router-view/>
       </keep-alive>
     </transition>
