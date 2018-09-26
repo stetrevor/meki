@@ -178,6 +178,7 @@ export default {
       video.currentTime = value / 1000000
       return video
         .play()
+        .then(() => (this.paused = video.paused))
         .catch(err =>
           console.log('error caused by sliding progress bar too fast', err),
         )
