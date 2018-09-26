@@ -5,7 +5,6 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
-           @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
            @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
 
     <transition name="fade-out-in" 
