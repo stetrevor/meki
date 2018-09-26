@@ -67,7 +67,7 @@
              :key="currentTab"
              class="home-page__media-list">
           <video-item v-for="video in videos.sort(sortVideosByTitle)" 
-                      :key="video.path"
+                      :key="video._id"
                       :video="video"
                       :selected="selectAll"
                       :selection-mode="selectionMode"
