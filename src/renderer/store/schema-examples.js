@@ -36,6 +36,9 @@
  *   'folder', 'movie', and 'tvshow' media, media 'favorite' field should be a non negative
  *   integer, and favoriting an episode from a media should increase parent media's 'favorite'
  *   field, vice versa.
+ * 
+ * (1) Runtime and progress:
+ *   double number of seconds.
  */
 
 const _id1 = Date.now().toString() + '1'
