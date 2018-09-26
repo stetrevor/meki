@@ -119,17 +119,19 @@ export default {
   },
 
   data() {
+    const getQuery = mediaType => ({
+      mediaType: mediaType,
+      private: { $ne: true },
+    })
+
     const queries = {
       recents: {
-        $and: [
-          { recentEpisodeId: { $exists: true } },
-          { recentEpisodeId: { $ne: null } },
-        ],
+        recentEpisodeId: { $exists: true, $ne: null },
       },
       favorites: { favorite: true },
-      movies: { mediaType: 'movie' },
-      'tv shows': { mediaType: 'tvshow' },
-      videos: { mediaType: { $in: ['folder', 'video'] } },
+      movies: getQuery('movie'),
+      'tv shows': getQuery('tvshow'),
+      videos: getQuery({ $in: ['folder', 'video'] }),
       private: { private: true },
     }
 
