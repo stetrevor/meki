@@ -39,9 +39,10 @@
             {{ progress | toTime }} / {{ duration | toTime }}
           </div>
           <div class="player-page__volume-controls">
-            <icon-toggle-button icon-normal="volume" 
+            <icon-toggle-button :toggled="muted" 
+                                icon-normal="volume" 
                                 icon-toggled="muted" 
-                                @click.native="$refs.video.muted = !$refs.video.muted"/>
+                                @click.native="muted = $refs.video.muted = !$refs.video.muted"/>
             <player-slider :value="100"
                            :max="100" 
                            :discrete="true"
@@ -120,6 +121,7 @@ export default {
   data() {
     return {
       paused: true,
+      muted: false,
       duration: 0,
       progress: 0,
       subtitleMenuShow: false,

@@ -67,7 +67,8 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <icon-toggle-button class="video-item__expand-toggle" 
+      <icon-toggle-button :toggled="expanded" 
+                          class="video-item__expand-toggle"
                           icon-normal="expand"
                           icon-toggled="fold"
                           @click.native="expanded = !expanded"/>
