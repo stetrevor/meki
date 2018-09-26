@@ -26,6 +26,9 @@
 </template>
 
 <script>
+import { fromEvent } from 'rxjs'
+import { debounceTime, map } from 'rxjs/operators'
+
 export default {
   name: 'PlayerSlider',
 
@@ -95,6 +98,17 @@ export default {
 
     document.body.addEventListener('mouseup', this.mouseup)
     document.body.addEventListener('mousemove', this.mousemove)
+
+    // Update track bounding box when window resizes.
+    this.resize = e => {
+      this.rect = this.$refs.track.getBoundingClientRect()
+    }
+    this.$subscribeTo(
+      fromEvent(window, 'resize').pipe(
+        debounceTime(200),
+        map(this.resize),
+      ),
+    )
   },
 
   beforeDestroy() {
