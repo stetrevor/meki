@@ -53,11 +53,15 @@ base.add('Icon Toggle Button', () => {
     template: `
     <div class="theme-bg-color-primary"
          style="height: calc(100vh - 24px * 2); padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 48px); grid-auto-rows: 48px; justify-content: center">
-         <icon-toggle-button icon-normal="fullscreen" icon-toggled="fullscreen-exit"/>
-         <icon-toggle-button icon-normal="search" icon-toggled="settings"/>
-         <icon-toggle-button icon-normal="selection-mode" icon-toggled="fullscreen-exit"/>
-         <icon-toggle-button icon-normal="settings" icon-toggled="fullscreen-exit"/>
+         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="fullscreen" icon-toggled="fullscreen-exit"/>
+         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="search" icon-toggled="settings"/>
+         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="selection-mode" icon-toggled="fullscreen-exit"/>
+         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="settings" icon-toggled="fullscreen-exit"/>
     </div>`,
+
+    data() {
+      return { toggled: false }
+    },
   }
 })
 
