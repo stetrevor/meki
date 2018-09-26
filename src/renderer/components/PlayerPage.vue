@@ -258,7 +258,7 @@ export default {
 
     this.$subscribeTo(
       this.seek$.pipe(
-        auditTime(50),
+        auditTime(80),
         pluck('event', 'msg'),
         switchMap(v => this.seek(v)),
       ),
