@@ -152,6 +152,12 @@ export default {
     ...mapState({ video: 'currentPlayingEpisode' }),
   },
 
+  mounted() {
+    this.duration = this.video.runtime * 1000000
+    this.progress = this.video.progress * 1000000
+    this.seek(this.progress)
+  },
+
   methods: {
     toTime,
 
