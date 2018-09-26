@@ -5,7 +5,7 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
-           @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
+           @timeupdate="progress = $refs.video.currentTime"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
@@ -102,7 +102,7 @@ import '../assets/icons/icon-play.svg'
 const toTime = function(number) {
   const pad = num => `00${num}`.slice(-2)
 
-  let num = Math.floor(number / 1000) // Total milliseconds
+  let num = Math.floor(number * 1000) // Total milliseconds
   const milliseconds = num % 1000
   num = (num - milliseconds) / 1000
   const seconds = num % 60
@@ -153,8 +153,8 @@ export default {
   },
 
   mounted() {
-    this.duration = this.video.runtime * 1000000
-    this.progress = this.video.progress * 1000000
+    this.duration = this.video.runtime
+    this.progress = this.video.progress
     this.seek(this.progress)
   },
 
@@ -165,8 +165,7 @@ export default {
       // Unload video
       this.$refs.video.src = ''
 
-      const progress =
-        this.progress === this.duration ? 0 : this.progress / 1000000
+      const progress = this.progress === this.duration ? 0 : this.progress
       const lastWatched = this.progress === this.duration ? new Date() : 0
       this.updateMedia([[this.video._id], { progress, lastWatched }])
       this.$router.push({ name: 'home' })
@@ -175,7 +174,7 @@ export default {
     seek(value) {
       const video = this.$refs.video
 
-      video.currentTime = value / 1000000
+      video.currentTime = value
       return video
         .play()
         .then(() => (this.paused = video.paused))
