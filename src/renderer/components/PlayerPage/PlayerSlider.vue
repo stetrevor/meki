@@ -83,15 +83,23 @@ export default {
   mounted() {
     this.rect = this.$refs.track.getBoundingClientRect()
 
-    document.body.addEventListener('mouseup', e => {
+    this.mouseup = e => {
       this.dragging = false
-    })
+    }
 
-    document.body.addEventListener('mousemove', e => {
+    this.mousemove = e => {
       if (this.dragging) {
         this.setValue(e)
       }
-    })
+    }
+
+    document.body.addEventListener('mouseup', this.mouseup)
+    document.body.addEventListener('mousemove', this.mousemove)
+  },
+
+  beforeDestroy() {
+    document.body.removeEventListener('mouseup', this.mouseup)
+    document.body.removeEventListener('mousemove', this.mousemove)
   },
 
   methods: {
