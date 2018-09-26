@@ -115,6 +115,7 @@ export default {
     FullscreenToggle,
     OverlayIconButton,
     PlayerSlider,
+    SubtitleMenu,
   },
 
   filters: {
