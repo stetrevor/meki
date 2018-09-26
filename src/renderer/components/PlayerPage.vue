@@ -31,18 +31,18 @@
                               icon-normal="play-arrow" 
                               icon-toggled="pause"
                               @click.native="playOrPause"/>
-          <player-slider :max="duration" 
+          <player-slider v-stream:value-changed="seek$" 
+                         :max="duration"
                          :value="progress"
                          :format="toTime"
-                         class="player-page__timeline"
-                         @value-changed="seek"/>
+                         class="player-page__timeline"/>
           <div class="player-page__progress">
             {{ progress | toTime }} / {{ duration | toTime }}
           </div>
           <div class="player-page__volume-controls">
             <icon-toggle-button :toggled="muted" 
                                 icon-normal="volume" 
-                                icon-toggled="muted" 
+                                icon-toggled="muted"
                                 @click.native="muted = $refs.video.muted = !$refs.video.muted"/>
             <player-slider :value="100"
                            :max="100" 
@@ -70,7 +70,14 @@
 
 <script>
 import { merge, of } from 'rxjs'
-import { mapTo, switchMap, delay, startWith } from 'rxjs/operators'
+import {
+  mapTo,
+  switchMap,
+  delay,
+  startWith,
+  auditTime,
+  pluck,
+} from 'rxjs/operators'
 
 import { mapState, mapActions } from 'vuex'
 
@@ -165,9 +172,14 @@ export default {
       video.pause()
       this.paused = video.paused
       video.currentTime = value / 1000000
-      video.play().then(() => {
-        this.paused = video.paused
-      })
+      return video
+        .play()
+        .then(() => {
+          this.paused = video.paused
+        })
+        .catch(err =>
+          console.log('error caused by sliding progress bar too fast', err),
+        )
     },
 
     isPlaying() {
@@ -233,7 +245,7 @@ export default {
     ...mapActions(['updateMedia']),
   },
 
-  domStreams: ['mousemove$', 'mouseup$'],
+  domStreams: ['mousemove$', 'mouseup$', 'seek$'],
 
   subscriptions() {
     const events$ = merge(this.mousemove$, this.mouseup$).pipe(startWith(null))
@@ -243,6 +255,14 @@ export default {
       switchMap(() => of(false).pipe(delay(5000))),
     )
     const controlsShow$ = merge(show$, hide$)
+
+    this.$subscribeTo(
+      this.seek$.pipe(
+        auditTime(50),
+        pluck('event', 'msg'),
+        switchMap(v => this.seek(v)),
+      ),
+    )
 
     return { controlsShow$ }
   },
