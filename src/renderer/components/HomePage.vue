@@ -1,6 +1,7 @@
 <template>
   <div class="home-page">
-    <div class="home-page__sidebar">
+    <div class="home-page__sidebar" 
+         @click="selectionMode = false; selectedItems = []">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd" 
                         @click.native="showAddMediaDialog"/>
