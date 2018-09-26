@@ -3,21 +3,22 @@
        v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
        :class="['player-page', { 'player-page--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
+           :src="videoPath"
            class="player-page__video"
-           src="http://127.0.0.1:8080/test.mp4"
-           @loadedmetadata="duration = Math.floor($refs.video.duration * 1000000)"
-           @timeupdate="progress = Math.floor($refs.video.currentTime * 1000000)"/>
+           @timeupdate="progress = $refs.video.currentTime"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-show="controlsShow$ || paused" 
            class="player-page__controls">
         <div class="player-page__header">
-          <icon-button icon="back"/>
-          <h5 class="player-page__title">Big Bunny</h5>
+          <icon-button icon="back" 
+                       @click.native="exit"/>
+          <h5 class="player-page__title">{{ video.title }}</h5>
           <icon-button :colored="true" 
                        class="player-page__home" 
-                       icon="logo"/>
+                       icon="logo"
+                       @click.native="exit"/>
         </div>
 
         <overlay-icon-button v-show="paused" 
@@ -30,18 +31,19 @@
                               icon-normal="play-arrow" 
                               icon-toggled="pause"
                               @click.native="playOrPause"/>
-          <player-slider :max="duration" 
+          <player-slider v-stream:value-changed="seek$" 
+                         :max="duration"
                          :value="progress"
                          :format="toTime"
-                         class="player-page__timeline"
-                         @value-changed="seek"/>
+                         class="player-page__timeline"/>
           <div class="player-page__progress">
             {{ progress | toTime }} / {{ duration | toTime }}
           </div>
           <div class="player-page__volume-controls">
-            <icon-toggle-button icon-normal="volume" 
-                                icon-toggled="muted" 
-                                @click.native="$refs.video.muted = !$refs.video.muted"/>
+            <icon-toggle-button :toggled="muted" 
+                                icon-normal="volume" 
+                                icon-toggled="muted"
+                                @click.native="muted = $refs.video.muted = !$refs.video.muted"/>
             <player-slider :value="100"
                            :max="100" 
                            :discrete="true"
@@ -68,7 +70,16 @@
 
 <script>
 import { merge, of } from 'rxjs'
-import { mapTo, switchMap, delay, startWith } from 'rxjs/operators'
+import {
+  mapTo,
+  switchMap,
+  delay,
+  startWith,
+  auditTime,
+  pluck,
+} from 'rxjs/operators'
+
+import { mapState, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import IconToggleButton from './Base/IconToggleButton'
@@ -91,7 +102,7 @@ import '../assets/icons/icon-play.svg'
 const toTime = function(number) {
   const pad = num => `00${num}`.slice(-2)
 
-  let num = Math.floor(number / 1000) // Total milliseconds
+  let num = Math.floor(number * 1000) // Total milliseconds
   const milliseconds = num % 1000
   num = (num - milliseconds) / 1000
   const seconds = num % 60
@@ -111,6 +122,7 @@ export default {
     FullscreenToggle,
     OverlayIconButton,
     PlayerSlider,
+    SubtitleMenu,
   },
 
   filters: {
@@ -120,6 +132,7 @@ export default {
   data() {
     return {
       paused: true,
+      muted: false,
       duration: 0,
       progress: 0,
       subtitleMenuShow: false,
@@ -131,18 +144,43 @@ export default {
     }
   },
 
+  computed: {
+    videoPath() {
+      return this.$serverAddress + this.video.filePath
+    },
+
+    ...mapState({ video: 'currentPlayingEpisode' }),
+  },
+
+  mounted() {
+    this.duration = this.video.runtime
+    this.progress = this.video.progress
+    this.seek(this.progress)
+  },
+
   methods: {
     toTime,
+
+    exit() {
+      // Unload video
+      this.$refs.video.src = ''
+
+      const progress = this.progress === this.duration ? 0 : this.progress
+      const lastWatched = this.progress === this.duration ? new Date() : 0
+      this.updateMedia([[this.video._id], { progress, lastWatched }])
+      this.$router.push({ name: 'home' })
+    },
 
     seek(value) {
       const video = this.$refs.video
 
-      video.pause()
-      this.paused = video.paused
-      video.currentTime = value / 1000000
-      video.play().then(() => {
-        this.paused = video.paused
-      })
+      video.currentTime = value
+      return video
+        .play()
+        .then(() => (this.paused = video.paused))
+        .catch(err =>
+          console.log('error caused by sliding progress bar too fast', err),
+        )
     },
 
     isPlaying() {
@@ -204,9 +242,11 @@ export default {
         Object.assign({}, subtitle, { default: true }),
       )
     },
+
+    ...mapActions(['updateMedia']),
   },
 
-  domStreams: ['mousemove$', 'mouseup$'],
+  domStreams: ['mousemove$', 'mouseup$', 'seek$'],
 
   subscriptions() {
     const events$ = merge(this.mousemove$, this.mouseup$).pipe(startWith(null))
@@ -216,6 +256,14 @@ export default {
       switchMap(() => of(false).pipe(delay(5000))),
     )
     const controlsShow$ = merge(show$, hide$)
+
+    this.$subscribeTo(
+      this.seek$.pipe(
+        auditTime(80),
+        pluck('event', 'msg'),
+        switchMap(v => this.seek(v)),
+      ),
+    )
 
     return { controlsShow$ }
   },

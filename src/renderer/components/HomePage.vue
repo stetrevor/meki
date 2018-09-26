@@ -1,6 +1,7 @@
 <template>
   <div class="home-page">
-    <div class="home-page__sidebar">
+    <div class="home-page__sidebar" 
+         @click="selectionMode = false; selectedItems = []">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd" 
                         @click.native="showAddMediaDialog"/>
@@ -66,14 +67,14 @@
         <div v-else 
              :key="currentTab"
              class="home-page__media-list">
-          <video-item v-for="video in videos" 
-                      :key="video.path"
+          <video-item v-for="video in videos.sort(sortVideosByTitle)" 
+                      :key="video._id"
                       :video="video"
                       :selected="selectAll"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItems.push(video)" 
                       @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"
-                      @video-item-play="$router.push({ name: 'player' })"/>
+                      @video-item-play="play(video)"/>
         </div>
       </transition>
     </div>
@@ -119,17 +120,19 @@ export default {
   },
 
   data() {
+    const getQuery = mediaType => ({
+      mediaType: mediaType,
+      private: { $ne: true },
+    })
+
     const queries = {
       recents: {
-        $and: [
-          { recentEpisodeId: { $exists: true } },
-          { recentEpisodeId: { $ne: null } },
-        ],
+        recentEpisodeId: { $exists: true, $ne: null },
       },
       favorites: { favorite: true },
-      movies: { mediaType: 'movie' },
-      'tv shows': { mediaType: 'tvshow' },
-      videos: { mediaType: { $in: ['folder', 'video'] } },
+      movies: getQuery('movie'),
+      'tv shows': getQuery('tvshow'),
+      videos: getQuery({ $in: ['folder', 'video'] }),
       private: { private: true },
     }
 
@@ -198,7 +201,28 @@ export default {
       )
     },
 
-    ...mapActions(['getMedia', 'addMediaItem', 'deleteMedia']),
+    play(video) {
+      this.switchCurrentPlayingEpisode(video)
+      this.$router.push({ name: 'player' })
+    },
+
+    sortVideosByTitle(v1, v2) {
+      const [t1, t2] = [v1.title, v2.title]
+      if (t1 == t2) return 0
+
+      if (typeof t1 === typeof t2) {
+        return t1 < t2 ? -1 : 1
+      }
+
+      return typeof a < typeof b ? -1 : 1
+    },
+
+    ...mapActions([
+      'getMedia',
+      'addMediaItem',
+      'deleteMedia',
+      'switchCurrentPlayingEpisode',
+    ]),
   },
 }
 </script>

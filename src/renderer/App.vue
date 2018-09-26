@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <keep-alive include="HomePage">
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
