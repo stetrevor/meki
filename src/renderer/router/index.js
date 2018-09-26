@@ -5,6 +5,7 @@ Vue.use(Router)
 
 import SplashScreen from '@/components/SplashScreen'
 import HomePage from '@/components/HomePage'
+import PlayerPage from '@/components/PlayerPage'
 
 export default new Router({
   routes: [
@@ -17,6 +18,15 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: HomePage,
+    },
+    {
+      path: 'player',
+      name: 'player',
+      component: PlayerPage,
+    },
+    {
+      path: '*',
+      redirect: '/home',
     },
   ],
 })
