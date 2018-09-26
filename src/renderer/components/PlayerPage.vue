@@ -17,7 +17,8 @@
           <h5 class="player-page__title">{{ video.title }}</h5>
           <icon-button :colored="true" 
                        class="player-page__home" 
-                       icon="logo"/>
+                       icon="logo"
+                       @click.native="exit"/>
         </div>
 
         <overlay-icon-button v-show="paused" 
