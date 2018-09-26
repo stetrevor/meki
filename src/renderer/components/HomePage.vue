@@ -73,7 +73,7 @@
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItems.push(video)" 
                       @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"
-                      @video-item-play="$router.push({ name: 'player' })"/>
+                      @video-item-play="play(video)"/>
         </div>
       </transition>
     </div>
@@ -198,7 +198,17 @@ export default {
       )
     },
 
-    ...mapActions(['getMedia', 'addMediaItem', 'deleteMedia']),
+    play(video) {
+      this.switchCurrentPlayingEpisode(video)
+      this.$router.push({ name: 'player' })
+    },
+
+    ...mapActions([
+      'getMedia',
+      'addMediaItem',
+      'deleteMedia',
+      'switchCurrentPlayingEpisode',
+    ]),
   },
 }
 </script>
