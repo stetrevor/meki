@@ -12,9 +12,9 @@ if (process.env.NODE_ENV !== 'testing') {
     process.env.NODE_ENV === 'production'
       ? path.join(app.getPath('userData'), 'paw.db')
       : path.join(__dirname, '../../../temp', 'paw.db')
-  media = new Datastore({ filename, autoload: true })
+  media = new Datastore({ filename, timestampData: true, autoload: true })
 } else {
-  media = new Datastore()
+  media = new Datastore({ timestampData: true })
 }
 
 export default { media }
