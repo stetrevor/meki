@@ -47,11 +47,11 @@
           <icon-toggle-button :toggled="video.favorite" 
                               icon-normal="favorite"
                               icon-toggled="favorited"
-                              @click.native="updateMediaItem(video._id, { favorite: !video.favorite })"/>
+                              @click.native="updateMedia([[video._id], { favorite: !video.favorite }])"/>
           <icon-toggle-button :toggled="!!video.lastWatched" 
                               icon-normal="mark-watched"
                               icon-toggled="watched"
-                              @click.native="updateMediaItem(video._id, { lastWatched: video.lastWatched ? 0 : Date.now(), progress: 0 })"/>
+                              @click.native="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
         </div>
       </div>
     </transition>
@@ -184,7 +184,7 @@ export default {
       shell.showItemInFolder(this.video.filePath)
     },
 
-    ...mapActions(['updateMediaItem']),
+    ...mapActions(['updateMedia']),
   },
 }
 </script>
