@@ -167,7 +167,7 @@ export default {
 
       const progress =
         this.progress === this.duration ? 0 : this.progress / 1000000
-      const lastWatched = new Date()
+      const lastWatched = this.progress === this.duration ? new Date() : 0
       this.updateMedia([[this.video._id], { progress, lastWatched }])
       this.$router.push({ name: 'home' })
     },
