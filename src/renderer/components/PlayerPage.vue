@@ -40,11 +40,11 @@
             {{ progress | toTime }} / {{ duration | toTime }}
           </div>
           <div class="player-page__volume-controls">
-            <icon-toggle-button :toggled="muted" 
+            <icon-toggle-button :toggled="videoMuted" 
                                 icon-normal="volume" 
                                 icon-toggled="muted"
-                                @click.native="muted = $refs.video.muted = !$refs.video.muted"/>
-            <player-slider :value="100"
+                                @click.native="videoMuted = $refs.video.muted = !$refs.video.muted"/>
+            <player-slider :value="volume"
                            :max="100" 
                            :discrete="true"
                            :format="v => `${v}%`"
@@ -131,9 +131,8 @@ export default {
 
   data() {
     return {
+      videoMuted: false,
       paused: true,
-      muted: false,
-      duration: 0,
       progress: 0,
       subtitleMenuShow: false,
       subtitles: [
@@ -149,25 +148,36 @@ export default {
       return this.$serverAddress + this.video.filePath
     },
 
-    ...mapState({ video: 'currentPlayingEpisode' }),
+    ...mapState({
+      video: 'currentPlayingEpisode',
+      volume: state => state.PlayerPage.volume,
+      muted: state => state.PlayerPage.muted,
+    }),
   },
 
   mounted() {
     this.duration = this.video.runtime
     this.progress = this.video.progress
     this.seek(this.progress)
+    this.$refs.video.muted = this.videoMuted = this.muted
+    this.$refs.video.volume = this.volume
   },
 
   methods: {
     toTime,
 
     exit() {
+      const progress = this.progress === this.video.duration ? 0 : this.progress
+      const lastWatched = this.progress === this.video.duration ? new Date() : 0
+      const volume = this.$refs.video.volume
+
       // Unload video
       this.$refs.video.src = ''
 
-      const progress = this.progress === this.duration ? 0 : this.progress
-      const lastWatched = this.progress === this.duration ? new Date() : 0
       this.updateMedia([[this.video._id], { progress, lastWatched }])
+      this.setSoundMuted(this.videoMuted)
+      this.setSoundVolume(volume * 100)
+
       this.$router.push({ name: 'home' })
     },
 
@@ -243,7 +253,7 @@ export default {
       )
     },
 
-    ...mapActions(['updateMedia']),
+    ...mapActions(['updateMedia', 'setSoundVolume', 'setSoundMuted']),
   },
 
   domStreams: ['mousemove$', 'mouseup$', 'seek$'],
