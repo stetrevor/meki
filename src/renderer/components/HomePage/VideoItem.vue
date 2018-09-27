@@ -33,14 +33,14 @@
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
                        @click.native="showInFolder"/>
-          <icon-toggle-button :toggled="video.favorite" 
-                              icon-normal="favorite"
-                              icon-toggled="favorited"
-                              @click.native="updateMedia([[video._id], { favorite: !video.favorite }])"/>
           <icon-toggle-button :toggled="!!video.lastWatched" 
                               icon-normal="mark-watched"
                               icon-toggled="watched"
                               @click.native="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+          <icon-toggle-button :toggled="video.favorite" 
+                              icon-normal="favorite"
+                              icon-toggled="favorited"
+                              @click.native="updateMedia([[video._id], { favorite: !video.favorite }])"/>
         </div>
       </div>
 
