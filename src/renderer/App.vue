@@ -13,6 +13,7 @@
 import { ipcRenderer } from 'electron'
 
 import Vue from 'vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Paw',
@@ -23,7 +24,15 @@ export default {
       Vue.prototype.$serverAddress = `http://${address}:${port}/`
       this.$router.push({ name: 'home' })
     })
+
+    ipcRenderer.send('settings-video-player-request')
+    ipcRenderer.on('settings-video-player-response', (_, { muted, volume }) => {
+      this.setSoundMuted(muted)
+      this.setSoundVolume(volume)
+    })
   },
+
+  methods: mapActions(['setSoundMuted', 'setSoundVolume']),
 }
 </script>
 
