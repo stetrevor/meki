@@ -10,8 +10,20 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
+
+import Vue from 'vue'
+
 export default {
   name: 'Paw',
+
+  created() {
+    ipcRenderer.send('server-address-request')
+    ipcRenderer.on('server-address', (_, { address, port }) => {
+      Vue.prototype.$serverAddress = `http://${address}:${port}/`
+      this.$router.push({ name: 'home' })
+    })
+  },
 }
 </script>
 

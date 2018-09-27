@@ -7,23 +7,10 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
-
-import Vue from 'vue'
-
 import '../assets/logo.svg'
 
 export default {
   name: 'SplashScreen',
-
-  created() {
-    ipcRenderer.send('server-address-request')
-
-    ipcRenderer.on('server-address', (_, { address, port }) => {
-      Vue.prototype.$serverAddress = `http://${address}:${port}/`
-      this.$router.push({ name: 'home' })
-    })
-  },
 }
 </script>
 
