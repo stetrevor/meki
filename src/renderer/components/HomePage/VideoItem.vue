@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': hovered, 'video-item--selection-mode': selectionMode, 'video-item--selected': selectedStatus }]" 
+  <div :class="['video-item', { 'video-item--expanded': hovered, 'video-item--selection-mode': selectionMode, 'video-item--selected': selected }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <div class="video-item__thumbnail-container">
@@ -13,18 +13,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="!hovered" 
-           key="folded"
-           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
-        <progress-bar v-if="video.progress" 
-                      :colored="hovered" 
-                      :progress="video.progress"
-                      :max="video.runtime" 
-                      class="video-item__progress-bar"/>
-        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
-      </div>
-    
-      <div v-else 
+      <div v-if="hovered || selectionMode" 
            key="expanded"
            class="video-item__expanded">
         <div class="video-item__info">
@@ -54,13 +43,24 @@
                               @click.native="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
         </div>
       </div>
+
+      <div v-else
+           key="folded"
+           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
+        <progress-bar v-if="video.progress" 
+                      :colored="hovered" 
+                      :progress="video.progress"
+                      :max="video.runtime" 
+                      class="video-item__progress-bar"/>
+        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
+      </div>
     </transition>
 
     <transition name="fade-out-in" 
                 mode="out-in">
       <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': hovered, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :active="selectedStatus"
+                           :active="selected"
                            :key="`${selectionMode}${hovered}`" 
                            @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
@@ -133,25 +133,12 @@ export default {
   data() {
     return {
       hovered: false,
-      selectedStatus: false,
     }
   },
 
   computed: {
     thumbnailPath() {
       return this.$serverAddress + path.resolve(base, this.video.backdropPath)
-    },
-  },
-
-  watch: {
-    selectionMode(mode) {
-      if (!mode) {
-        this.selectedStatus = false
-      }
-    },
-
-    selected(status) {
-      this.selectedStatus = status
     },
   },
 
