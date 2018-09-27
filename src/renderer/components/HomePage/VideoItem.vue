@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selected': selectedStatus }]" 
+  <div :class="['video-item', { 'video-item--expanded': hovered, 'video-item--selection-mode': selectionMode, 'video-item--selected': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <div class="video-item__thumbnail-container">
@@ -13,7 +13,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="!expanded" 
+      <div v-if="!hovered" 
            key="folded"
            :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
         <progress-bar v-if="video.progress" 
@@ -58,20 +58,11 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
+      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': hovered, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
                            :active="selectedStatus"
-                           :key="`${selectionMode}${expanded}`" 
+                           :key="`${selectionMode}${hovered}`" 
                            @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
-    </transition>
-
-    <transition name="fade-out-in" 
-                mode="out-in">
-      <icon-toggle-button :toggled="expanded" 
-                          class="video-item__expand-toggle"
-                          icon-normal="expand"
-                          icon-toggled="fold"
-                          @click.native="expanded = !expanded"/>
     </transition>
   </div>
 </template>
@@ -88,8 +79,6 @@ import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
 
-import '../../assets/icons/icon-expand.svg'
-import '../../assets/icons/icon-fold.svg'
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
 import '../../assets/icons/icon-mark-watched.svg'
@@ -143,7 +132,6 @@ export default {
 
   data() {
     return {
-      expanded: false,
       hovered: false,
       selectedStatus: false,
     }
@@ -349,13 +337,6 @@ export default {
     top: 0;
     left: 0;
     transform: scale(2) translate(12px, 12px);
-  }
-
-  &__expand-toggle {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    border-radius: 8px 0 8px 0;
   }
 }
 </style>
