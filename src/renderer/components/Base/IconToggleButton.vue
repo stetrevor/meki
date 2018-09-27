@@ -1,5 +1,6 @@
 <template>
-  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio }]">
+  <div :class="['icon-toggle-button', { 'icon-toggle-button--toggling': toggling, 'icon-toggle-button--radio': radio, 'icon-toggle-button--disabled': disabled }]"
+       @click="disabled ? '' : $emit('clicked')">
     <transition name="fade-out-in" 
                 mode="out-in"
                 @before-leave="toggling = true"
@@ -38,6 +39,11 @@ export default {
     },
 
     radio: {
+      type: Boolean,
+      default: false,
+    },
+
+    disabled: {
       type: Boolean,
       default: false,
     },
@@ -105,6 +111,18 @@ export default {
 
     &::before {
       @include theme-bg-color-primary();
+    }
+  }
+
+  &--disabled {
+    cursor: inherit;
+
+    &:hover::before {
+      opacity: 0;
+    }
+
+    &:hover .icon-toggle-button__icon {
+      opacity: 0.54;
     }
   }
 }

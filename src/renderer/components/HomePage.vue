@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div class="home-page__sidebar" 
-         @click="selectionMode = false; selectedItems = []">
+         @click="exitSelectionMode">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd" 
                         @click.native="showAddMediaDialog"/>
@@ -20,16 +20,20 @@
            class="home-page__selection-toolbar">
         <icon-button icon="cancel" 
                      class="home-page__selection-mode-exit"
-                     @click.native="selectionMode = false; selectedItems = []"/>
-        <div class="home-page__selection-toolbar-title">{{ selectedItems.length }} Selected</div>
-        <icon-toggle-button icon-normal="favorite" 
-                            icon-toggled="favorited"/>
-        <icon-toggle-button icon-normal="mark-watched" 
-                            icon-toggled="watched"/>
+                     @click.native="exitSelectionMode"/>
+        <div class="home-page__selection-toolbar-title">{{ selectedItemIds.length }} Selected</div>
+        <icon-toggle-button :toggled="favoriteSet" 
+                            icon-normal="favorited"
+                            icon-toggled="favorite"
+                            @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
+        <icon-toggle-button :toggled="watchedSet" 
+                            icon-normal="watched"
+                            icon-toggled="mark-watched"
+                            @clicked="setWatched"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
-          <icon-button v-show="selectedItems.length" 
+          <icon-button v-show="selectedItemIds.length" 
                        icon="delete"
                        @click.native="showDeleteDialog"/>
         </transition>
@@ -40,8 +44,8 @@
         <transition name="fade-out-in">
           <selection-menu v-if="selectionMenu" 
                           class="home-page__selection-toolbar-menu"
-                          @select-all="selectAll = true; selectedItems = videos"
-                          @select-none="selectAll = false; selectedItems = []"
+                          @select-all="selectedItemIds = videos.map(video => video._id)"
+                          @select-none="selectedItemIds = []"
                           @dismiss="selectionMenu = false"/>
         </transition>
       </div>
@@ -70,10 +74,10 @@
           <video-item v-for="video in videos.sort(sortVideosByTitle)" 
                       :key="video._id"
                       :video="video"
-                      :selected="selectAll"
+                      :selected="selectedItemIds.indexOf(video._id) > -1"
                       :selection-mode="selectionMode"
-                      @video-item-selected="selectedItems.push(video)" 
-                      @video-item-deselected="selectedItems.splice(selectedItems.findIndex(item => item._id === video._id), 1)"
+                      @video-item-selected="selectedItemIds.push(video._id)" 
+                      @video-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(id => id === video._id), 1)"
                       @video-item-play="play(video)"/>
         </div>
       </transition>
@@ -142,9 +146,11 @@ export default {
       fetched: [],
       currentTab: null,
       selectionMode: false,
-      selectedItems: [],
+      selectedItemIds: [],
       selectionMenu: false,
       selectAll: false,
+      favoriteSet: false,
+      watchedSet: false,
     }
   },
 
@@ -180,7 +186,7 @@ export default {
     },
 
     showDeleteDialog() {
-      if (!this.selectedItems.length) return
+      if (!this.selectedItemIds.length) return
 
       dialog.showMessageBox(
         getCurrentWindow(),
@@ -189,13 +195,15 @@ export default {
           buttons: ['Delete', 'Cancel'],
           defaultId: 1,
           title: 'Delete Media',
-          message: `This will delete ${this.selectedItems.length} media items.`,
+          message: `This will delete ${
+            this.selectedItemIds.length
+          } media items.`,
           cancelId: 1,
         },
         response => {
           if (response === 0) {
-            this.deleteMedia(this.selectedItems.map(({ _id }) => _id))
-            this.selectedItems = []
+            this.deleteMedia(this.selectedItemIds)
+            this.selectedItemIds = []
           }
         },
       )
@@ -217,9 +225,28 @@ export default {
       return typeof a < typeof b ? -1 : 1
     },
 
+    setWatched() {
+      const watchedIds = this.selectedItemIds.filter(
+        id => this.videos.find(video => video._id === id).lastWatched,
+      )
+      const ids = this.watchedSet
+        ? watchedIds
+        : this.selectedItemIds.filter(id => watchedIds.indexOf(id) < 0)
+      this.updateMedia([ids, { lastWatched: this.watchedSet ? 0 : new Date() }])
+      this.watchedSet = !this.watchedSet
+    },
+
+    exitSelectionMode() {
+      this.selectionMode = false
+      this.selectedItemIds = []
+      this.favoriteSet = false
+      this.watchedSet = false
+    },
+
     ...mapActions([
       'getMedia',
       'addMediaItem',
+      'updateMedia',
       'deleteMedia',
       'switchCurrentPlayingEpisode',
     ]),

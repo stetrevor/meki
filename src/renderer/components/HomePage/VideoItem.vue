@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
+  <div :class="['video-item', { 'video-item--expanded': hovered, 'video-item--selection-mode': selectionMode, 'video-item--selected': selected }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <div class="video-item__thumbnail-container">
@@ -13,18 +13,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="!expanded" 
-           key="folded"
-           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
-        <progress-bar v-if="video.progress" 
-                      :colored="hovered" 
-                      :progress="video.progress"
-                      :max="video.runtime" 
-                      class="video-item__progress-bar"/>
-        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
-      </div>
-    
-      <div v-else 
+      <div v-if="hovered || selectionMode" 
            key="expanded"
            class="video-item__expanded">
         <div class="video-item__info">
@@ -44,34 +33,38 @@
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
                        @click.native="showInFolder"/>
-          <icon-toggle-button :toggled="video.favorite" 
-                              icon-normal="favorite"
-                              icon-toggled="favorited"
-                              @click.native="updateMedia([[video._id], { favorite: !video.favorite }])"/>
           <icon-toggle-button :toggled="!!video.lastWatched" 
+                              :disabled="selectionMode"
                               icon-normal="mark-watched"
                               icon-toggled="watched"
-                              @click.native="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+                              @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+          <icon-toggle-button :toggled="video.favorite" 
+                              :disabled="selectionMode"
+                              icon-normal="favorite"
+                              icon-toggled="favorited"
+                              @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
         </div>
+      </div>
+
+      <div v-else
+           key="folded"
+           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
+        <progress-bar v-if="video.progress" 
+                      :colored="hovered" 
+                      :progress="video.progress"
+                      :max="video.runtime" 
+                      class="video-item__progress-bar"/>
+        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
       </div>
     </transition>
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': expanded, 'video-item__main-action--selection-mode': selectionMode }]" 
+      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': hovered, 'video-item__main-action--selection-mode': selectionMode }]" 
                            :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :active="selectedStatus"
-                           :key="`${selectionMode}${expanded}`" 
+                           :active="selected"
+                           :key="`${selectionMode}${hovered}`" 
                            @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
-    </transition>
-
-    <transition name="fade-out-in" 
-                mode="out-in">
-      <icon-toggle-button :toggled="expanded" 
-                          class="video-item__expand-toggle"
-                          icon-normal="expand"
-                          icon-toggled="fold"
-                          @click.native="expanded = !expanded"/>
     </transition>
   </div>
 </template>
@@ -88,8 +81,6 @@ import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
 
-import '../../assets/icons/icon-expand.svg'
-import '../../assets/icons/icon-fold.svg'
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
 import '../../assets/icons/icon-mark-watched.svg'
@@ -143,9 +134,7 @@ export default {
 
   data() {
     return {
-      expanded: false,
       hovered: false,
-      selectedStatus: false,
     }
   },
 
@@ -155,25 +144,12 @@ export default {
     },
   },
 
-  watch: {
-    selectionMode(mode) {
-      if (!mode) {
-        this.selectedStatus = false
-      }
-    },
-
-    selected(status) {
-      this.selectedStatus = status
-    },
-  },
-
   methods: {
     mainActionHandler() {
       if (this.selectionMode) {
-        this.selectedStatus = !this.selectedStatus
-        const eventName = this.selectedStatus
-          ? 'video-item-selected'
-          : 'video-item-deselected'
+        const eventName = this.selected
+          ? 'video-item-deselected'
+          : 'video-item-selected'
         this.$emit(eventName)
       } else {
         this.$emit('video-item-play')
@@ -205,7 +181,7 @@ export default {
   transition: box-shadow 100ms $mdc-animation-standard-curve-timing-function;
   will-change: box-shadow;
 
-  &--selectedStatus {
+  &--selected {
     box-shadow: 0 0 0 4px $theme-color-secondary;
   }
 
@@ -315,13 +291,17 @@ export default {
 
   &__toolbar {
     grid-column: 2 / 3;
-    grid-row: 1 / 2;
+    grid-row: 1 / -1;
     display: grid;
     align-content: end;
   }
 
   &__toolbar * {
     border-radius: 8px 0 0 8px;
+
+    &:last-child {
+      border-radius: 8px 0 8px 0;
+    }
   }
 
   &__main-action {
@@ -349,13 +329,6 @@ export default {
     top: 0;
     left: 0;
     transform: scale(2) translate(12px, 12px);
-  }
-
-  &__expand-toggle {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    border-radius: 8px 0 8px 0;
   }
 }
 </style>
