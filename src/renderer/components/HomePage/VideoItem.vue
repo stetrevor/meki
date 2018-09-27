@@ -1,5 +1,5 @@
 <template>
-  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selectedStatus': selectedStatus }]" 
+  <div :class="['video-item', { 'video-item--expanded': expanded, 'video-item--selection-mode': selectionMode, 'video-item--selected': selectedStatus }]" 
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <div class="video-item__thumbnail-container">
