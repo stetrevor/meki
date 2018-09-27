@@ -145,10 +145,9 @@ export default {
   methods: {
     mainActionHandler() {
       if (this.selectionMode) {
-        this.selectedStatus = !this.selectedStatus
-        const eventName = this.selectedStatus
-          ? 'video-item-selected'
-          : 'video-item-deselected'
+        const eventName = this.selected
+          ? 'video-item-deselected'
+          : 'video-item-selected'
         this.$emit(eventName)
       } else {
         this.$emit('video-item-play')
@@ -180,7 +179,7 @@ export default {
   transition: box-shadow 100ms $mdc-animation-standard-curve-timing-function;
   will-change: box-shadow;
 
-  &--selectedStatus {
+  &--selected {
     box-shadow: 0 0 0 4px $theme-color-secondary;
   }
 
