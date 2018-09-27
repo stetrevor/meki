@@ -289,13 +289,17 @@ export default {
 
   &__toolbar {
     grid-column: 2 / 3;
-    grid-row: 1 / 2;
+    grid-row: 1 / -1;
     display: grid;
     align-content: end;
   }
 
   &__toolbar * {
     border-radius: 8px 0 0 8px;
+
+    &:last-child {
+      border-radius: 8px 0 8px 0;
+    }
   }
 
   &__main-action {
