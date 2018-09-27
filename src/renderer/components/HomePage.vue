@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
     <div class="home-page__sidebar" 
-         @click="selectionMode = false; selectedItemIds = []">
+         @click="exitSelectionMode">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
       <add-media-button class="home-page__amd" 
                         @click.native="showAddMediaDialog"/>
@@ -20,12 +20,16 @@
            class="home-page__selection-toolbar">
         <icon-button icon="cancel" 
                      class="home-page__selection-mode-exit"
-                     @click.native="selectionMode = false; selectedItemIds = []"/>
+                     @click.native="exitSelectionMode"/>
         <div class="home-page__selection-toolbar-title">{{ selectedItemIds.length }} Selected</div>
-        <icon-toggle-button icon-normal="favorite" 
-                            icon-toggled="favorited"/>
-        <icon-toggle-button icon-normal="mark-watched" 
-                            icon-toggled="watched"/>
+        <icon-toggle-button :toggled="favoriteSet" 
+                            icon-normal="favorited"
+                            icon-toggled="favorite"
+                            @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
+        <icon-toggle-button :toggled="watchedSet" 
+                            icon-normal="watched"
+                            icon-toggled="mark-watched"
+                            @clicked="setWatched"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
@@ -145,6 +149,8 @@ export default {
       selectedItemIds: [],
       selectionMenu: false,
       selectAll: false,
+      favoriteSet: false,
+      watchedSet: false,
     }
   },
 
@@ -219,9 +225,28 @@ export default {
       return typeof a < typeof b ? -1 : 1
     },
 
+    setWatched() {
+      const watchedIds = this.selectedItemIds.filter(
+        id => this.videos.find(video => video._id === id).lastWatched,
+      )
+      const ids = this.watchedSet
+        ? watchedIds
+        : this.selectedItemIds.filter(id => watchedIds.indexOf(id) < 0)
+      this.updateMedia([ids, { lastWatched: this.watchedSet ? 0 : new Date() }])
+      this.watchedSet = !this.watchedSet
+    },
+
+    exitSelectionMode() {
+      this.selectionMode = false
+      this.selectedItemIds = []
+      this.favoriteSet = false
+      this.watchedSet = false
+    },
+
     ...mapActions([
       'getMedia',
       'addMediaItem',
+      'updateMedia',
       'deleteMedia',
       'switchCurrentPlayingEpisode',
     ]),
