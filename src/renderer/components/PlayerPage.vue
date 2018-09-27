@@ -159,7 +159,7 @@ export default {
     this.progress = this.video.progress || 0
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
-    this.$refs.video.volume = this.volume
+    this.$refs.video.volume = this.volume / 100
   },
 
   methods: {
