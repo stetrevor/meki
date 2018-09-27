@@ -70,7 +70,7 @@ app.on('ready', () => {
       const port = process.env.NODE_ENV === 'production' ? 0 : 3000
 
       server.listen(port, 'localhost', () => {
-        mainWindow.webContents.send('server-address-reponse', server.address())
+        mainWindow.webContents.send('server-address-response', server.address())
       })
     }
   })
