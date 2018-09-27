@@ -4,7 +4,6 @@
        @mousemove.capture="onMouseMove"
        @mouseout.capture="onMouseOut"
        @click.capture="onClick">
-    {{ hello }}
     <div ref="track" 
          class="player-slider__track" />
 
@@ -37,6 +36,12 @@ export default {
       type: Number,
       required: true,
     },
+
+    step: {
+      type: Number, // Integer
+      default: 1,
+    },
+
     max: {
       type: Number,
       required: true,
@@ -55,7 +60,6 @@ export default {
 
   data() {
     return {
-      hello: '',
       dragging: false,
       hovered: false,
       value_: this.value,
@@ -122,7 +126,7 @@ export default {
       const left = Math.min(this.rect.width, Math.max(movedLeft, 0))
       const value = (left / this.rect.width) * this.max
 
-      return this.discrete ? Math.round(value) : value
+      return this.discrete ? Math.round(value / this.step) * this.step : value
     },
 
     setValue(e) {

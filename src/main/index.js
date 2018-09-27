@@ -3,8 +3,14 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
+import settings from 'electron-settings'
+
 import { setup as videoInfoSetup } from './video-info'
 import createServer from './server'
+
+if (process.env.NODE_ENV !== 'production') {
+  settings.setPath(path.resolve(__dirname, '../../temp/settings'))
+}
 
 /**
  * Set `__static` path to static files in production
@@ -16,7 +22,7 @@ if (process.env.NODE_ENV !== 'development') {
     .replace(/\\/g, '\\\\')
 }
 
-let mainWindow, server, serverAddress
+let mainWindow, server
 const winURL =
   process.env.NODE_ENV === 'development'
     ? `http://localhost:9080`
@@ -30,18 +36,6 @@ function createWindow() {
     height: 1000,
     useContentSize: true,
     width: 2000,
-  })
-
-  mainWindow.webContents.on('dom-ready', () => {
-    if (!server) {
-      server = createServer()
-      const port = process.env.NODE_ENV === 'production' ? 0 : 3000
-
-      server.listen(port, 'localhost', () => {
-        serverAddress = server.address()
-        mainWindow.webContents.send('server-address', serverAddress)
-      })
-    }
   })
 
   mainWindow.loadURL(winURL)
@@ -75,9 +69,24 @@ app.on('ready', () => {
   setupVideoInfo()
 
   ipcMain.on('server-address-request', event => {
-    if (serverAddress) {
-      event.sender.send('server-address', serverAddress)
+    if (server) {
+      event.sender.send('server-address-response', server.address())
+    } else {
+      server = createServer()
+      const port = process.env.NODE_ENV === 'production' ? 0 : 3000
+
+      server.listen(port, 'localhost', () => {
+        mainWindow.webContents.send('server-address-response', server.address())
+      })
     }
+  })
+
+  ipcMain.on('settings-video-player-request', event => {
+    const videoPlayerSettings = settings.get('videoPlayer', {
+      muted: false,
+      volume: 100,
+    })
+    event.sender.send('settings-video-player-response', videoPlayerSettings)
   })
 })
 
