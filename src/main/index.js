@@ -3,8 +3,14 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 import fs from 'fs'
 
+import settings from 'electron-settings'
+
 import { setup as videoInfoSetup } from './video-info'
 import createServer from './server'
+
+if (process.env.NODE_ENV !== 'production') {
+  settings.setPath(path.resolve(__dirname, '../../temp/settings'))
+}
 
 /**
  * Set `__static` path to static files in production
@@ -73,6 +79,14 @@ app.on('ready', () => {
         mainWindow.webContents.send('server-address-response', server.address())
       })
     }
+  })
+
+  ipcMain.on('settings-video-player-request', event => {
+    const videoPlayerSettings = settings.get('videoPlayer', {
+      muted: false,
+      volume: 100,
+    })
+    event.sender.send('settings-video-player-response', videoPlayerSettings)
   })
 })
 
