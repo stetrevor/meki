@@ -4,7 +4,6 @@
        @mousemove.capture="onMouseMove"
        @mouseout.capture="onMouseOut"
        @click.capture="onClick">
-    {{ hello }}
     <div ref="track" 
          class="player-slider__track" />
 
@@ -55,7 +54,6 @@ export default {
 
   data() {
     return {
-      hello: '',
       dragging: false,
       hovered: false,
       value_: this.value,
