@@ -32,12 +32,12 @@
                               icon-toggled="pause"
                               @click.native="playOrPause"/>
           <player-slider v-stream:value-changed="seek$" 
-                         :max="duration"
+                         :max="video.runtime"
                          :value="progress"
                          :format="toTime"
                          class="player-page__timeline"/>
           <div class="player-page__progress">
-            {{ progress | toTime }} / {{ duration | toTime }}
+            {{ progress | toTime }} / {{ video.runtime | toTime }}
           </div>
           <div class="player-page__volume-controls">
             <icon-toggle-button :toggled="videoMuted" 
@@ -156,8 +156,7 @@ export default {
   },
 
   mounted() {
-    this.duration = this.video.runtime
-    this.progress = this.video.progress
+    this.progress = this.video.progress || 0
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
     this.$refs.video.volume = this.volume
