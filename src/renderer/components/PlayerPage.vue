@@ -185,12 +185,14 @@ export default {
       const video = this.$refs.video
 
       video.currentTime = value
-      return video
-        .play()
-        .then(() => (this.paused = video.paused))
-        .catch(err =>
-          console.log('error caused by sliding progress bar too fast', err),
-        )
+
+      return video.paused
+        ? Promise.resolve(video.pause())
+        : video
+            .play()
+            .catch(err =>
+              console.log('error caused by sliding progress bar too fast', err),
+            )
     },
 
     isPlaying() {
