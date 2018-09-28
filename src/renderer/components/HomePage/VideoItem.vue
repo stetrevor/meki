@@ -23,8 +23,8 @@
     
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
-          <progress-bar v-if="video.progress"
-                        :progress="video.progress" 
+          <progress-bar v-if="video.progress || video.lastWatched"
+                        :progress="video.progress || video.runtime" 
                         :max="video.runtime" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
@@ -55,6 +55,8 @@
            key="folded"
            class="video-item__folded" >
         <progress-bar v-if="video.progress || video.lastWatched" 
+                      :colored="true" 
+                      :progress="video.progress || video.runtime"
                       :max="video.runtime" 
                       class="video-item__progress-bar"/>
         <p class="video-item__title">{{ video.title }}</p>
