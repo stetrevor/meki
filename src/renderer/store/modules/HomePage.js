@@ -31,7 +31,7 @@ const mutations = {
   },
 
   DELETE_MEDIA(state, ids) {
-    state.media = state.media.filter(({ _id }) => !ids.inlcudes(_id))
+    state.media = state.media.filter(({ _id }) => !ids.includes(_id))
   },
 }
 
