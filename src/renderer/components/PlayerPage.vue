@@ -5,7 +5,8 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
-           @timeupdate="progress = $refs.video.currentTime"/>
+           @timeupdate="progress = $refs.video.currentTime"
+           @ended="paused = $refs.video.paused"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
