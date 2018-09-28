@@ -77,7 +77,7 @@
                       :selected="selectedItemIds.includes(video._id)"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItemIds.push(video._id)" 
-                      @video-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(id => id === video._id), 1)"
+                      @video-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(video._id), 1)"
                       @video-item-play="play(video)"/>
         </div>
       </transition>
