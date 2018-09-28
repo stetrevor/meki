@@ -168,8 +168,8 @@ export default {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.duration ? 0 : this.progress
-      const lastWatched = this.progress === this.video.duration ? new Date() : 0
+      const progress = this.progress === this.video.runtime ? 0 : this.progress
+      const lastWatched = this.progress === this.video.runtime ? new Date() : 0
       const volume = this.$refs.video.volume
 
       // Unload video
