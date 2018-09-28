@@ -5,6 +5,7 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
+           @canplay="play"
            @timeupdate="progress = $refs.video.currentTime"
            @ended="paused = $refs.video.paused"/>
 
