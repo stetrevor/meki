@@ -45,16 +45,17 @@ function createWindow() {
   })
 }
 
+let OUTPUT
 function setupVideoInfo() {
-  const output =
+  OUTPUT =
     process.env.NODE_ENV === 'production'
       ? path.join(app.getPath('userData'), 'images')
       : path.join(__dirname, '../../temp', 'images')
 
-  fs.existsSync(output) ? '' : fs.mkdirSync(output)
+  fs.existsSync(OUTPUT) ? '' : fs.mkdirSync(OUTPUT)
 
   videoInfoSetup(
-    output,
+    OUTPUT,
     videoFiles$ => {
       ipcMain.on('video-info-request', (_, videoData) =>
         videoFiles$.next(videoData),
@@ -87,6 +88,15 @@ app.on('ready', () => {
       volume: 100,
     })
     event.sender.send('settings-video-player-response', videoPlayerSettings)
+  })
+
+  ipcMain.on('delete-image-file-request', (event, filePath) => {
+    fs.unlink(path.resolve(OUTPUT, filePath), err => {
+      if (err) throw err
+
+      const success = !err
+      event.sender.send('delete-image-file-response', success, filePath)
+    })
   })
 })
 

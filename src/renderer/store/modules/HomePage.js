@@ -10,8 +10,7 @@ const getters = {
   videos(state) {
     return state.media.filter(
       mediaItem =>
-        ['folder', 'video'].indexOf(mediaItem.mediaType) > -1 &&
-        !mediaItem.private,
+        ['folder', 'video'].includes(mediaItem.mediaType) && !mediaItem.private,
     )
   },
 }
@@ -27,12 +26,12 @@ const mutations = {
 
   UPDATE_MEDIA(state, items) {
     const ids = items.map(({ _id }) => _id)
-    const unchanged = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
+    const unchanged = state.media.filter(({ _id }) => !ids.includes(_id))
     state.media = unchanged.concat(items)
   },
 
   DELETE_MEDIA(state, ids) {
-    state.media = state.media.filter(({ _id }) => ids.indexOf(_id) < 0)
+    state.media = state.media.filter(({ _id }) => !ids.includes(_id))
   },
 }
 
@@ -74,8 +73,8 @@ const actions = {
     commit('UPDATE_MEDIA', items)
   },
 
-  async deleteMedia({ commit }, ids) {
-    const [deletedIds, _] = await api.deleteMedia(ids)
+  async deleteMedia({ commit }, [ids, imagePaths]) {
+    const [deletedIds, _] = await api.deleteMedia(ids, imagePaths)
     commit('DELETE_MEDIA', deletedIds)
   },
 }

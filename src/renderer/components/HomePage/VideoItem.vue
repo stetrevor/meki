@@ -16,16 +16,21 @@
       <div v-if="hovered || selectionMode" 
            key="expanded"
            class="video-item__expanded">
+        <overlay-icon-button :icon="selectionMode ? 'selection-mode' : 'play'" 
+                             :active="selected"
+                             class="video-item__main-action"
+                             @click.native="mainActionHandler"/>
+    
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
-          <progress-bar v-if="video.progress"
-                        :progress="video.progress" 
+          <progress-bar v-if="video.progress || video.lastWatched"
+                        :progress="video.progress || video.runtime" 
                         :max="video.runtime" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
-          <div v-if="video.progress" 
-               class="video-item__runtime-left">{{ (video.runtime - video.progress) | toTime('m Left') }}</div>
-          <div class="video-item__runtime">{{ video.runtime | toTime('m') }}</div>
+          <div v-if="video.progress || video.lastWatched"
+               class="video-item__runtime-left">{{ progressMsg }}</div>
+          <div class="video-item__runtime">{{ video.runtime | toTime }}</div>
           <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
 
@@ -48,23 +53,14 @@
 
       <div v-else
            key="folded"
-           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
-        <progress-bar v-if="video.progress" 
-                      :colored="hovered" 
-                      :progress="video.progress"
+           class="video-item__folded" >
+        <progress-bar v-if="video.progress || video.lastWatched" 
+                      :colored="true" 
+                      :progress="video.progress || video.runtime"
                       :max="video.runtime" 
                       class="video-item__progress-bar"/>
-        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
+        <p class="video-item__title">{{ video.title }}</p>
       </div>
-    </transition>
-
-    <transition name="fade-out-in" 
-                mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': hovered, 'video-item__main-action--selection-mode': selectionMode }]" 
-                           :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :active="selected"
-                           :key="`${selectionMode}${hovered}`" 
-                           @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
   </div>
 </template>
@@ -80,6 +76,8 @@ import IconButton from '../Base/IconButton'
 import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
+
+import { toTime } from '../../filters'
 
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
@@ -105,14 +103,11 @@ export default {
   },
 
   filters: {
-    toTime(seconds, string) {
-      const minutes = parseInt(seconds / 60)
-      return `${minutes}${string}`
-    },
-
     toDate(milliseconds) {
       return new Date(milliseconds).toLocaleString()
     },
+
+    toTime,
   },
 
   props: {
@@ -141,6 +136,15 @@ export default {
   computed: {
     thumbnailPath() {
       return this.$serverAddress + path.resolve(base, this.video.backdropPath)
+    },
+
+    progressMsg() {
+      const { runtime, progress, lastWatched } = this.video
+      const secLeft = parseInt(runtime - progress)
+      const minLeft = parseInt((runtime - progress) / 60)
+      const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
+
+      return lastWatched ? 'Watched' : msg
     },
   },
 
@@ -223,16 +227,10 @@ export default {
     @include theme-text-color-on-primary();
     align-self: center;
     margin-left: 16px;
-    opacity: 0.54;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
+    opacity: 1;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  &__title--active {
-    opacity: 1;
   }
 
   &__expanded {
@@ -245,13 +243,14 @@ export default {
     grid-row: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 48px;
-    grid-template-rows: 1fr 48px;
+    grid-template-rows: 48px 1fr;
+    grid-gap: 16px;
+    padding: 16px 0 0 16px;
   }
 
   &__info {
-    grid-row: 1 / span 2;
-    padding: 16px;
-    margin-top: 24px+48px;
+    grid-row: 2 / -1;
+    padding-bottom: 16px;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: repeat(4, min-content);
@@ -305,30 +304,10 @@ export default {
   }
 
   &__main-action {
-    grid-column: 1 / span 2;
+    grid-column: 1 / 2;
     grid-row: 1 / 2;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(4);
-    visibility: hidden;
-  }
-
-  &__main-action--active {
-    visibility: visible;
-  }
-
-  &__main-action--expanded {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
-  }
-
-  &__main-action--selection-mode {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
+    transform-origin: top left;
+    transform: scale(2);
   }
 }
 </style>

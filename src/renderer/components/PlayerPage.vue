@@ -5,7 +5,8 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
-           @timeupdate="progress = $refs.video.currentTime"/>
+           @timeupdate="progress = $refs.video.currentTime"
+           @ended="paused = $refs.video.paused"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
@@ -88,6 +89,8 @@ import OverlayIconButton from './Base/OverlayIconButton'
 import PlayerSlider from './PlayerPage/PlayerSlider'
 import SubtitleMenu from './PlayerPage/SubtitleMenu'
 
+import { toTime } from '../filters'
+
 import '../assets/icons/icon-back.svg'
 import '../assets/icons/icon-logo.svg'
 import '../assets/icons/icon-play-arrow.svg'
@@ -98,20 +101,6 @@ import '../assets/icons/icon-subtitle.svg'
 import '../assets/icons/icon-fullscreen.svg'
 import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-play.svg'
-
-const toTime = function(number) {
-  const pad = num => `00${num}`.slice(-2)
-
-  let num = Math.floor(number * 1000) // Total milliseconds
-  const milliseconds = num % 1000
-  num = (num - milliseconds) / 1000
-  const seconds = num % 60
-  num = (num - seconds) / 60
-  const minutes = num % 60
-  const hours = (num - minutes) / 60
-  const hoursStr = hours > 0 ? `${hours} : ` : ''
-  return `${hoursStr}${pad(minutes)} : ${pad(seconds)}`
-}
 
 export default {
   name: 'PlayerPage',
@@ -160,14 +149,15 @@ export default {
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
     this.$refs.video.volume = this.volume / 100
+    this.play()
   },
 
   methods: {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.duration ? 0 : this.progress
-      const lastWatched = this.progress === this.video.duration ? new Date() : 0
+      const progress = this.progress === this.video.runtime ? 0 : this.progress
+      const lastWatched = this.progress === this.video.runtime ? new Date() : 0
       const volume = this.$refs.video.volume
 
       // Unload video
@@ -184,12 +174,14 @@ export default {
       const video = this.$refs.video
 
       video.currentTime = value
-      return video
-        .play()
-        .then(() => (this.paused = video.paused))
-        .catch(err =>
-          console.log('error caused by sliding progress bar too fast', err),
-        )
+
+      return video.paused
+        ? Promise.resolve(video.pause())
+        : video
+            .play()
+            .catch(err =>
+              console.log('error caused by sliding progress bar too fast', err),
+            )
     },
 
     isPlaying() {
@@ -286,6 +278,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
+  @include theme-bg-color-primary();
 
   &--do-not-disturb {
     cursor: none;
@@ -295,7 +288,6 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: -1;
   }
 
   &__header,
@@ -306,6 +298,7 @@ export default {
     width: 100%;
     height: 96px;
     @include theme-text-color-on-primary();
+    z-index: 1;
 
     &::before {
       content: '';
