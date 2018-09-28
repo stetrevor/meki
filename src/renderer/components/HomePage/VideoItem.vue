@@ -28,9 +28,9 @@
                         :max="video.runtime" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
-          <div v-if="video.progress" 
-               class="video-item__runtime-left">{{ (video.runtime - video.progress) | toTime('m Left') }}</div>
-          <div class="video-item__runtime">{{ video.runtime | toTime('m') }}</div>
+          <div v-if="video.progress || video.lastWatched"
+               class="video-item__runtime-left">{{ progressMsg }}</div>
+          <div class="video-item__runtime">{{ video.runtime | toTime }}</div>
           <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
 
@@ -77,6 +77,8 @@ import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
 
+import { toTime } from '../../filters'
+
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
 import '../../assets/icons/icon-mark-watched.svg'
@@ -101,14 +103,11 @@ export default {
   },
 
   filters: {
-    toTime(seconds, string) {
-      const minutes = parseInt(seconds / 60)
-      return `${minutes}${string}`
-    },
-
     toDate(milliseconds) {
       return new Date(milliseconds).toLocaleString()
     },
+
+    toTime,
   },
 
   props: {
@@ -143,7 +142,7 @@ export default {
       const { runtime, progress, lastWatched } = this.video
       const secLeft = parseInt(runtime - progress)
       const minLeft = parseInt((runtime - progress) / 60)
-      const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left` 
+      const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
 
       return lastWatched ? 'Watched' : msg
     },
