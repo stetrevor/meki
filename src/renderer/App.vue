@@ -30,6 +30,16 @@ export default {
       this.setSoundMuted(muted)
       this.setSoundVolume(volume)
     })
+
+    this.prevent = e => e.preventDefault()
+
+    window.addEventListener('dragover', this.prevent)
+    window.addEventListener('drop', this.prevent)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('dragover', this.prevent)
+    window.removeEventListener('drop', this.prevent)
   },
 
   methods: mapActions(['setSoundMuted', 'setSoundVolume']),
