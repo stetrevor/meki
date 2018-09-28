@@ -16,6 +16,11 @@
       <div v-if="hovered || selectionMode" 
            key="expanded"
            class="video-item__expanded">
+        <overlay-icon-button :icon="selectionMode ? 'selection-mode' : 'play'" 
+                             :active="selected"
+                             class="video-item__main-action"
+                             @click.native="mainActionHandler"/>
+    
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
           <progress-bar v-if="video.progress"
@@ -56,15 +61,6 @@
                       class="video-item__progress-bar"/>
         <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
       </div>
-    </transition>
-
-    <transition name="fade-out-in" 
-                mode="out-in">
-      <overlay-icon-button :class="['video-item__main-action', { 'video-item__main-action--active': hovered || selectionMode, 'video-item__main-action--expanded': hovered, 'video-item__main-action--selection-mode': selectionMode }]" 
-                           :icon="selectionMode ? 'selection-mode' : 'play'"
-                           :active="selected"
-                           :key="`${selectionMode}${hovered}`" 
-                           @click.native="mainActionHandler"/> <!-- icon: play big, play, selection-mode -->
     </transition>
   </div>
 </template>
@@ -245,13 +241,14 @@ export default {
     grid-row: 1 / -1;
     display: grid;
     grid-template-columns: 1fr 48px;
-    grid-template-rows: 1fr 48px;
+    grid-template-rows: 48px 1fr;
+    grid-gap: 16px;
+    padding: 16px 0 0 16px;
   }
 
   &__info {
-    grid-row: 1 / span 2;
-    padding: 16px;
-    margin-top: 24px+48px;
+    grid-row: 2 / -1;
+    padding-bottom: 16px;
     display: grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: repeat(4, min-content);
@@ -305,30 +302,10 @@ export default {
   }
 
   &__main-action {
-    grid-column: 1 / span 2;
+    grid-column: 1 / 2;
     grid-row: 1 / 2;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: center center;
-    transform: translate(-50%, -50%) scale(4);
-    visibility: hidden;
-  }
-
-  &__main-action--active {
-    visibility: visible;
-  }
-
-  &__main-action--expanded {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
-  }
-
-  &__main-action--selection-mode {
-    top: 0;
-    left: 0;
-    transform: scale(2) translate(12px, 12px);
+    transform-origin: top left;
+    transform: scale(2);
   }
 }
 </style>
