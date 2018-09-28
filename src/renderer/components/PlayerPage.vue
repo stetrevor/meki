@@ -5,7 +5,6 @@
     <video ref="video" 
            :src="videoPath"
            class="player-page__video"
-           @canplay="play"
            @timeupdate="progress = $refs.video.currentTime"
            @ended="paused = $refs.video.paused"/>
 
@@ -162,6 +161,7 @@ export default {
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
     this.$refs.video.volume = this.volume / 100
+    this.play()
   },
 
   methods: {
