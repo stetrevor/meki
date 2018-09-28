@@ -138,6 +138,15 @@ export default {
     thumbnailPath() {
       return this.$serverAddress + path.resolve(base, this.video.backdropPath)
     },
+
+    progressMsg() {
+      const { runtime, progress, lastWatched } = this.video
+      const secLeft = parseInt(runtime - progress)
+      const minLeft = parseInt((runtime - progress) / 60)
+      const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left` 
+
+      return lastWatched ? 'Watched' : msg
+    },
   },
 
   methods: {
