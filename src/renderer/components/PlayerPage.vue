@@ -290,6 +290,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
+  @include theme-bg-color-primary();
 
   &--do-not-disturb {
     cursor: none;
@@ -299,7 +300,6 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: -1;
   }
 
   &__header,
@@ -310,6 +310,7 @@ export default {
     width: 100%;
     height: 96px;
     @include theme-text-color-on-primary();
+    z-index: 1;
 
     &::before {
       content: '';
