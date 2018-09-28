@@ -202,7 +202,10 @@ export default {
         },
         response => {
           if (response === 0) {
-            this.deleteMedia(this.selectedItemIds)
+            const imagePaths = this.videos
+              .filter(video => this.selectedItemIds.includes(video._id))
+              .map(video => video.backdropPath)
+            this.deleteMedia([this.selectedItemIds, imagePaths])
             this.selectedItemIds = []
           }
         },

@@ -73,8 +73,8 @@ const actions = {
     commit('UPDATE_MEDIA', items)
   },
 
-  async deleteMedia({ commit }, ids) {
-    const [deletedIds, _] = await api.deleteMedia(ids)
+  async deleteMedia({ commit }, [ids, imagePaths]) {
+    const [deletedIds, _] = await api.deleteMedia(ids, imagePaths)
     commit('DELETE_MEDIA', deletedIds)
   },
 }
