@@ -74,7 +74,7 @@
           <video-item v-for="video in videos.sort(sortVideosByTitle)" 
                       :key="video._id"
                       :video="video"
-                      :selected="selectedItemIds.indexOf(video._id) > -1"
+                      :selected="selectedItemIds.includes(video._id)"
                       :selection-mode="selectionMode"
                       @video-item-selected="selectedItemIds.push(video._id)" 
                       @video-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(id => id === video._id), 1)"
@@ -161,7 +161,7 @@ export default {
   methods: {
     navItemChanged(item) {
       this.currentTab = item
-      if (this.fetched.indexOf(item) > -1) return
+      if (this.fetched.includes(item)) return
 
       this.getMedia(this.queries[item]).then(() => this.fetched.push(item))
     },
@@ -231,7 +231,7 @@ export default {
       )
       const ids = this.watchedSet
         ? watchedIds
-        : this.selectedItemIds.filter(id => watchedIds.indexOf(id) < 0)
+        : this.selectedItemIds.filter(id => !watchedIds.includes(id))
       this.updateMedia([ids, { lastWatched: this.watchedSet ? 0 : new Date() }])
       this.watchedSet = !this.watchedSet
     },
