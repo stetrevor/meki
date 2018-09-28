@@ -89,6 +89,8 @@ import OverlayIconButton from './Base/OverlayIconButton'
 import PlayerSlider from './PlayerPage/PlayerSlider'
 import SubtitleMenu from './PlayerPage/SubtitleMenu'
 
+import { toTime } from '../filters'
+
 import '../assets/icons/icon-back.svg'
 import '../assets/icons/icon-logo.svg'
 import '../assets/icons/icon-play-arrow.svg'
@@ -99,20 +101,6 @@ import '../assets/icons/icon-subtitle.svg'
 import '../assets/icons/icon-fullscreen.svg'
 import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-play.svg'
-
-const toTime = function(number) {
-  const pad = num => `00${num}`.slice(-2)
-
-  let num = Math.floor(number * 1000) // Total milliseconds
-  const milliseconds = num % 1000
-  num = (num - milliseconds) / 1000
-  const seconds = num % 60
-  num = (num - seconds) / 60
-  const minutes = num % 60
-  const hours = (num - minutes) / 60
-  const hoursStr = hours > 0 ? `${hours} : ` : ''
-  return `${hoursStr}${pad(minutes)} : ${pad(seconds)}`
-}
 
 export default {
   name: 'PlayerPage',
