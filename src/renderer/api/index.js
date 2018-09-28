@@ -5,6 +5,7 @@ import { promisify } from 'util'
 import db from '../db'
 
 let setupVideoInfo = false
+let setupDeleteImageFile = false
 
 function promisifyUpdate(dbCollection) {
   return (...params) => {
@@ -50,11 +51,24 @@ export default {
     return await media.update({ _id: { $in: ids } }, { $set: updates })
   },
 
-  async deleteMedia(ids) {
+  async deleteMedia(ids, imagePaths) {
     const numRemoved = await media.delete(
       { _id: { $in: ids } },
       { multi: true },
     )
+
+    imagePaths.forEach(imagePath =>
+      ipcRenderer.send('delete-image-file-request', imagePath),
+    )
+
+    if (setupDeleteImageFile) {
+      ipcRenderer.on('delete-image-file-response', (_, success, filePath) => {
+        if (!success) throw new Error(`${filePath} can't be deleted!`)
+      })
+
+      setupDeleteImageFile = true
+    }
+
     return [ids, numRemoved]
   },
 }
