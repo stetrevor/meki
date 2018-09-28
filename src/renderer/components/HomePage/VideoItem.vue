@@ -53,13 +53,11 @@
 
       <div v-else
            key="folded"
-           :class="['video-item__folded', { 'video-item__folded--active' : hovered }]" >
-        <progress-bar v-if="video.progress" 
-                      :colored="hovered" 
-                      :progress="video.progress"
+           class="video-item__folded" >
+        <progress-bar v-if="video.progress || video.lastWatched" 
                       :max="video.runtime" 
                       class="video-item__progress-bar"/>
-        <p :class="['video-item__title', { 'video-item__title--active': hovered }]">{{ video.title }}</p>
+        <p class="video-item__title">{{ video.title }}</p>
       </div>
     </transition>
   </div>
@@ -219,16 +217,10 @@ export default {
     @include theme-text-color-on-primary();
     align-self: center;
     margin-left: 16px;
-    opacity: 0.54;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
+    opacity: 1;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  &__title--active {
-    opacity: 1;
   }
 
   &__expanded {
