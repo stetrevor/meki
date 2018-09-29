@@ -177,11 +177,9 @@ export default {
 
       return video.paused
         ? Promise.resolve(video.pause())
-        : video
-            .play()
-            .catch(err =>
-              console.log('error caused by sliding progress bar too fast', err),
-            )
+        : video.play().catch(err => {
+            // console.log('error caused by sliding progress bar too fast', err)
+          })
     },
 
     isPlaying() {
@@ -238,10 +236,10 @@ export default {
         Object.assign({}, subtitle, { default: true }),
       )
 
-      console.log(
-        Object.assign({}, old, { default: false }),
-        Object.assign({}, subtitle, { default: true }),
-      )
+      // console.log(
+      //   Object.assign({}, old, { default: false }),
+      //   Object.assign({}, subtitle, { default: true }),
+      // )
     },
 
     ...mapActions(['updateMedia', 'setSoundVolume', 'setSoundMuted']),
