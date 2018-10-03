@@ -276,7 +276,7 @@ export default {
   position: relative;
   width: 100vw;
   height: 100vh;
-  @include theme-bg-color-primary();
+  background-color: black;
 
   &--do-not-disturb {
     cursor: none;
