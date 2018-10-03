@@ -1,11 +1,11 @@
 <template>
   <div :class="['video-item', { 'video-item--expanded': hovered, 'video-item--selection-mode': selectionMode, 'video-item--selected': selected }]" 
-       @mouseenter="hovered = true" 
-       @mouseleave="hovered = false">
+       @mouseenter="ready ? hovered = true : ''" 
+       @mouseleave="ready ? hovered = false : ''">
     <div class="video-item__thumbnail-container">
       <transition name="fade-out-in" 
                   mode="out-in">
-        <img v-if="video.backdropPath" 
+        <img v-if="ready" 
              :src="thumbnailPath" 
              class="video-item__thumbnail">
       </transition>
@@ -13,7 +13,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="hovered || selectionMode" 
+      <div v-if="hovered || (ready && selectionMode)" 
            key="expanded"
            class="video-item__expanded">
         <overlay-icon-button :icon="selectionMode ? 'selection-mode' : 'play'" 
@@ -135,16 +135,24 @@ export default {
 
   computed: {
     thumbnailPath() {
-      return this.$serverAddress + path.resolve(base, this.video.backdropPath)
+      return this.ready
+        ? this.$serverAddress + path.resolve(base, this.video.backdropPath)
+        : ''
     },
 
     progressMsg() {
-      const { runtime, progress, lastWatched } = this.video
+      const runtime = this.video.runtime
+      const progress = this.video.progress || 0
+      const lastWatched = this.video.lastWatched || 0
       const secLeft = parseInt(runtime - progress)
       const minLeft = parseInt((runtime - progress) / 60)
       const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
 
       return lastWatched ? 'Watched' : msg
+    },
+
+    ready() {
+      return !!(this.video.runtime && this.video.backdropPath)
     },
   },
 

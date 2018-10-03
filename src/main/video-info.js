@@ -5,8 +5,8 @@ import hash from 'hash.js'
 import { Subject } from 'rxjs'
 import { mergeMap } from 'rxjs/operators'
 
-ffmpeg.setFfmpegPath(ffmpegBin.path)
-ffmpeg.setFfprobePath(ffprobeBin.path)
+ffmpeg.setFfmpegPath(ffmpegBin.path.replace('app.asar', 'app.asar.unpacked'))
+ffmpeg.setFfprobePath(ffprobeBin.path.replace('app.asar', 'app.asar.unpacked'))
 const sha256 = hash.sha256()
 
 const generateThumbnail = (filePath, output) => {
