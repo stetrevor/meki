@@ -5,7 +5,7 @@
     <div class="video-item__thumbnail-container">
       <transition name="fade-out-in" 
                   mode="out-in">
-        <img v-if="video.backdropPath" 
+        <img v-if="ready" 
              :src="thumbnailPath" 
              class="video-item__thumbnail">
       </transition>
@@ -13,7 +13,7 @@
 
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-if="hovered || selectionMode" 
+      <div v-if="hovered || (ready && selectionMode)" 
            key="expanded"
            class="video-item__expanded">
         <overlay-icon-button :icon="selectionMode ? 'selection-mode' : 'play'" 
