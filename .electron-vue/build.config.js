@@ -15,5 +15,6 @@ module.exports = {
   out: path.join(__dirname, '../build'),
   overwrite: true,
   platform: process.env.BUILD_TARGET || 'all',
+  appCopyright: 'Copyright © 2018, Stephen Trevor Wong',
   appVersion: '1.0.0',
 }
