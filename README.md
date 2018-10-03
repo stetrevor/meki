@@ -1,4 +1,4 @@
-# meki
+# Paw
 
 > A media manager for desktop
 

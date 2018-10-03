@@ -1,15 +1,51 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <keep-alive include="HomePage">
+        <router-view/>
+      </keep-alive>
+    </transition>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'meki'
-  }
+import { ipcRenderer } from 'electron'
+
+import Vue from 'vue'
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'Paw',
+
+  created() {
+    ipcRenderer.send('server-address-request')
+    ipcRenderer.on('server-address-response', (_, { address, port }) => {
+      Vue.prototype.$serverAddress = `http://${address}:${port}/`
+      this.$router.push({ name: 'home' })
+    })
+
+    ipcRenderer.send('settings-video-player-request')
+    ipcRenderer.on('settings-video-player-response', (_, { muted, volume }) => {
+      this.setSoundMuted(muted)
+      this.setSoundVolume(volume)
+    })
+
+    this.prevent = e => e.preventDefault()
+
+    window.addEventListener('dragover', this.prevent)
+    window.addEventListener('drop', this.prevent)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('dragover', this.prevent)
+    window.removeEventListener('drop', this.prevent)
+  },
+
+  methods: mapActions(['setSoundMuted', 'setSoundVolume']),
+}
 </script>
 
-<style>
-  /* CSS */
+<style lang="scss">
+/* CSS */
 </style>
