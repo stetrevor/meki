@@ -1,4 +1,9 @@
 import { storiesOf } from '@storybook/vue'
+import Vue from 'vue'
+
+import IconButton from '../components/Base/IconButton'
+
+Vue.component('IconButton', IconButton)
 
 const base = storiesOf('Base Components', module)
 
@@ -38,11 +43,12 @@ base.add('Icon Button', () => {
       <icon-button icon="selection-mode"/>
       <icon-button icon="fullscreen"/>
       <icon-button icon="fullscreen-exit"/>
+      <icon-button icon="fullscreen-exit" :disabled="true"/>
     </div>`,
   }
 })
 
-base.add('Icon Toggle Button', () => {
+base.add('Icon Button | Toggle', () => {
   require('../assets/icons/icon-settings.svg')
   require('../assets/icons/icon-search.svg')
   require('../assets/icons/icon-selection-mode.svg')
@@ -53,10 +59,11 @@ base.add('Icon Toggle Button', () => {
     template: `
     <div class="theme-bg-color-primary"
          style="height: calc(100vh - 24px * 2); padding: 24px 0; display: grid; grid-gap: 24px; grid-template-columns: repeat(auto-fill, 48px); grid-auto-rows: 48px; justify-content: center">
-         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="fullscreen" icon-toggled="fullscreen-exit"/>
-         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="search" icon-toggled="settings"/>
-         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="selection-mode" icon-toggled="fullscreen-exit"/>
-         <icon-toggle-button :toggled="toggled" @click.native="toggled = !toggled" icon-normal="settings" icon-toggled="fullscreen-exit"/>
+         <icon-button :toggled="toggled" @clicked="toggled = !toggled" icon="fullscreen" icon-toggled="fullscreen-exit"/>
+         <icon-button :toggled="toggled" @clicked="toggled = !toggled" icon="search" icon-toggled="settings"/>
+         <icon-button :toggled="toggled" @clicked="toggled = !toggled" icon="selection-mode" icon-toggled="fullscreen-exit"/>
+         <icon-button :toggled="toggled" @clicked="toggled = !toggled" icon="settings" icon-toggled="fullscreen-exit"/>
+         <icon-button icon="settings" icon-toggled="fullscreen-exit" :disabled="true"/>
     </div>`,
 
     data() {
