@@ -53,9 +53,10 @@ export default {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
 
   &:not(&--disabled) {
+    cursor: pointer;
+
     &:hover {
       @include theme-bg-color-background(0.08);
     }
