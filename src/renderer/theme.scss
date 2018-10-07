@@ -8,8 +8,8 @@ $theme-color-text-primary-lighter: $theme-color-primary-lighter;
 $theme-color-text-secondary: $theme-color-secondary;
 $theme-color-text-on-primary: #FFFFFF;
 $theme-color-text-on-primary-lighter: #FFFFFF;
-$theme-color-text-on-secondary: $theme-color-primary;
-$theme-color-text-on-background: $theme-color-primary;
+$theme-color-text-on-secondary: #000000;
+$theme-color-text-on-background: #000000;
 
 @mixin theme-fill-current-color() {
   fill: currentColor;
@@ -42,6 +42,32 @@ $theme-color-text-on-background: $theme-color-primary;
 @mixin theme-text-color-on-background($opacity: 1) {
   color: rgba($theme-color-text-on-background, $opacity);
   @include theme-fill-current-color();
+}
+
+$theme-text-color-map: (
+  primary: $theme-color-text-primary,
+  primary-lighter: $theme-color-text-primary-lighter,
+  secondary: $theme-color-text-secondary,
+  on-primary: $theme-color-text-on-primary,
+  on-primary-lighter: $theme-color-text-on-primary-lighter,
+  on-secondary: $theme-color-text-on-secondary,
+  on-background: $theme-color-text-on-background,
+);
+
+@mixin theme-text-color($theme, $opacity: 1) {
+  color: rgba(map-get($theme-text-color-map, $theme), $opacity);
+  @include theme-fill-current-color();
+}
+
+$theme-bg-color-map: (
+  primary: $theme-color-text-primary,
+  primary-lighter: $theme-color-text-primary-lighter,
+  secondary: $theme-color-text-secondary,
+  background: $theme-color-background,
+);
+
+@mixin theme-bg-color($theme, $opacity: 1) {
+  background-color: rgba(map-get($theme-bg-color-map, $theme), $opacity);
 }
 
 @mixin theme-bg-color-primary($opacity: 1) {
@@ -218,7 +244,7 @@ $theme-typography-font-family: Rubik, sans-serif;
   opacity: 1;
 }
 .fade-out-in-enter-active {
-  transition: opacity 125ms $mdc-animation-deceleration-curve-timing-function;
+  transition: opacity 150ms $mdc-animation-deceleration-curve-timing-function;
 }
 .fade-out-in-leave-active {
   transition: opacity 75ms $mdc-animation-acceleration-curve-timing-function;

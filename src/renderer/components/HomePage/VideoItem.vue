@@ -37,17 +37,17 @@
         <div class="video-item__toolbar">
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
-                       @click.native="showInFolder"/>
-          <icon-toggle-button :toggled="!!video.lastWatched" 
-                              :disabled="selectionMode"
-                              icon-normal="mark-watched"
-                              icon-toggled="watched"
-                              @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
-          <icon-toggle-button :toggled="video.favorite" 
-                              :disabled="selectionMode"
-                              icon-normal="favorite"
-                              icon-toggled="favorited"
-                              @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
+                       @clicked="showInFolder"/>
+          <icon-button :toggled="!!video.lastWatched" 
+                       :disabled="selectionMode"
+                       icon="mark-watched"
+                       icon-toggled="watched"
+                       @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+          <icon-button :toggled="video.favorite" 
+                       :disabled="selectionMode"
+                       icon="favorite"
+                       icon-toggled="favorited"
+                       @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
         </div>
       </div>
 
@@ -73,7 +73,6 @@ import path from 'path'
 import { mapActions } from 'vuex'
 
 import IconButton from '../Base/IconButton'
-import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
 
@@ -97,7 +96,6 @@ export default {
 
   components: {
     IconButton,
-    IconToggleButton,
     OverlayIconButton,
     ProgressBar,
   },

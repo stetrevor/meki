@@ -1,9 +1,9 @@
 <template>
-  <icon-toggle-button :toggled="fullscreen" 
-                      class="fullscreen-toggle"
-                      icon-normal="fullscreen" 
-                      icon-toggled="fullscreen-exit"
-                      @click.native="toggleFullscreen"/>
+  <icon-button :toggled="fullscreen" 
+               class="fullscreen-toggle"
+               icon="fullscreen" 
+               icon-toggled="fullscreen-exit"
+               @click.native="toggleFullscreen"/>
 </template>
 
 <script>
@@ -11,7 +11,7 @@ import { remote } from 'electron'
 
 import { mapGetters, mapActions } from 'vuex'
 
-import IconToggleButton from './IconToggleButton'
+import IconButton from './IconButton'
 
 import '../../assets/icons/icon-fullscreen.svg'
 import '../../assets/icons/icon-fullscreen-exit.svg'
@@ -19,7 +19,7 @@ import '../../assets/icons/icon-fullscreen-exit.svg'
 export default {
   name: 'FullscreenToggle',
 
-  components: { IconToggleButton },
+  components: { IconButton },
 
   computed: mapGetters(['fullscreen']),
 

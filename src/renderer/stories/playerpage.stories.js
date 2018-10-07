@@ -47,7 +47,7 @@ subtitles.add('Subtitle Menu', () => ({
                      :subtitles="subtitles"
                      @active-subtitle-changed="setActiveSubtitle"
                      @dismiss="show = false"/>
-      <icon-button icon="subtitle" @click.native.stop="show = !show" :active="show"/>
+      <icon-button icon="subtitle" @clicked.stop="show = !show" :active="show"/>
     </div>`,
 
   data() {

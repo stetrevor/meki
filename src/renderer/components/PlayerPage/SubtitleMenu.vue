@@ -5,31 +5,29 @@
       <div v-for="subtitle in subtitles" 
            :key="subtitle._id" 
            :class="['subtitle-menu__subtitle', { 'subtitle-menu__subtitle--active': activeSubtitle._id === subtitle._id }]">
-        <icon-toggle-button :toggled="activeSubtitle._id === subtitle._id" 
-                            :radio="true" 
-                            :class="['subtitle-menu__radio', { 'subtitle-menu__radio--active': activeSubtitle._id === subtitle._id }]"
-                            icon-normal="radio-unchecked"
-                            icon-toggled="radio-checked"
-                            @click.native.stop="activeSubtitle = subtitle; $emit('active-subtitle-changed', activeSubtitle)"/>
+        <icon-button :toggled="activeSubtitle._id === subtitle._id" 
+                     :radio="true" 
+                     :class="['subtitle-menu__radio', { 'subtitle-menu__radio--active': activeSubtitle._id === subtitle._id }]"
+                     icon="radio-unchecked"
+                     icon-toggled="radio-checked"
+                     @clicked.stop="activeSubtitle = subtitle; $emit('active-subtitle-changed', activeSubtitle)"/>
         <div class="subtitle-menu__title">{{ subtitle.title }}</div>
         <icon-button icon="delete" 
                      class="subtitle-menu__delete"
-                     @click.native.stop/>
+                     @clicked.stop/>
       </div>
     </div>
 
     <div v-else 
          class="subtitle-menu__empty">No Subtitles. Click "+" to add subtitles.</div>
 
-    <icon-button :colored="true" 
-                 icon="add"
+    <icon-button icon="add"
                  class="subtitle-menu__add-button"/>
   </div>
 </template>
 
 <script>
 import IconButton from '../Base/IconButton'
-import IconToggleButton from '../Base/IconToggleButton'
 
 import '../../assets/icons/icon-radio-unchecked.svg'
 import '../../assets/icons/icon-radio-checked.svg'
@@ -37,7 +35,7 @@ import '../../assets/icons/icon-radio-checked.svg'
 export default {
   name: 'SubtitleMenu',
 
-  components: { IconButton, IconToggleButton },
+  components: { IconButton },
 
   props: {
     subtitles: {

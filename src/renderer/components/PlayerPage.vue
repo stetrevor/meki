@@ -14,12 +14,11 @@
            class="player-page__controls">
         <div class="player-page__header">
           <icon-button icon="back" 
-                       @click.native="exit"/>
+                       @clicked="exit"/>
           <h5 class="player-page__title">{{ video.title }}</h5>
-          <icon-button :colored="true" 
-                       class="player-page__home" 
+          <icon-button class="player-page__home" 
                        icon="logo"
-                       @click.native="exit"/>
+                       @clicked="exit"/>
         </div>
 
         <overlay-icon-button v-show="paused" 
@@ -28,10 +27,10 @@
                              @click.native="play"/>
     
         <div class="player-page__footer">
-          <icon-toggle-button :toggled="!paused" 
-                              icon-normal="play-arrow" 
-                              icon-toggled="pause"
-                              @click.native="playOrPause"/>
+          <icon-button :toggled="!paused" 
+                       icon="play-arrow" 
+                       icon-toggled="pause"
+                       @clicked="playOrPause"/>
           <player-slider v-stream:value-changed="seek$" 
                          :max="video.runtime"
                          :value="progress"
@@ -41,10 +40,10 @@
             {{ progress | toTime }} / {{ video.runtime | toTime }}
           </div>
           <div class="player-page__volume-controls">
-            <icon-toggle-button :toggled="videoMuted" 
-                                icon-normal="volume" 
-                                icon-toggled="muted"
-                                @click.native="videoMuted = $refs.video.muted = !$refs.video.muted"/>
+            <icon-button :toggled="videoMuted" 
+                         icon="volume" 
+                         icon-toggled="muted"
+                         @clicked="videoMuted = $refs.video.muted = !$refs.video.muted"/>
             <player-slider :value="volume"
                            :max="100" 
                            :discrete="true"
@@ -55,7 +54,7 @@
 
           <icon-button :active="subtitleMenuShow" 
                        icon="subtitle"
-                       @click.native.stop="subtitleMenuShow = !subtitleMenuShow"/>
+                       @clicked.stop="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
                          :subtitles="subtitles"
                          class="player-page__subtitle-menu"
@@ -83,7 +82,6 @@ import {
 import { mapState, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
-import IconToggleButton from './Base/IconToggleButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
 import PlayerSlider from './PlayerPage/PlayerSlider'
@@ -107,7 +105,6 @@ export default {
 
   components: {
     IconButton,
-    IconToggleButton,
     FullscreenToggle,
     OverlayIconButton,
     PlayerSlider,

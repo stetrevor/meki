@@ -1,8 +1,14 @@
 <template>
-  <div :class="['icon-button', { 'icon-button--colored': colored, 'icon-button--active': active }]">
-    <svg :class="['icon-button__icon', { 'icon-button__icon--active': active }]">
-      <use :xlink:href="`#icon-${icon}`"/>
-    </svg>
+  <div :class="['icon-button', `icon-button--theme-${theme}`, { 'icon-button--disabled': disabled }]"
+       @click="disabled ? '' : $emit('clicked')">
+    <transition name="fade-out-in" 
+                mode="out-in">
+      <svg :key="toggled" 
+           class="icon-button__icon">
+        <use :xlink:href="`#icon-${toggled ? iconToggled : icon}`" 
+        />
+      </svg>
+    </transition>
   </div>
 </template>
 
@@ -16,14 +22,28 @@ export default {
       required: true,
     },
 
-    colored: {
+    iconToggled: {
+      type: String,
+      default: '',
+    },
+
+    toggled: {
       type: Boolean,
       default: false,
     },
 
-    active: {
+    disabled: {
       type: Boolean,
       default: false,
+    },
+
+    theme: {
+      type: String,
+      /* Applicable values are:
+       *  'on-primary', 'on-primary-lighter', 'on-secondary', 'on-background',
+       *  'primary', 'primary-lighter', 'secondary'.
+       */
+      default: 'on-primary',
     },
   },
 }
@@ -32,74 +52,53 @@ export default {
 <style lang="scss">
 @import '../../theme';
 
+@mixin icon-button-theme($theme) {
+  &--theme-#{$theme}:not(&--disabled) {
+    @include theme-text-color($theme);
+
+    &:hover {
+      background-color: rgba(map-get($theme-text-color-map, $theme), 0.08);
+    }
+
+    &:focus {
+      background-color: rgba(map-get($theme-text-color-map, $theme), 0.24);
+    }
+
+    &:active {
+      background-color: rgba(map-get($theme-text-color-map, $theme), 0.32);
+    }
+  }
+
+  &--theme-#{$theme}#{&}--disabled {
+    @include theme-text-color($theme, 0.38);
+  }
+}
+
 .icon-button {
   border-radius: 8px;
-  overflow: hidden;
   width: 48px;
   height: 48px;
-  @include theme-text-color-on-primary();
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  cursor: pointer;
-  transition: opacity, color 100ms $mdc-animation-standard-curve-timing-function;
-  will-change: opacity, color;
+  will-change: background-color, color;
+  transition-property: background-color, color;
+  transition-duration: 100ms;
+  transition-timing-function: $mdc-animation-sharp-curve-timing-function;
+
+  &:not(&--disabled) {
+    cursor: pointer;
+  }
+
+  @each $theme in 'on-primary', 'on-primary-lighter', 'on-secondary',
+    'on-background', 'primary', 'primary-lighter', 'secondary'
+  {
+    @include icon-button-theme($theme);
+  }
 
   &__icon {
     width: 24px;
     height: 24px;
-    opacity: 0.54;
-    position: relative;
-  }
-
-  &::before {
-    content: '';
-    width: 48px;
-    height: 48px;
-    position: absolute;
-    @include theme-bg-color-background();
-    opacity: 0;
-    transition: opacity 100ms $mdc-animation-standard-curve-timing-function;
-    will-change: opacity;
-  }
-
-  &:hover {
-    &::before {
-      opacity: 0.38;
-    }
-
-    .icon-button__icon {
-      opacity: 1;
-    }
-  }
-
-  &:active {
-    &::before {
-      opacity: 0.54;
-    }
-  }
-
-  &--colored {
-    @include theme-text-color-secondary();
-
-    &:hover::before {
-      @include theme-bg-color-secondary();
-    }
-
-    &:active::before {
-      opacity: 0.54;
-    }
-  }
-
-  &--active {
-    &::before {
-      opacity: 0.54;
-    }
-  }
-
-  &__icon--active {
-    opacity: 1;
   }
 }
 </style>
