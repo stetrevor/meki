@@ -84,8 +84,8 @@ import { mapState, mapActions } from 'vuex'
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
-import PlayerSlider from './PlayerPage/PlayerSlider'
-import SubtitleMenu from './PlayerPage/SubtitleMenu'
+import PlayerSlider from './VideoPlayer/PlayerSlider'
+import SubtitleMenu from './VideoPlayer/SubtitleMenu'
 
 import { toTime } from '../filters'
 
@@ -101,7 +101,7 @@ import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-play.svg'
 
 export default {
-  name: 'PlayerPage',
+  name: 'VideoPlayer',
 
   components: {
     IconButton,
@@ -136,8 +136,8 @@ export default {
 
     ...mapState({
       video: 'currentPlayingEpisode',
-      volume: state => state.PlayerPage.volume,
-      muted: state => state.PlayerPage.muted,
+      volume: state => state.VideoPlayer.volume,
+      muted: state => state.VideoPlayer.muted,
     }),
   },
 

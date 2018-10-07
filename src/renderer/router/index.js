@@ -5,7 +5,7 @@ Vue.use(Router)
 
 import SplashScreen from '@/components/SplashScreen'
 import HomePage from '@/components/HomePage'
-import PlayerPage from '@/components/PlayerPage'
+import VideoPlayer from '@/components/VideoPlayer'
 
 export default new Router({
   routes: [
@@ -22,7 +22,7 @@ export default new Router({
     {
       path: 'player',
       name: 'player',
-      component: PlayerPage,
+      component: VideoPlayer,
     },
     {
       path: '*',
