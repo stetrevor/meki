@@ -31,11 +31,11 @@
                        icon="play-arrow" 
                        icon-toggled="pause"
                        @clicked="playOrPause"/>
-          <player-slider v-stream:value-changed="seek$" 
-                         :max="video.runtime"
-                         :value="progress"
-                         :format="toTime"
-                         class="player-page__timeline"/>
+          <base-slider v-stream:value-changed="seek$" 
+                       :max="video.runtime"
+                       :value="progress"
+                       :format="toTime"
+                       class="player-page__timeline"/>
           <div class="player-page__progress">
             {{ progress | toTime }} / {{ video.runtime | toTime }}
           </div>
@@ -44,12 +44,12 @@
                          icon="volume" 
                          icon-toggled="muted"
                          @clicked="videoMuted = $refs.video.muted = !$refs.video.muted"/>
-            <player-slider :value="volume"
-                           :max="100" 
-                           :discrete="true"
-                           :format="v => `${v}%`"
-                           class="player-page__volume"
-                           @value-changed="$refs.video.volume = $event / 100"/>
+            <base-slider :value="volume"
+                         :max="100" 
+                         :discrete="true"
+                         :format="v => `${v}%`"
+                         class="player-page__volume"
+                         @value-changed="$refs.video.volume = $event / 100"/>
           </div>
 
           <icon-button :active="subtitleMenuShow" 
@@ -84,7 +84,7 @@ import { mapState, mapActions } from 'vuex'
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
-import PlayerSlider from './VideoPlayer/PlayerSlider'
+import BaseSlider from './Base/BaseSlider'
 import SubtitleMenu from './VideoPlayer/SubtitleMenu'
 
 import { toTime } from '../filters'
@@ -107,7 +107,7 @@ export default {
     IconButton,
     FullscreenToggle,
     OverlayIconButton,
-    PlayerSlider,
+    BaseSlider,
     SubtitleMenu,
   },
 
