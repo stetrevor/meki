@@ -227,12 +227,12 @@ export default {
   }
 
   &__title {
-    grid-column: 1 / 2;
+    grid-column: 1 / -1;
     grid-row: 2 / 3;
     @include theme-typography-body1();
     @include theme-text-color-on-primary();
     align-self: center;
-    margin-left: 16px;
+    margin: 0 16px;
     opacity: 1;
     text-overflow: ellipsis;
     overflow: hidden;
