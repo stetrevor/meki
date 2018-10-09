@@ -18,6 +18,7 @@
           <h5 class="video-player__title">{{ video.title }}</h5>
           <icon-button class="video-player__home" 
                        icon="logo"
+                       theme="secondary"
                        @clicked="exit"/>
         </div>
 
