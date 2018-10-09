@@ -29,7 +29,7 @@
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
           <div v-if="video.progress || video.lastWatched"
-               class="video-item__runtime-left">{{ progressMsg }}</div>
+               class="video-item__progress-message">{{ progressMsg }}</div>
           <div class="video-item__runtime">{{ video.runtime | toTime }}</div>
           <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
@@ -281,7 +281,7 @@ export default {
     @include theme-bg-color-background();
   }
 
-  &__runtime-left {
+  &__progress-message {
     grid-column: 2 / 3;
     align-self: center;
     @include theme-typography-subtitle1();
