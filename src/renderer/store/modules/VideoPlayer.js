@@ -5,7 +5,7 @@ const settings = remote.require('electron-settings')
 const state = {
   volume: 100,
   muted: false,
-  currentPlayingEpisode: null,
+  currentEpisode: null,
 }
 
 const mutations = {
@@ -17,8 +17,8 @@ const mutations = {
     state.muted = muted
   },
 
-  SWITCH_CURRENT_PLAYING_EPISODE(state, episode) {
-    state.currentPlayingEpisode = episode
+  SWITCH_CURRENT_EPISODE(state, episode) {
+    state.currentEpisode = episode
   },
 }
 
@@ -33,8 +33,8 @@ const actions = {
     commit('UPDATE_MUTED', muted)
   },
 
-  switchCurrentPlayingEpisode({ commit }, episode) {
-    commit('SWITCH_CURRENT_PLAYING_EPISODE', episode)
+  switchCurrentEpisode({ commit }, episode) {
+    commit('SWITCH_CURRENT_EPISODE', episode)
   },
 }
 

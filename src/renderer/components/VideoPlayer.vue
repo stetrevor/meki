@@ -135,7 +135,7 @@ export default {
     },
 
     ...mapState({
-      video: state => state.VideoPlayer.currentPlayingEpisode,
+      video: state => state.VideoPlayer.currentEpisode,
       volume: state => state.VideoPlayer.volume,
       muted: state => state.VideoPlayer.muted,
     }),
