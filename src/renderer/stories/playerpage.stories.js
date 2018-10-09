@@ -1,17 +1,22 @@
 import { storiesOf } from '@storybook/vue'
+import Vue from 'vue'
+
+import BaseSlider from '../components/Base/BaseSlider'
+
+Vue.component('BaseSlider', BaseSlider)
 
 const slider = storiesOf('Player Page | Slider', module)
 
-slider.add('PlayerSlider', () => ({
+slider.add('VideoPlayer', () => ({
   template: `
   <div class="theme-bg-color-primary theme-text-color-on-primary"
        style="box-sizing: border-box; padding: 64px; width: 100vw; height: 100vh; display: flex; align-items: center; flex-direction: column">
     {{ value1 + ' / 100' }}
-    <player-slider :value="32" :max="100" :discrete="true" @value-changed="valueChanged1"/>
+    <base-slider :value="32" :max="100" :discrete="true" @value-changed="valueChanged1"/>
     {{ value2 + ' / 100' }}
-    <player-slider :value="64" :max="100" @value-changed="value2 = arguments[0]"/>
+    <base-slider :value="64" :max="100" @value-changed="value2 = arguments[0]"/>
     {{ value3 + ' / ' + \`${120 * 60 * 60 * 1000}\` }}
-    <player-slider :value="5 * 60 * 60 * 1000" :max="120 * 60 * 60 * 1000" :discrete="true" @value-changed="value3 = $event"/>
+    <base-slider :value="5 * 60 * 60 * 1000" :max="120 * 60 * 60 * 1000" :discrete="true" @value-changed="value3 = $event"/>
   </div>`,
 
   data() {

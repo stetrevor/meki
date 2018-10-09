@@ -1,55 +1,55 @@
 <template>
   <div v-stream:mousemove="{ subject: mousemove$, options: { capture: true } }" 
        v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
-       :class="['player-page', { 'player-page--do-not-disturb': !controlsShow$ }]">
+       :class="['video-player', { 'video-player--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            :src="videoPath"
-           class="player-page__video"
+           class="video-player__video"
            @timeupdate="progress = $refs.video.currentTime"
            @ended="paused = $refs.video.paused"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-show="controlsShow$ || paused" 
-           class="player-page__controls">
-        <div class="player-page__header">
+           class="video-player__controls">
+        <div class="video-player__header">
           <icon-button icon="back" 
                        @clicked="exit"/>
-          <h5 class="player-page__title">{{ video.title }}</h5>
-          <icon-button class="player-page__home" 
+          <h5 class="video-player__title">{{ video.title }}</h5>
+          <icon-button class="video-player__home" 
                        icon="logo"
                        @clicked="exit"/>
         </div>
 
         <overlay-icon-button v-show="paused" 
-                             class="player-page__main-action"
+                             class="video-player__main-action"
                              icon="play"
                              @click.native="play"/>
     
-        <div class="player-page__footer">
+        <div class="video-player__footer">
           <icon-button :toggled="!paused" 
                        icon="play-arrow" 
                        icon-toggled="pause"
                        @clicked="playOrPause"/>
-          <player-slider v-stream:value-changed="seek$" 
-                         :max="video.runtime"
-                         :value="progress"
-                         :format="toTime"
-                         class="player-page__timeline"/>
-          <div class="player-page__progress">
+          <base-slider v-stream:value-changed="seek$" 
+                       :max="video.runtime"
+                       :value="progress"
+                       :format="toTime"
+                       class="video-player__timeline"/>
+          <div class="video-player__progress">
             {{ progress | toTime }} / {{ video.runtime | toTime }}
           </div>
-          <div class="player-page__volume-controls">
+          <div class="video-player__volume-controls">
             <icon-button :toggled="videoMuted" 
                          icon="volume" 
                          icon-toggled="muted"
                          @clicked="videoMuted = $refs.video.muted = !$refs.video.muted"/>
-            <player-slider :value="volume"
-                           :max="100" 
-                           :discrete="true"
-                           :format="v => `${v}%`"
-                           class="player-page__volume"
-                           @value-changed="$refs.video.volume = $event / 100"/>
+            <base-slider :value="volume"
+                         :max="100" 
+                         :discrete="true"
+                         :format="v => `${v}%`"
+                         class="video-player__volume"
+                         @value-changed="$refs.video.volume = $event / 100"/>
           </div>
 
           <icon-button :active="subtitleMenuShow" 
@@ -57,7 +57,7 @@
                        @clicked.stop="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
                          :subtitles="subtitles"
-                         class="player-page__subtitle-menu"
+                         class="video-player__subtitle-menu"
                          @active-subtitle-changed="setActiveSubtitle"
                          @dismiss="subtitleMenuShow = false"/>
 
@@ -84,8 +84,8 @@ import { mapState, mapActions } from 'vuex'
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
-import PlayerSlider from './PlayerPage/PlayerSlider'
-import SubtitleMenu from './PlayerPage/SubtitleMenu'
+import BaseSlider from './Base/BaseSlider'
+import SubtitleMenu from './VideoPlayer/SubtitleMenu'
 
 import { toTime } from '../filters'
 
@@ -101,13 +101,13 @@ import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-play.svg'
 
 export default {
-  name: 'PlayerPage',
+  name: 'VideoPlayer',
 
   components: {
     IconButton,
     FullscreenToggle,
     OverlayIconButton,
-    PlayerSlider,
+    BaseSlider,
     SubtitleMenu,
   },
 
@@ -135,9 +135,9 @@ export default {
     },
 
     ...mapState({
-      video: 'currentPlayingEpisode',
-      volume: state => state.PlayerPage.volume,
-      muted: state => state.PlayerPage.muted,
+      video: state => state.VideoPlayer.currentEpisode,
+      volume: state => state.VideoPlayer.volume,
+      muted: state => state.VideoPlayer.muted,
     }),
   },
 
@@ -269,7 +269,7 @@ export default {
 <style lang="scss">
 @import '../theme';
 
-.player-page {
+.video-player {
   position: relative;
   width: 100vw;
   height: 100vh;
