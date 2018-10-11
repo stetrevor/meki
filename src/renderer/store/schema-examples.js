@@ -61,13 +61,13 @@ const videoItem = {
   subtitles: [
     {
       _id: _id2,
-      title: 'English', // required
+      label: 'English', // required
       lang: 'en', // required
       filePath: 'a/b/c/d.srt', // required
     },
     {
       _id: _id3,
-      title: 'English',
+      label: 'English',
       lang: 'en',
       filePath: 'a/b/c/d.vtt',
     },
@@ -142,7 +142,7 @@ const folderItem = {
   title: 'A Folder Full of Funny Things',
   backdropPath: 'a/b/c/d.jpg',
   filePath: 'a/b/c',
-  favorite: 5,
+  favorite: true,
   private: false,
   recentEpisodeId: _id11,
 }
@@ -154,8 +154,7 @@ const tvshowItem = {
   title: 'A Funny TV Show',
   overview: 'A really funny show',
   posterPath: 'a/b/c/d.jpg',
-  filePath: 'a/b/c',
-  favorite: 5,
+  favorite: false,
   private: true,
   recentEpisodeId: _id12,
 }
@@ -172,13 +171,13 @@ const episodes = [
     subtitles: [
       {
         _id: _id13,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.srt',
       },
       {
         _id: _id14,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.vtt',
       },
@@ -197,7 +196,7 @@ const episodes = [
     subtitles: [
       {
         _id: _id15,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.srt',
       },
