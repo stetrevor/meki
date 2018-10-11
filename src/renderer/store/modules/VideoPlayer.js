@@ -5,7 +5,15 @@ const settings = remote.require('electron-settings')
 const state = {
   volume: 100,
   muted: false,
-  currentEpisode: null,
+  currentEpisodeId: null,
+}
+
+const getters = {
+  currentEpisode(state, _, rootState) {
+    return rootState.HomePage.media.find(
+      media => media._id === state.currentEpisodeId,
+    )
+  },
 }
 
 const mutations = {
@@ -17,8 +25,8 @@ const mutations = {
     state.muted = muted
   },
 
-  SWITCH_CURRENT_EPISODE(state, episode) {
-    state.currentEpisode = episode
+  SWITCH_CURRENT_EPISODE_ID(state, episodeId) {
+    state.currentEpisodeId = episodeId
   },
 }
 
@@ -33,8 +41,11 @@ const actions = {
     commit('UPDATE_MUTED', muted)
   },
 
-  switchCurrentEpisode({ commit }, episode) {
-    commit('SWITCH_CURRENT_EPISODE', episode)
+  switchCurrentEpisodeId({ commit }, episodeId) {
+    commit('SWITCH_CURRENT_EPISODE_ID', episodeId)
+  },
+
+  async setDefaultSubtitleId({ state, dispatch }, defaultSubtitleId) {
   },
 }
 
