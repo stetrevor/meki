@@ -4,9 +4,18 @@
        :class="['video-player', { 'video-player--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            :src="videoPath"
+           crossorigin="anonymous"
            class="video-player__video"
            @timeupdate="progress = $refs.video.currentTime"
-           @ended="paused = $refs.video.paused"/>
+           @ended="paused = $refs.video.paused">
+      <track v-for="subtitle in video.subtitles" 
+             :label="subtitle.label" 
+             :srclang="subtitle.lang" 
+             :default="subtitle._id === video.defaultSubtitleId" 
+             :key="subtitle._id" 
+             :src="subtitleSrc(subtitle.filePath)" 
+             kind="subtitles">
+    </video>
 
     <transition name="fade-out-in" 
                 mode="out-in">
@@ -234,6 +243,10 @@ export default {
       //   Object.assign({}, old, { default: false }),
       //   Object.assign({}, subtitle, { default: true }),
       // )
+    },
+
+    subtitleSrc(filePath) {
+      return this.$serverAddress + filePath
     },
 
     ...mapActions(['updateMedia', 'setSoundVolume', 'setSoundMuted']),
