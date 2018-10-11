@@ -46,7 +46,33 @@ const actions = {
   },
 
   async setDefaultSubtitleId({ state, dispatch }, defaultSubtitleId) {
+    await dispatch('updateMedia', [
+      [state.currentEpisodeId],
+      { defaultSubtitleId },
+    ])
+  },
+
+  async addSubtitle({ state, dispatch }, subtitle) {
+    const _id = Date.now().toString()
+    const withId = Object.assign({}, { _id }, subtitle)
+
+    await dispatch('updateMediaArrayField', [
+      state.currentEpisodeId,
+      { $push: { subtitles: withId } },
+    ])
+
+    await dispatch('updateMedia', [
+      [state.currentEpisodeId],
+      { defaultSubtitleId: _id },
+    ])
+  },
+
+  async deleteSubtitle({ state, dispatch }, subtitleId) {
+    await dispatch('updateMediaArrayField', [
+      state.currentEpisodeId,
+      { $pull: { subtitles: { _id: subtitleId } } },
+    ])
   },
 }
 
-export default { state, mutations, actions }
+export default { state, getters, mutations, actions }
