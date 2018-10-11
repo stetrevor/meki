@@ -55,11 +55,10 @@
 
           <icon-button :active="subtitleMenuShow" 
                        icon="subtitle"
-                       @clicked.stop="subtitleMenuShow = !subtitleMenuShow"/>
+                       @click.native.stop
+                       @clicked="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
-                         :subtitles="subtitles"
                          class="video-player__subtitle-menu"
-                         @active-subtitle-changed="setActiveSubtitle"
                          @dismiss="subtitleMenuShow = false"/>
 
           <fullscreen-toggle/>
@@ -80,7 +79,7 @@ import {
   pluck,
 } from 'rxjs/operators'
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
@@ -122,11 +121,6 @@ export default {
       paused: true,
       progress: 0,
       subtitleMenuShow: false,
-      subtitles: [
-        { _id: '1', default: false, title: 'English', lang: 'en' },
-        { _id: '2', default: true, title: 'English 2', lang: 'en' },
-        { _id: '3', default: false, title: 'Chinese', lang: 'cn' },
-      ],
     }
   },
 
@@ -136,9 +130,11 @@ export default {
     },
 
     ...mapState({
-      video: state => state.VideoPlayer.currentEpisode,
       volume: state => state.VideoPlayer.volume,
       muted: state => state.VideoPlayer.muted,
+    }),
+    ...mapGetters({
+      video: 'currentEpisode',
     }),
   },
 
