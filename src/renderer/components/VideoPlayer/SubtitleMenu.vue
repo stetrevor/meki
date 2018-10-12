@@ -15,7 +15,7 @@
                      theme="on-background"
                      class="subtitle-menu__delete"
                      @click.native.stop
-                     @clicked="deleteSubtitle(subtitle._id)"/>
+                     @clicked="handleDelete(subtitle._id)"/>
       </div>
 
       <div class="subtitle-menu__subtitle subtitle-menu__subtitle--none"
@@ -95,6 +95,12 @@ export default {
             })
           }
         },
+      )
+    },
+
+    handleDelete(subtitleId) {
+      this.deleteSubtitle(subtitleId).then(() =>
+        this.$emit('subtitle-changed', this.video.defaultSubtitleId, null),
       )
     },
 
