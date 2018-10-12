@@ -68,6 +68,7 @@
                        @clicked="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
                          class="video-player__subtitle-menu"
+                         @subtitle-changed="switchSubtitle"
                          @dismiss="subtitleMenuShow = false"/>
 
           <fullscreen-toggle/>
@@ -223,26 +224,15 @@ export default {
       }
     },
 
-    setActiveSubtitle(subtitle) {
-      const oldIndex = this.subtitles.findIndex(s => s.default)
-      const old = this.subtitles[oldIndex]
-      this.subtitles.splice(
-        oldIndex,
-        1,
-        Object.assign({}, old, { default: false }),
-      )
+    switchSubtitle(newActiveSubtitleId, oldActiveSubtitleId) {
+      const textTracks = this.$refs.video.textTracks
 
-      const index = this.subtitles.findIndex(s => s._id === subtitle._id)
-      this.subtitles.splice(
-        index,
-        1,
-        Object.assign({}, subtitle, { default: true }),
-      )
+      console.log(...arguments, 'switchSubtitle')
 
-      // console.log(
-      //   Object.assign({}, old, { default: false }),
-      //   Object.assign({}, subtitle, { default: true }),
-      // )
+      if (oldActiveSubtitleId)
+        textTracks.getTrackById(oldActiveSubtitleId).mode = 'hidden'
+      if (newActiveSubtitleId)
+        textTracks.getTrackById(newActiveSubtitleId).mode = 'showing'
     },
 
     subtitleSrc(filePath) {
