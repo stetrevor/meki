@@ -67,11 +67,19 @@ const actions = {
     ])
   },
 
-  async deleteSubtitle({ state, dispatch }, subtitleId) {
+  async deleteSubtitle({ state, getters, dispatch }, subtitleId) {
     await dispatch('updateMediaArrayField', [
       state.currentEpisodeId,
       { $pull: { subtitles: { _id: subtitleId } } },
     ])
+
+    if (subtitleId === getters.currentEpisode.defaultSubtitleId) {
+      const subtitles = getters.currentEpisode.subtitles
+      const subtitleId = subtitles.length
+        ? subtitles[subtitles.length - 1]._id
+        : null
+      await dispatch('setDefaultSubtitleId', subtitleId)
+    }
   },
 }
 
