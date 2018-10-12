@@ -62,6 +62,8 @@ export default {
     }
 
     document.body.addEventListener('click', this.dissmissHandler)
+
+    this.$emit('subtitle-changed', this.video.defaultSubtitleId, null)
   },
 
   beforeDestroy() {
@@ -91,7 +93,7 @@ export default {
 
               this.addSubtitle(subtitle).then(() =>
                 this.$emit('subtitle-changed', subtitle._id, oldSubtitleId),
-            )
+              )
             })
           }
         },
