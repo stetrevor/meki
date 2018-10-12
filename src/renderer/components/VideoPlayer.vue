@@ -11,8 +11,8 @@
       <track v-for="subtitle in video.subtitles" 
              :label="subtitle.label" 
              :srclang="subtitle.lang" 
-             :default="subtitle._id === video.defaultSubtitleId" 
              :key="subtitle._id" 
+             :id="subtitle._id"
              :src="subtitleSrc(subtitle.filePath)" 
              kind="subtitles">
     </video>
