@@ -5,7 +5,7 @@
       <div v-for="subtitle in video.subtitles" 
            :key="subtitle._id" 
            class="subtitle-menu__subtitle"
-           @click.stop="setDefaultSubtitleId(subtitle._id)">
+           @click.stop="subtitle._id !== video.defaultSubtitleId && $emit('subtitle-changed', subtitle._id, video.defaultSubtitleId); setDefaultSubtitleId(subtitle._id)">
         <svg v-visible="video.defaultSubtitleId === subtitle._id" 
              class="subtitle-menu__selected">
           <use xlink:href="#icon-checked"/>
@@ -19,8 +19,8 @@
       </div>
 
       <div class="subtitle-menu__subtitle subtitle-menu__subtitle--none"
-           @click.stop="setDefaultSubtitleId(null)">
-        <svg v-visible="video.defaultSubtitleId === null" 
+           @click.stop="!!video.defaultSubtitleId !== false && $emit('subtitle-changed', null, video.defaultSubtitleId); setDefaultSubtitleId(null)">
+        <svg v-visible="!!video.defaultSubtitleId === false" 
              class="subtitle-menu__selected">
           <use xlink:href="#icon-checked"/>
         </svg>
