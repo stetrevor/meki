@@ -53,14 +53,14 @@ const actions = {
   },
 
   async addSubtitle({ state, dispatch }, subtitle) {
-    const _id = Date.now().toString()
-    const withId = Object.assign({}, { _id }, subtitle)
+    const { _id } = subtitle
 
     await dispatch('updateMediaArrayField', [
       state.currentEpisodeId,
-      { $push: { subtitles: withId } },
+      { $push: { subtitles: subtitle } },
     ])
 
+    // Refactor: Use setDefaultSubtitleId instead.
     await dispatch('updateMedia', [
       [state.currentEpisodeId],
       { defaultSubtitleId: _id },
