@@ -80,13 +80,19 @@ export default {
         },
         paths => {
           if (paths) {
-            this.$nextTick(() =>
-              this.addSubtitle({
+            this.$nextTick(() => {
+              const oldSubtitleId = this.video.defaultSubtitleId
+              const subtitle = {
+                _id: Date.now().toString(),
                 lang: 'en',
                 label: 'English',
                 filePath: paths[0],
-              }),
+              }
+
+              this.addSubtitle(subtitle).then(() =>
+                this.$emit('subtitle-changed', subtitle._id, oldSubtitleId),
             )
+            })
           }
         },
       )
