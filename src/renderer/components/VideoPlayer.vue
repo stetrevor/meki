@@ -204,14 +204,18 @@ export default {
       })
     },
 
-    playOrPause() {
+    pause() {
       const video = this.$refs.video
 
+      video.pause()
+      this.paused = video.paused
+    },
+
+    playOrPause() {
       if (!this.isPlaying()) {
         this.play()
       } else {
-        video.pause()
-        this.paused = video.paused
+        this.pause()
       }
     },
 
