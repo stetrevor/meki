@@ -69,6 +69,8 @@
           <subtitle-menu v-show="subtitleMenuShow" 
                          class="video-player__subtitle-menu"
                          @subtitle-changed="switchSubtitle"
+                         @subtitle-before-add="pause"
+                         @subtitle-after-add="play"
                          @dismiss="subtitleMenuShow = false"/>
 
           <fullscreen-toggle/>

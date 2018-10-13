@@ -73,6 +73,8 @@ export default {
 
   methods: {
     showDialog() {
+      this.$emit('subtitle-before-add')
+
       dialog.showOpenDialog(
         getCurrentWindow(),
         {
@@ -95,9 +97,10 @@ export default {
                 filePath: paths[0],
               }
 
-              this.addSubtitle(subtitle).then(() =>
-                this.$emit('subtitle-changed', subtitle._id, oldSubtitleId),
-              )
+              this.addSubtitle(subtitle).then(() => {
+                this.$emit('subtitle-changed', subtitle._id, oldSubtitleId)
+                this.$emit('subtitle-after-add')
+              })
             })
           }
         },
