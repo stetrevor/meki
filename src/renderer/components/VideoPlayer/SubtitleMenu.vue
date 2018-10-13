@@ -64,6 +64,7 @@ export default {
     document.body.addEventListener('click', this.dissmissHandler)
 
     this.$emit('subtitle-changed', this.video.defaultSubtitleId, null)
+    this.newSubtitleIndex = this.video.subtitles && this.video.subtitles.length
   },
 
   beforeDestroy() {
@@ -84,10 +85,13 @@ export default {
           if (paths) {
             this.$nextTick(() => {
               const oldSubtitleId = this.video.defaultSubtitleId
+
+              this.newSubtitleIndex += 1
+              const label = `Subtitle ${this.newSubtitleIndex}`
               const subtitle = {
                 _id: Date.now().toString(),
                 lang: 'en',
-                label: 'English',
+                label,
                 filePath: paths[0],
               }
 
