@@ -63,7 +63,6 @@ export default {
 
     document.body.addEventListener('click', this.dissmissHandler)
 
-    this.$emit('subtitle-changed', this.video.defaultSubtitleId, null)
     this.newSubtitleIndex = this.video.subtitles && this.video.subtitles.length
   },
 

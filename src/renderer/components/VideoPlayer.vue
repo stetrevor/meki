@@ -14,6 +14,7 @@
              :key="subtitle._id" 
              :id="subtitle._id"
              :src="subtitleSrc(subtitle.filePath)" 
+             :default="subtitle._id === video.defaultSubtitleId"
              kind="subtitles">
     </video>
 
