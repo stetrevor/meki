@@ -1,65 +1,78 @@
 <template>
   <div v-stream:mousemove="{ subject: mousemove$, options: { capture: true } }" 
        v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
-       :class="['player-page', { 'player-page--do-not-disturb': !controlsShow$ }]">
+       v-hotkey="keymap"
+       :class="['video-player', { 'video-player--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            :src="videoPath"
-           class="player-page__video"
+           crossorigin="anonymous"
+           class="video-player__video"
            @timeupdate="progress = $refs.video.currentTime"
-           @ended="paused = $refs.video.paused"/>
+           @ended="paused = $refs.video.paused">
+      <track v-for="subtitle in video.subtitles" 
+             :label="subtitle.label" 
+             :srclang="subtitle.lang" 
+             :key="subtitle._id" 
+             :id="subtitle._id"
+             :src="subtitleSrc(subtitle.filePath)" 
+             :default="subtitle._id === video.defaultSubtitleId"
+             kind="subtitles">
+    </video>
 
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-show="controlsShow$ || paused" 
-           class="player-page__controls">
-        <div class="player-page__header">
+           class="video-player__controls">
+        <div class="video-player__header">
           <icon-button icon="back" 
-                       @click.native="exit"/>
-          <h5 class="player-page__title">{{ video.title }}</h5>
-          <icon-button :colored="true" 
-                       class="player-page__home" 
+                       @clicked="exit"/>
+          <h5 class="video-player__title">{{ video.title }}</h5>
+          <icon-button class="video-player__home" 
                        icon="logo"
-                       @click.native="exit"/>
+                       theme="secondary"
+                       @clicked="exit"/>
         </div>
 
         <overlay-icon-button v-show="paused" 
-                             class="player-page__main-action"
+                             class="video-player__main-action"
                              icon="play"
                              @click.native="play"/>
     
-        <div class="player-page__footer">
-          <icon-toggle-button :toggled="!paused" 
-                              icon-normal="play-arrow" 
-                              icon-toggled="pause"
-                              @click.native="playOrPause"/>
-          <player-slider v-stream:value-changed="seek$" 
-                         :max="video.runtime"
-                         :value="progress"
-                         :format="toTime"
-                         class="player-page__timeline"/>
-          <div class="player-page__progress">
-            {{ progress | toTime }} / {{ video.runtime | toTime }}
+        <div class="video-player__footer">
+          <icon-button :toggled="!paused" 
+                       icon="play-arrow" 
+                       icon-toggled="pause"
+                       @clicked="playOrPause"/>
+          <base-slider v-stream:value-changed="seek$" 
+                       :max="video.duration"
+                       :value="progress"
+                       :format="toTime"
+                       class="video-player__timeline"/>
+          <div class="video-player__progress">
+            {{ progress | toTime }} / {{ video.duration | toTime }}
           </div>
-          <div class="player-page__volume-controls">
-            <icon-toggle-button :toggled="videoMuted" 
-                                icon-normal="volume" 
-                                icon-toggled="muted"
-                                @click.native="videoMuted = $refs.video.muted = !$refs.video.muted"/>
-            <player-slider :value="volume"
-                           :max="100" 
-                           :discrete="true"
-                           :format="v => `${v}%`"
-                           class="player-page__volume"
-                           @value-changed="$refs.video.volume = $event / 100"/>
+          <div class="video-player__volume-controls">
+            <icon-button :toggled="videoMuted" 
+                         icon="volume" 
+                         icon-toggled="muted"
+                         @clicked="videoMuted = $refs.video.muted = !$refs.video.muted"/>
+            <base-slider :value="volume"
+                         :max="100" 
+                         :discrete="true"
+                         :format="v => `${v}%`"
+                         class="video-player__volume"
+                         @value-changed="$refs.video.volume = $event / 100"/>
           </div>
 
           <icon-button :active="subtitleMenuShow" 
                        icon="subtitle"
-                       @click.native.stop="subtitleMenuShow = !subtitleMenuShow"/>
+                       @click.native.stop
+                       @clicked="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
-                         :subtitles="subtitles"
-                         class="player-page__subtitle-menu"
-                         @active-subtitle-changed="setActiveSubtitle"
+                         class="video-player__subtitle-menu"
+                         @subtitle-changed="switchSubtitle"
+                         @subtitle-before-add="pause"
+                         @subtitle-after-add="play"
                          @dismiss="subtitleMenuShow = false"/>
 
           <fullscreen-toggle/>
@@ -80,14 +93,13 @@ import {
   pluck,
 } from 'rxjs/operators'
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
-import IconToggleButton from './Base/IconToggleButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import OverlayIconButton from './Base/OverlayIconButton'
-import PlayerSlider from './PlayerPage/PlayerSlider'
-import SubtitleMenu from './PlayerPage/SubtitleMenu'
+import BaseSlider from './Base/BaseSlider'
+import SubtitleMenu from './VideoPlayer/SubtitleMenu'
 
 import { toTime } from '../filters'
 
@@ -103,14 +115,13 @@ import '../assets/icons/icon-fullscreen-exit.svg'
 import '../assets/icons/icon-play.svg'
 
 export default {
-  name: 'PlayerPage',
+  name: 'VideoPlayer',
 
   components: {
     IconButton,
-    IconToggleButton,
     FullscreenToggle,
     OverlayIconButton,
-    PlayerSlider,
+    BaseSlider,
     SubtitleMenu,
   },
 
@@ -124,11 +135,6 @@ export default {
       paused: true,
       progress: 0,
       subtitleMenuShow: false,
-      subtitles: [
-        { _id: '1', default: false, title: 'English', lang: 'en' },
-        { _id: '2', default: true, title: 'English 2', lang: 'en' },
-        { _id: '3', default: false, title: 'Chinese', lang: 'cn' },
-      ],
     }
   },
 
@@ -137,10 +143,18 @@ export default {
       return this.$serverAddress + this.video.filePath
     },
 
+    keymap() {
+      return {
+        space: this.playOrPause,
+      }
+    },
+
     ...mapState({
-      video: 'currentPlayingEpisode',
-      volume: state => state.PlayerPage.volume,
-      muted: state => state.PlayerPage.muted,
+      volume: state => state.VideoPlayer.volume,
+      muted: state => state.VideoPlayer.muted,
+    }),
+    ...mapGetters({
+      video: 'currentEpisode',
     }),
   },
 
@@ -156,8 +170,8 @@ export default {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.runtime ? 0 : this.progress
-      const lastWatched = this.progress === this.video.runtime ? new Date() : 0
+      const progress = this.progress === this.video.duration ? 0 : this.progress
+      const lastWatched = this.progress === this.video.duration ? new Date() : 0
       const volume = this.$refs.video.volume
 
       // Unload video
@@ -200,14 +214,18 @@ export default {
       })
     },
 
-    playOrPause() {
+    pause() {
       const video = this.$refs.video
 
+      video.pause()
+      this.paused = video.paused
+    },
+
+    playOrPause() {
       if (!this.isPlaying()) {
         this.play()
       } else {
-        video.pause()
-        this.paused = video.paused
+        this.pause()
       }
     },
 
@@ -220,26 +238,17 @@ export default {
       }
     },
 
-    setActiveSubtitle(subtitle) {
-      const oldIndex = this.subtitles.findIndex(s => s.default)
-      const old = this.subtitles[oldIndex]
-      this.subtitles.splice(
-        oldIndex,
-        1,
-        Object.assign({}, old, { default: false }),
-      )
+    switchSubtitle(newActiveSubtitleId, oldActiveSubtitleId) {
+      const textTracks = this.$refs.video.textTracks
 
-      const index = this.subtitles.findIndex(s => s._id === subtitle._id)
-      this.subtitles.splice(
-        index,
-        1,
-        Object.assign({}, subtitle, { default: true }),
-      )
+      if (oldActiveSubtitleId)
+        textTracks.getTrackById(oldActiveSubtitleId).mode = 'hidden'
+      if (newActiveSubtitleId)
+        textTracks.getTrackById(newActiveSubtitleId).mode = 'showing'
+    },
 
-      // console.log(
-      //   Object.assign({}, old, { default: false }),
-      //   Object.assign({}, subtitle, { default: true }),
-      // )
+    subtitleSrc(filePath) {
+      return this.$serverAddress + filePath
     },
 
     ...mapActions(['updateMedia', 'setSoundVolume', 'setSoundMuted']),
@@ -272,7 +281,7 @@ export default {
 <style lang="scss">
 @import '../theme';
 
-.player-page {
+.video-player {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -286,6 +295,13 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+
+    &::cue {
+      color: white;
+      text-shadow: 0 0 1vh black;
+      background: transparent;
+      @include theme-typography-cue();
+    }
   }
 
   &__header,

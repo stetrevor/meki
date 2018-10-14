@@ -37,7 +37,7 @@
  *   integer, and favoriting an episode from a media should increase parent media's 'favorite'
  *   field, vice versa.
  * 
- * (1) Runtime and progress:
+ * (1) Duration and progress:
  *   double number of seconds.
  */
 
@@ -49,11 +49,11 @@ const videoItem = {
   _id: _id1,
   mediaType: 'video', // mediaData
   title: 'A Very Interesting Video',
-  backdropPath: '/a/b/c/d.jpg', // Make this '_id' + '.png', (1)
+  thumbnailPath: '/a/b/c/d.jpg', // Make this '_id' + '.png', (1)
   filePath: 'a/b/c/d.mp4', // mediaData
   favorite: true, // When this field doesn't exist, it's false by default
   private: false, // Same as above
-  runtime: Math.random() * 120 * 60 * 60 * 1000, // (1)
+  duration: Math.random() * 120 * 60 * 60 * 1000, // (1)
   progress: 0.3333 * 120 * 60 * 60 * 1000, // 0 if non exist
   lastWatched: new Date(), // 0 if non exist
   recentEpisodeId: _id1, // null if non exist
@@ -61,13 +61,13 @@ const videoItem = {
   subtitles: [
     {
       _id: _id2,
-      title: 'English', // required
+      label: 'English', // required
       lang: 'en', // required
       filePath: 'a/b/c/d.srt', // required
     },
     {
       _id: _id3,
-      title: 'English',
+      label: 'English',
       lang: 'en',
       filePath: 'a/b/c/d.vtt',
     },
@@ -87,17 +87,17 @@ const movieItem = {
   createdAt: new Date(),
   title: 'A Very Interesting Movie',
   overview: 'Really funny movie',
-  posterPath: 'a/b/c/d.jpg',
+  thumbnailPath: 'a/b/c/d.jpg',
   favorite: 1,
   private: true,
-  runtime: Math.random() * 120 * 60 * 60 * 1000,
+  duration: Math.random() * 120 * 60 * 60 * 1000,
   recentEpisodeId: _id6,
   episodes: [
     {
       _id: _id5,
       title: 'part1',
       filePath: 'a/b/c/1.mp4',
-      backdropPath: 'a/b/c/d.jpg',
+      thumbnailPath: 'a/b/c/d.jpg',
       favorite: true,
       history: null,
     },
@@ -105,7 +105,7 @@ const movieItem = {
       _id: _id6,
       title: 'part1',
       filePath: 'a/b/c/1.mp4',
-      backdropPath: 'a/b/c/d.jpg',
+      thumbnailPath: 'a/b/c/d.jpg',
       progress: 0.3333 * 120 * 60 * 60 * 1000,
       lastWatched: new Date(),
       defaultSubtitleId: _id8,
@@ -140,9 +140,9 @@ const folderItem = {
   mediaType: 'folder',
   createdAt: new Date(),
   title: 'A Folder Full of Funny Things',
-  backdropPath: 'a/b/c/d.jpg',
+  thumbnailPath: 'a/b/c/d.jpg',
   filePath: 'a/b/c',
-  favorite: 5,
+  favorite: true,
   private: false,
   recentEpisodeId: _id11,
 }
@@ -153,9 +153,8 @@ const tvshowItem = {
   createdAt: new Date(),
   title: 'A Funny TV Show',
   overview: 'A really funny show',
-  posterPath: 'a/b/c/d.jpg',
-  filePath: 'a/b/c',
-  favorite: 5,
+  thumbnailPath: 'a/b/c/d.jpg',
+  favorite: false,
   private: true,
   recentEpisodeId: _id12,
 }
@@ -165,20 +164,20 @@ const episodes = [
     _id: _id11,
     title: 'Episode 11',
     overview: 'Folder episode 11',
-    backdropPath: 'a/b/c/d.jpg',
+    thumbnailPath: 'a/b/c/d.jpg',
     filePath: 'a/b/c/d.mp4',
     favorite: true,
     defaultSubtitleId: _id15,
     subtitles: [
       {
         _id: _id13,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.srt',
       },
       {
         _id: _id14,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.vtt',
       },
@@ -188,7 +187,7 @@ const episodes = [
     _id: _id12,
     title: 'Episode 12',
     overview: 'TV Show episode 12',
-    backdropPath: 'a/b/c/d.jpg',
+    thumbnailPath: 'a/b/c/d.jpg',
     filePath: 'a/b/c/d.mp4',
     seasonNumber: 1,
     episodeNumber: 12,
@@ -197,7 +196,7 @@ const episodes = [
     subtitles: [
       {
         _id: _id15,
-        title: 'English',
+        label: 'English',
         lang: 'en',
         filePath: 'a/b/c/d.srt',
       },

@@ -11,27 +11,27 @@ const sha256 = hash.sha256()
 
 const generateThumbnail = (filePath, output) => {
   return new Promise((resolve, reject) => {
-    const backdropPath = sha256.update(filePath).digest('hex') + '.png'
+    const thumbnailPath = sha256.update(filePath).digest('hex') + '.png'
 
     ffmpeg(filePath)
-      .on('end', () => resolve(backdropPath))
+      .on('end', () => resolve(thumbnailPath))
       .on('error', err => reject(err))
       .takeScreenshots({
         count: 1,
         timestamps: ['50%'],
         folder: output,
-        filename: backdropPath,
+        filename: thumbnailPath,
       })
   })
 }
 
-const getVideoRuntime = filePath => {
+const getVideoDuration = filePath => {
   return new Promise((resolve, reject) => {
     ffmpeg(filePath).ffprobe((err, data) => {
       if (err) reject(err)
 
-      const runtime = data.format.duration
-      resolve(runtime)
+      const duration = data.format.duration
+      resolve(duration)
     })
   })
 }
@@ -39,10 +39,10 @@ const getVideoRuntime = filePath => {
 const getVideoInfo = (videoData, output) => {
   const { filePath } = videoData
   return Promise.all([
-    getVideoRuntime(filePath),
+    getVideoDuration(filePath),
     generateThumbnail(filePath, output),
-  ]).then(([runtime, backdropPath]) =>
-    Object.assign({}, videoData, { runtime, backdropPath }),
+  ]).then(([duration, thumbnailPath]) =>
+    Object.assign({}, videoData, { duration, thumbnailPath }),
   )
 }
 

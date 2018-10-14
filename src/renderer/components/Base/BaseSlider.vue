@@ -1,25 +1,25 @@
 <template>
-  <div class="player-slider"
+  <div class="base-slider"
        @mouseenter.capture="onMouseEnter"
        @mousemove.capture="onMouseMove"
        @mouseout.capture="onMouseOut"
        @click.capture="onClick">
     <div ref="track" 
-         class="player-slider__track" />
+         class="base-slider__track" />
 
     <div :style="valueStyle" 
-         class="player-slider__value"/>
+         class="base-slider__value"/>
 
     <div ref="thumb" 
          :style="thumbStyle"
-         class="player-slider__thumb"
+         class="base-slider__thumb"
          @mousedown="dragging = true"/>
 
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-show="hovered" 
            :style="labelStyle"
-           class="player-slider__label">{{ label }}</div>
+           class="base-slider__label">{{ label }}</div>
     </transition>
   </div>
 </template>
@@ -29,7 +29,7 @@ import { fromEvent } from 'rxjs'
 import { debounceTime, map } from 'rxjs/operators'
 
 export default {
-  name: 'PlayerSlider',
+  name: 'BaseSlider',
 
   props: {
     value: {
@@ -182,7 +182,7 @@ export default {
 <style lang="scss">
 @import '../../theme';
 
-.player-slider {
+.base-slider {
   box-sizing: border-box;
   border-left: 24px solid transparent;
   border-right: 24px solid transparent;

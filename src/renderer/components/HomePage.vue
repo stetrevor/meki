@@ -22,24 +22,24 @@
                      class="home-page__selection-mode-exit"
                      @click.native="exitSelectionMode"/>
         <div class="home-page__selection-toolbar-title">{{ selectedItemIds.length }} Selected</div>
-        <icon-toggle-button :toggled="favoriteSet" 
-                            icon-normal="favorited"
-                            icon-toggled="favorite"
-                            @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
-        <icon-toggle-button :toggled="watchedSet" 
-                            icon-normal="watched"
-                            icon-toggled="mark-watched"
-                            @clicked="setWatched"/>
+        <icon-button :toggled="favoriteSet" 
+                     icon="favorited"
+                     icon-toggled="favorite"
+                     @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
+        <icon-button :toggled="watchedSet" 
+                     icon="watched"
+                     icon-toggled="mark-watched"
+                     @clicked="setWatched"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
           <icon-button v-show="selectedItemIds.length" 
                        icon="delete"
-                       @click.native="showDeleteDialog"/>
+                       @clicked="showDeleteDialog"/>
         </transition>
 
         <icon-button icon="more" 
-                     @click.native.stop="selectionMenu = true"/>
+                     @clicked.stop="selectionMenu = true"/>
 
         <transition name="fade-out-in">
           <selection-menu v-if="selectionMenu" 
@@ -55,7 +55,7 @@
            class="home-page__toolbar">
         <icon-button icon="search"/>
         <icon-button icon="selection-mode" 
-                     @click.native="selectionMode = true"/>
+                     @clicked="selectionMode = true"/>
         <fullscreen-toggle/>
       </div>
     </transition>
@@ -91,7 +91,6 @@ const { dialog, getCurrentWindow } = require('electron').remote
 import { mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
-import IconToggleButton from './Base/IconToggleButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
@@ -115,7 +114,6 @@ export default {
 
   components: {
     IconButton,
-    IconToggleButton,
     FullscreenToggle,
     NavBar,
     AddMediaButton,
@@ -204,7 +202,7 @@ export default {
           if (response === 0) {
             const imagePaths = this.videos
               .filter(video => this.selectedItemIds.includes(video._id))
-              .map(video => video.backdropPath)
+              .map(video => video.thumbnailPath)
             this.deleteMedia([this.selectedItemIds, imagePaths])
             this.selectedItemIds = []
           }
@@ -213,7 +211,7 @@ export default {
     },
 
     play(video) {
-      this.switchCurrentPlayingEpisode(video)
+      this.switchCurrentEpisodeId(video._id)
       this.$router.push({ name: 'player' })
     },
 
@@ -251,7 +249,7 @@ export default {
       'addMediaItem',
       'updateMedia',
       'deleteMedia',
-      'switchCurrentPlayingEpisode',
+      'switchCurrentEpisodeId',
     ]),
   },
 }

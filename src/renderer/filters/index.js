@@ -1,7 +1,7 @@
-function toTime(runtime) {
+function toTime(duration) {
   const pad = num => `00${num}`.slice(-2)
 
-  let num = Math.floor(runtime * 1000) // Total milliseconds
+  let num = Math.floor(duration * 1000) // Total milliseconds
   const milliseconds = num % 1000
   num = (num - milliseconds) / 1000
   const seconds = num % 60

@@ -24,30 +24,30 @@
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
           <progress-bar v-if="video.progress || video.lastWatched"
-                        :progress="video.progress || video.runtime" 
-                        :max="video.runtime" 
+                        :progress="video.progress || video.duration" 
+                        :max="video.duration" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
           <div v-if="video.progress || video.lastWatched"
-               class="video-item__runtime-left">{{ progressMsg }}</div>
-          <div class="video-item__runtime">{{ video.runtime | toTime }}</div>
+               class="video-item__progress-message">{{ progressMsg }}</div>
+          <div class="video-item__duration">{{ video.duration | toTime }}</div>
           <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
 
         <div class="video-item__toolbar">
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
-                       @click.native="showInFolder"/>
-          <icon-toggle-button :toggled="!!video.lastWatched" 
-                              :disabled="selectionMode"
-                              icon-normal="mark-watched"
-                              icon-toggled="watched"
-                              @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
-          <icon-toggle-button :toggled="video.favorite" 
-                              :disabled="selectionMode"
-                              icon-normal="favorite"
-                              icon-toggled="favorited"
-                              @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
+                       @clicked="showInFolder"/>
+          <icon-button :toggled="!!video.lastWatched" 
+                       :disabled="selectionMode"
+                       icon="mark-watched"
+                       icon-toggled="watched"
+                       @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+          <icon-button :toggled="video.favorite" 
+                       :disabled="selectionMode"
+                       icon="favorite"
+                       icon-toggled="favorited"
+                       @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
         </div>
       </div>
 
@@ -56,8 +56,8 @@
            class="video-item__folded" >
         <progress-bar v-if="video.progress || video.lastWatched" 
                       :colored="true" 
-                      :progress="video.progress || video.runtime"
-                      :max="video.runtime" 
+                      :progress="video.progress || video.duration"
+                      :max="video.duration" 
                       class="video-item__progress-bar"/>
         <p class="video-item__title">{{ video.title }}</p>
       </div>
@@ -73,7 +73,6 @@ import path from 'path'
 import { mapActions } from 'vuex'
 
 import IconButton from '../Base/IconButton'
-import IconToggleButton from '../Base/IconToggleButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
 
@@ -97,7 +96,6 @@ export default {
 
   components: {
     IconButton,
-    IconToggleButton,
     OverlayIconButton,
     ProgressBar,
   },
@@ -136,23 +134,23 @@ export default {
   computed: {
     thumbnailPath() {
       return this.ready
-        ? this.$serverAddress + path.resolve(base, this.video.backdropPath)
+        ? this.$serverAddress + path.resolve(base, this.video.thumbnailPath)
         : ''
     },
 
     progressMsg() {
-      const runtime = this.video.runtime
+      const duration = this.video.duration
       const progress = this.video.progress || 0
       const lastWatched = this.video.lastWatched || 0
-      const secLeft = parseInt(runtime - progress)
-      const minLeft = parseInt((runtime - progress) / 60)
+      const secLeft = parseInt(duration - progress)
+      const minLeft = parseInt((duration - progress) / 60)
       const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
 
       return lastWatched ? 'Watched' : msg
     },
 
     ready() {
-      return !!(this.video.runtime && this.video.backdropPath)
+      return !!(this.video.duration && this.video.thumbnailPath)
     },
   },
 
@@ -229,12 +227,12 @@ export default {
   }
 
   &__title {
-    grid-column: 1 / 2;
+    grid-column: 1 / -1;
     grid-row: 2 / 3;
     @include theme-typography-body1();
     @include theme-text-color-on-primary();
     align-self: center;
-    margin-left: 16px;
+    margin: 0 16px;
     opacity: 1;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -283,13 +281,13 @@ export default {
     @include theme-bg-color-background();
   }
 
-  &__runtime-left {
+  &__progress-message {
     grid-column: 2 / 3;
     align-self: center;
     @include theme-typography-subtitle1();
   }
 
-  &__runtime,
+  &__duration,
   &__date-added {
     grid-column: 1 / span 2;
     align-self: center;
