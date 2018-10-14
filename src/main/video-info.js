@@ -25,13 +25,13 @@ const generateThumbnail = (filePath, output) => {
   })
 }
 
-const getVideoRuntime = filePath => {
+const getVideoDuration = filePath => {
   return new Promise((resolve, reject) => {
     ffmpeg(filePath).ffprobe((err, data) => {
       if (err) reject(err)
 
-      const runtime = data.format.duration
-      resolve(runtime)
+      const duration = data.format.duration
+      resolve(duration)
     })
   })
 }
@@ -39,10 +39,10 @@ const getVideoRuntime = filePath => {
 const getVideoInfo = (videoData, output) => {
   const { filePath } = videoData
   return Promise.all([
-    getVideoRuntime(filePath),
+    getVideoDuration(filePath),
     generateThumbnail(filePath, output),
-  ]).then(([runtime, thumbnailPath]) =>
-    Object.assign({}, videoData, { runtime, thumbnailPath }),
+  ]).then(([duration, thumbnailPath]) =>
+    Object.assign({}, videoData, { duration, thumbnailPath }),
   )
 }
 

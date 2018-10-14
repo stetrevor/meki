@@ -37,7 +37,7 @@
  *   integer, and favoriting an episode from a media should increase parent media's 'favorite'
  *   field, vice versa.
  * 
- * (1) Runtime and progress:
+ * (1) Duration and progress:
  *   double number of seconds.
  */
 
@@ -53,7 +53,7 @@ const videoItem = {
   filePath: 'a/b/c/d.mp4', // mediaData
   favorite: true, // When this field doesn't exist, it's false by default
   private: false, // Same as above
-  runtime: Math.random() * 120 * 60 * 60 * 1000, // (1)
+  duration: Math.random() * 120 * 60 * 60 * 1000, // (1)
   progress: 0.3333 * 120 * 60 * 60 * 1000, // 0 if non exist
   lastWatched: new Date(), // 0 if non exist
   recentEpisodeId: _id1, // null if non exist
@@ -90,7 +90,7 @@ const movieItem = {
   thumbnailPath: 'a/b/c/d.jpg',
   favorite: 1,
   private: true,
-  runtime: Math.random() * 120 * 60 * 60 * 1000,
+  duration: Math.random() * 120 * 60 * 60 * 1000,
   recentEpisodeId: _id6,
   episodes: [
     {
