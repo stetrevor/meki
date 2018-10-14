@@ -49,7 +49,7 @@ const videoItem = {
   _id: _id1,
   mediaType: 'video', // mediaData
   title: 'A Very Interesting Video',
-  backdropPath: '/a/b/c/d.jpg', // Make this '_id' + '.png', (1)
+  thumbnailPath: '/a/b/c/d.jpg', // Make this '_id' + '.png', (1)
   filePath: 'a/b/c/d.mp4', // mediaData
   favorite: true, // When this field doesn't exist, it's false by default
   private: false, // Same as above
@@ -87,7 +87,7 @@ const movieItem = {
   createdAt: new Date(),
   title: 'A Very Interesting Movie',
   overview: 'Really funny movie',
-  posterPath: 'a/b/c/d.jpg',
+  thumbnailPath: 'a/b/c/d.jpg',
   favorite: 1,
   private: true,
   runtime: Math.random() * 120 * 60 * 60 * 1000,
@@ -97,7 +97,7 @@ const movieItem = {
       _id: _id5,
       title: 'part1',
       filePath: 'a/b/c/1.mp4',
-      backdropPath: 'a/b/c/d.jpg',
+      thumbnailPath: 'a/b/c/d.jpg',
       favorite: true,
       history: null,
     },
@@ -105,7 +105,7 @@ const movieItem = {
       _id: _id6,
       title: 'part1',
       filePath: 'a/b/c/1.mp4',
-      backdropPath: 'a/b/c/d.jpg',
+      thumbnailPath: 'a/b/c/d.jpg',
       progress: 0.3333 * 120 * 60 * 60 * 1000,
       lastWatched: new Date(),
       defaultSubtitleId: _id8,
@@ -140,7 +140,7 @@ const folderItem = {
   mediaType: 'folder',
   createdAt: new Date(),
   title: 'A Folder Full of Funny Things',
-  backdropPath: 'a/b/c/d.jpg',
+  thumbnailPath: 'a/b/c/d.jpg',
   filePath: 'a/b/c',
   favorite: true,
   private: false,
@@ -153,7 +153,7 @@ const tvshowItem = {
   createdAt: new Date(),
   title: 'A Funny TV Show',
   overview: 'A really funny show',
-  posterPath: 'a/b/c/d.jpg',
+  thumbnailPath: 'a/b/c/d.jpg',
   favorite: false,
   private: true,
   recentEpisodeId: _id12,
@@ -164,7 +164,7 @@ const episodes = [
     _id: _id11,
     title: 'Episode 11',
     overview: 'Folder episode 11',
-    backdropPath: 'a/b/c/d.jpg',
+    thumbnailPath: 'a/b/c/d.jpg',
     filePath: 'a/b/c/d.mp4',
     favorite: true,
     defaultSubtitleId: _id15,
@@ -187,7 +187,7 @@ const episodes = [
     _id: _id12,
     title: 'Episode 12',
     overview: 'TV Show episode 12',
-    backdropPath: 'a/b/c/d.jpg',
+    thumbnailPath: 'a/b/c/d.jpg',
     filePath: 'a/b/c/d.mp4',
     seasonNumber: 1,
     episodeNumber: 12,
