@@ -106,7 +106,7 @@ describe('video-info', function() {
       expect(info).to.deep.equal(
         Object.assign({}, videData, {
           runtime: 10.022,
-          backdropPath: h,
+          thumbnailPath: h,
         }),
       )
     })
@@ -127,7 +127,7 @@ describe('video-info', function() {
     let expected = fixture.map((d, i) =>
       Object.assign({}, d, {
         runtime: 1.022,
-        backdropPath: hashs[i],
+        thumbnailPath: hashs[i],
       }),
     )
 

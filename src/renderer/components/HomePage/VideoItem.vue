@@ -134,7 +134,7 @@ export default {
   computed: {
     thumbnailPath() {
       return this.ready
-        ? this.$serverAddress + path.resolve(base, this.video.backdropPath)
+        ? this.$serverAddress + path.resolve(base, this.video.thumbnailPath)
         : ''
     },
 
@@ -150,7 +150,7 @@ export default {
     },
 
     ready() {
-      return !!(this.video.runtime && this.video.backdropPath)
+      return !!(this.video.runtime && this.video.thumbnailPath)
     },
   },
 
