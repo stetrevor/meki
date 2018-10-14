@@ -1,6 +1,7 @@
 <template>
   <div v-stream:mousemove="{ subject: mousemove$, options: { capture: true } }" 
        v-stream:mouseup="{ subject: mouseup$, options: { capture: true } }"
+       v-hotkey="keymap"
        :class="['video-player', { 'video-player--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            :src="videoPath"
@@ -140,6 +141,12 @@ export default {
   computed: {
     videoPath() {
       return this.$serverAddress + this.video.filePath
+    },
+
+    keymap() {
+      return {
+        space: this.playOrPause,
+      }
     },
 
     ...mapState({
