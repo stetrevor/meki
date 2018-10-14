@@ -10131,6 +10131,10 @@ uuid@^3.0.1, uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
+v-hotkey@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/v-hotkey/-/v-hotkey-0.2.3.tgz#ef0e7a021e9cda59b67510d870cde3f2176ed5c6"
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
