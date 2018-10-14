@@ -289,6 +289,13 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+
+    &::cue {
+      color: white;
+      text-shadow: 0 0 1vh black;
+      background: transparent;
+      @include theme-typography-cue();
+    }
   }
 
   &__header,

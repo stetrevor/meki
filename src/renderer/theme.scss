@@ -196,6 +196,10 @@ $theme-typography-font-family: Rubik, sans-serif;
   letter-spacing: 2px;
 }
 
+@mixin theme-typography-cue() {
+  font: 500 4vh/2 $theme-typography-font-family;
+}
+
 .theme-typography-headline1 {
   @include theme-typography-headline1();
 }
