@@ -1,4 +1,11 @@
 import { storiesOf } from '@storybook/vue'
+import { withKnobs, boolean } from '@storybook/addon-knobs'
+
+import Vue from 'vue'
+
+import FolderItem from '../components/HomePage/FolderItem'
+
+Vue.component('FolderItem', FolderItem)
 
 const amb = storiesOf('Home Page | Add Media Button', module)
 
@@ -63,6 +70,23 @@ video.add('VideoItem List', () => ({
   </div>
   `,
 }))
+
+const folder = storiesOf('Home Page | Folder Item', module)
+
+folder.addDecorator(withKnobs)
+
+folder.add('FolderItem', () => {
+  const selectionMode = boolean('Selection Mode', false)
+  const selected = boolean('Selected', false)
+
+  return {
+    template: `
+    <folder-item :selection-mode="${selectionMode}"
+                :selected="${selected}"
+                :folder="{ title: 'A Very Long Folder Name That Will Cause Text Ellipsis To Show Up' }"/>
+    `,
+  }
+})
 
 const menu = storiesOf('Home Page | Selection Menu', module)
 
