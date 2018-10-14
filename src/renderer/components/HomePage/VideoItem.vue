@@ -24,13 +24,13 @@
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
           <progress-bar v-if="video.progress || video.lastWatched"
-                        :progress="video.progress || video.runtime" 
-                        :max="video.runtime" 
+                        :progress="video.progress || video.duration" 
+                        :max="video.duration" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
           <div v-if="video.progress || video.lastWatched"
                class="video-item__progress-message">{{ progressMsg }}</div>
-          <div class="video-item__runtime">{{ video.runtime | toTime }}</div>
+          <div class="video-item__duration">{{ video.duration | toTime }}</div>
           <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
         </div>
 
@@ -56,8 +56,8 @@
            class="video-item__folded" >
         <progress-bar v-if="video.progress || video.lastWatched" 
                       :colored="true" 
-                      :progress="video.progress || video.runtime"
-                      :max="video.runtime" 
+                      :progress="video.progress || video.duration"
+                      :max="video.duration" 
                       class="video-item__progress-bar"/>
         <p class="video-item__title">{{ video.title }}</p>
       </div>
@@ -139,18 +139,18 @@ export default {
     },
 
     progressMsg() {
-      const runtime = this.video.runtime
+      const duration = this.video.duration
       const progress = this.video.progress || 0
       const lastWatched = this.video.lastWatched || 0
-      const secLeft = parseInt(runtime - progress)
-      const minLeft = parseInt((runtime - progress) / 60)
+      const secLeft = parseInt(duration - progress)
+      const minLeft = parseInt((duration - progress) / 60)
       const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
 
       return lastWatched ? 'Watched' : msg
     },
 
     ready() {
-      return !!(this.video.runtime && this.video.thumbnailPath)
+      return !!(this.video.duration && this.video.thumbnailPath)
     },
   },
 
@@ -287,7 +287,7 @@ export default {
     @include theme-typography-subtitle1();
   }
 
-  &__runtime,
+  &__duration,
   &__date-added {
     grid-column: 1 / span 2;
     align-self: center;

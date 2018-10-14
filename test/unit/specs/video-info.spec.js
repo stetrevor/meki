@@ -94,7 +94,7 @@ describe('rxjs', function() {
 })
 
 describe('video-info', function() {
-  it('should get video info: runtime and thumbnail', function() {
+  it('should get video info: duration and thumbnail', function() {
     const videData = { _id: '1234', filePath: path.join(__dirname, 'test.mp4') }
     return getVideoInfo(videData, path.join(__dirname, 'temp')).then(info => {
       const h =
@@ -105,7 +105,7 @@ describe('video-info', function() {
 
       expect(info).to.deep.equal(
         Object.assign({}, videData, {
-          runtime: 10.022,
+          duration: 10.022,
           thumbnailPath: h,
         }),
       )
@@ -126,7 +126,7 @@ describe('video-info', function() {
     const fixture = paths.map((filePath, i) => ({ _id: i + 1, filePath }))
     let expected = fixture.map((d, i) =>
       Object.assign({}, d, {
-        runtime: 1.022,
+        duration: 1.022,
         thumbnailPath: hashs[i],
       }),
     )

@@ -44,12 +44,12 @@
                        icon-toggled="pause"
                        @clicked="playOrPause"/>
           <base-slider v-stream:value-changed="seek$" 
-                       :max="video.runtime"
+                       :max="video.duration"
                        :value="progress"
                        :format="toTime"
                        class="video-player__timeline"/>
           <div class="video-player__progress">
-            {{ progress | toTime }} / {{ video.runtime | toTime }}
+            {{ progress | toTime }} / {{ video.duration | toTime }}
           </div>
           <div class="video-player__volume-controls">
             <icon-button :toggled="videoMuted" 
@@ -170,8 +170,8 @@ export default {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.runtime ? 0 : this.progress
-      const lastWatched = this.progress === this.video.runtime ? new Date() : 0
+      const progress = this.progress === this.video.duration ? 0 : this.progress
+      const lastWatched = this.progress === this.video.duration ? new Date() : 0
       const volume = this.$refs.video.volume
 
       // Unload video
