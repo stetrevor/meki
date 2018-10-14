@@ -4,9 +4,19 @@
        :class="['video-player', { 'video-player--do-not-disturb': !controlsShow$ }]">
     <video ref="video" 
            :src="videoPath"
+           crossorigin="anonymous"
            class="video-player__video"
            @timeupdate="progress = $refs.video.currentTime"
-           @ended="paused = $refs.video.paused"/>
+           @ended="paused = $refs.video.paused">
+      <track v-for="subtitle in video.subtitles" 
+             :label="subtitle.label" 
+             :srclang="subtitle.lang" 
+             :key="subtitle._id" 
+             :id="subtitle._id"
+             :src="subtitleSrc(subtitle.filePath)" 
+             :default="subtitle._id === video.defaultSubtitleId"
+             kind="subtitles">
+    </video>
 
     <transition name="fade-out-in" 
                 mode="out-in">
@@ -55,11 +65,13 @@
 
           <icon-button :active="subtitleMenuShow" 
                        icon="subtitle"
-                       @clicked.stop="subtitleMenuShow = !subtitleMenuShow"/>
+                       @click.native.stop
+                       @clicked="subtitleMenuShow = !subtitleMenuShow"/>
           <subtitle-menu v-show="subtitleMenuShow" 
-                         :subtitles="subtitles"
                          class="video-player__subtitle-menu"
-                         @active-subtitle-changed="setActiveSubtitle"
+                         @subtitle-changed="switchSubtitle"
+                         @subtitle-before-add="pause"
+                         @subtitle-after-add="play"
                          @dismiss="subtitleMenuShow = false"/>
 
           <fullscreen-toggle/>
@@ -80,7 +92,7 @@ import {
   pluck,
 } from 'rxjs/operators'
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
@@ -122,11 +134,6 @@ export default {
       paused: true,
       progress: 0,
       subtitleMenuShow: false,
-      subtitles: [
-        { _id: '1', default: false, title: 'English', lang: 'en' },
-        { _id: '2', default: true, title: 'English 2', lang: 'en' },
-        { _id: '3', default: false, title: 'Chinese', lang: 'cn' },
-      ],
     }
   },
 
@@ -136,9 +143,11 @@ export default {
     },
 
     ...mapState({
-      video: state => state.VideoPlayer.currentEpisode,
       volume: state => state.VideoPlayer.volume,
       muted: state => state.VideoPlayer.muted,
+    }),
+    ...mapGetters({
+      video: 'currentEpisode',
     }),
   },
 
@@ -198,14 +207,18 @@ export default {
       })
     },
 
-    playOrPause() {
+    pause() {
       const video = this.$refs.video
 
+      video.pause()
+      this.paused = video.paused
+    },
+
+    playOrPause() {
       if (!this.isPlaying()) {
         this.play()
       } else {
-        video.pause()
-        this.paused = video.paused
+        this.pause()
       }
     },
 
@@ -218,26 +231,17 @@ export default {
       }
     },
 
-    setActiveSubtitle(subtitle) {
-      const oldIndex = this.subtitles.findIndex(s => s.default)
-      const old = this.subtitles[oldIndex]
-      this.subtitles.splice(
-        oldIndex,
-        1,
-        Object.assign({}, old, { default: false }),
-      )
+    switchSubtitle(newActiveSubtitleId, oldActiveSubtitleId) {
+      const textTracks = this.$refs.video.textTracks
 
-      const index = this.subtitles.findIndex(s => s._id === subtitle._id)
-      this.subtitles.splice(
-        index,
-        1,
-        Object.assign({}, subtitle, { default: true }),
-      )
+      if (oldActiveSubtitleId)
+        textTracks.getTrackById(oldActiveSubtitleId).mode = 'hidden'
+      if (newActiveSubtitleId)
+        textTracks.getTrackById(newActiveSubtitleId).mode = 'showing'
+    },
 
-      // console.log(
-      //   Object.assign({}, old, { default: false }),
-      //   Object.assign({}, subtitle, { default: true }),
-      // )
+    subtitleSrc(filePath) {
+      return this.$serverAddress + filePath
     },
 
     ...mapActions(['updateMedia', 'setSoundVolume', 'setSoundMuted']),
@@ -284,6 +288,13 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+
+    &::cue {
+      color: white;
+      text-shadow: 0 0 1vh black;
+      background: transparent;
+      @include theme-typography-cue();
+    }
   }
 
   &__header,

@@ -13,6 +13,12 @@ import './theme.scss'
 
 Vue.use(VueRx)
 
+Vue.directive('visible', (el, binding) => {
+  const visibility = !!binding.value ? 'visible' : 'hidden'
+
+  el.style.visibility = visibility
+})
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },

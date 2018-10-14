@@ -1,20 +1,30 @@
 <template>
   <div class="subtitle-menu">
-    <div v-if="subtitles.length" 
+    <div v-if="video.subtitles && video.subtitles.length" 
          class="subtitle-menu__subtitles">
-      <div v-for="subtitle in subtitles" 
+      <div v-for="subtitle in video.subtitles" 
            :key="subtitle._id" 
-           :class="['subtitle-menu__subtitle', { 'subtitle-menu__subtitle--active': activeSubtitle._id === subtitle._id }]">
-        <icon-button :toggled="activeSubtitle._id === subtitle._id" 
-                     :radio="true" 
-                     :class="['subtitle-menu__radio', { 'subtitle-menu__radio--active': activeSubtitle._id === subtitle._id }]"
-                     icon="radio-unchecked"
-                     icon-toggled="radio-checked"
-                     @clicked.stop="activeSubtitle = subtitle; $emit('active-subtitle-changed', activeSubtitle)"/>
-        <div class="subtitle-menu__title">{{ subtitle.title }}</div>
+           class="subtitle-menu__subtitle"
+           @click.stop="subtitle._id !== video.defaultSubtitleId && $emit('subtitle-changed', subtitle._id, video.defaultSubtitleId); setDefaultSubtitleId(subtitle._id)">
+        <svg v-visible="video.defaultSubtitleId === subtitle._id" 
+             class="subtitle-menu__selected">
+          <use xlink:href="#icon-checked"/>
+        </svg>
+        <div class="subtitle-menu__label">{{ subtitle.label }}</div>
         <icon-button icon="delete" 
+                     theme="on-background"
                      class="subtitle-menu__delete"
-                     @clicked.stop/>
+                     @click.native.stop
+                     @clicked="handleDelete(subtitle._id)"/>
+      </div>
+
+      <div class="subtitle-menu__subtitle subtitle-menu__subtitle--none"
+           @click.stop="!!video.defaultSubtitleId !== false && $emit('subtitle-changed', null, video.defaultSubtitleId); setDefaultSubtitleId(null)">
+        <svg v-visible="!!video.defaultSubtitleId === false" 
+             class="subtitle-menu__selected">
+          <use xlink:href="#icon-checked"/>
+        </svg>
+        <div class="subtitle-menu__label">None</div>
       </div>
     </div>
 
@@ -22,33 +32,29 @@
          class="subtitle-menu__empty">No Subtitles. Click "+" to add subtitles.</div>
 
     <icon-button icon="add"
-                 class="subtitle-menu__add-button"/>
+                 theme="secondary"
+                 class="subtitle-menu__add-button"
+                 @click.native.stop
+                 @clicked="showDialog"/>
   </div>
 </template>
 
 <script>
+const { dialog, getCurrentWindow } = require('electron').remote
+
+import { mapGetters, mapActions } from 'vuex'
+
 import IconButton from '../Base/IconButton'
 
-import '../../assets/icons/icon-radio-unchecked.svg'
-import '../../assets/icons/icon-radio-checked.svg'
+import '../../assets/icons/icon-checked.svg'
+import '../../assets/icons/icon-add.svg'
 
 export default {
   name: 'SubtitleMenu',
 
   components: { IconButton },
 
-  props: {
-    subtitles: {
-      type: Array,
-      required: true,
-    },
-  },
-
-  data() {
-    return {
-      activeSubtitle: this.subtitles.find(s => s.default),
-    }
-  },
+  computed: mapGetters({ video: 'currentEpisode' }),
 
   mounted() {
     this.dissmissHandler = e => {
@@ -56,10 +62,57 @@ export default {
     }
 
     document.body.addEventListener('click', this.dissmissHandler)
+
+    this.newSubtitleIndex = this.video.subtitles && this.video.subtitles.length
   },
 
   beforeDestroy() {
     document.body.removeEventListener('click', this.dissmissHandler)
+  },
+
+  methods: {
+    showDialog() {
+      this.$emit('subtitle-before-add')
+
+      dialog.showOpenDialog(
+        getCurrentWindow(),
+        {
+          title: 'Add .srt or .vtt file',
+          buttonLabel: 'Add Subtitle',
+          filters: [{ name: 'subtitles', extensions: ['srt', 'vtt'] }],
+          properties: ['openFile'],
+        },
+        paths => {
+          if (paths) {
+            this.$nextTick(() => {
+              const oldSubtitleId = this.video.defaultSubtitleId
+
+              this.newSubtitleIndex += 1
+              const label = `Subtitle ${this.newSubtitleIndex}`
+              const subtitle = {
+                _id: Date.now().toString(),
+                lang: 'en',
+                label,
+                filePath: paths[0],
+              }
+
+              this.addSubtitle(subtitle).then(() => {
+                this.$emit('subtitle-changed', subtitle._id, oldSubtitleId)
+                this.$emit('subtitle-after-add')
+              })
+            })
+          }
+        },
+      )
+    },
+
+    handleDelete(subtitleId) {
+      this.deleteSubtitle(subtitleId).then(() =>
+        this.$emit('subtitle-changed', this.video.defaultSubtitleId, null),
+      )
+    },
+
+    ...mapActions(['addSubtitle', 'setDefaultSubtitleId', 'deleteSubtitle']),
   },
 }
 </script>
@@ -77,8 +130,8 @@ export default {
   display: grid;
 
   &__subtitles {
+    margin-top: 8px;
     margin-bottom: 16px + 48px;
-    @include theme-typography-headline5();
   }
 
   &__subtitle {
@@ -87,20 +140,47 @@ export default {
     grid-template-columns: auto 1fr auto;
     grid-gap: 16px;
     align-items: center;
+    @include theme-typography-subtitle1();
+    cursor: pointer;
+    will-change: background-color;
+    transition: background-color 100ms
+      $mdc-animation-sharp-curve-timing-function;
+
+    &:hover {
+      background-color: rgba(
+        map-get($theme-text-color-map, 'on-background'),
+        0.08
+      );
+    }
+
+    &:focus {
+      background-color: rgba(
+        map-get($theme-text-color-map, 'on-background'),
+        0.24
+      );
+    }
+
+    &:active {
+      background-color: rgba(
+        map-get($theme-text-color-map, 'on-background'),
+        0.32
+      );
+    }
   }
 
-  &__radio {
-    border-radius: 0 8px 8px 0;
-
-    &--active {
-      @include theme-text-color-secondary();
-    }
+  &__selected {
+    padding: 12px;
+    width: 24px;
+    height: 24px;
+    @include theme-text-color-on-background();
   }
 
   &__delete {
     border-radius: 8px 0 0 8px;
     @include theme-text-color-on-background();
     opacity: 0;
+    will-change: opacity;
+    transition: 100ms $mdc-animation-standard-curve-timing-function;
   }
 
   &__subtitle:hover &__delete {

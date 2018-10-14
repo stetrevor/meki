@@ -5,7 +5,15 @@ const settings = remote.require('electron-settings')
 const state = {
   volume: 100,
   muted: false,
-  currentEpisode: null,
+  currentEpisodeId: null,
+}
+
+const getters = {
+  currentEpisode(state, _, rootState) {
+    return rootState.HomePage.media.find(
+      media => media._id === state.currentEpisodeId,
+    )
+  },
 }
 
 const mutations = {
@@ -17,8 +25,8 @@ const mutations = {
     state.muted = muted
   },
 
-  SWITCH_CURRENT_EPISODE(state, episode) {
-    state.currentEpisode = episode
+  SWITCH_CURRENT_EPISODE_ID(state, episodeId) {
+    state.currentEpisodeId = episodeId
   },
 }
 
@@ -33,9 +41,46 @@ const actions = {
     commit('UPDATE_MUTED', muted)
   },
 
-  switchCurrentEpisode({ commit }, episode) {
-    commit('SWITCH_CURRENT_EPISODE', episode)
+  switchCurrentEpisodeId({ commit }, episodeId) {
+    commit('SWITCH_CURRENT_EPISODE_ID', episodeId)
+  },
+
+  async setDefaultSubtitleId({ state, dispatch }, defaultSubtitleId) {
+    await dispatch('updateMedia', [
+      [state.currentEpisodeId],
+      { defaultSubtitleId },
+    ])
+  },
+
+  async addSubtitle({ state, dispatch }, subtitle) {
+    const { _id } = subtitle
+
+    await dispatch('updateMediaArrayField', [
+      state.currentEpisodeId,
+      { $push: { subtitles: subtitle } },
+    ])
+
+    // Refactor: Use setDefaultSubtitleId instead.
+    await dispatch('updateMedia', [
+      [state.currentEpisodeId],
+      { defaultSubtitleId: _id },
+    ])
+  },
+
+  async deleteSubtitle({ state, getters, dispatch }, subtitleId) {
+    await dispatch('updateMediaArrayField', [
+      state.currentEpisodeId,
+      { $pull: { subtitles: { _id: subtitleId } } },
+    ])
+
+    if (subtitleId === getters.currentEpisode.defaultSubtitleId) {
+      const subtitles = getters.currentEpisode.subtitles
+      const subtitleId = subtitles.length
+        ? subtitles[subtitles.length - 1]._id
+        : null
+      await dispatch('setDefaultSubtitleId', subtitleId)
+    }
   },
 }
 
-export default { state, mutations, actions }
+export default { state, getters, mutations, actions }

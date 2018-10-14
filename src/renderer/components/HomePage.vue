@@ -211,7 +211,7 @@ export default {
     },
 
     play(video) {
-      this.switchCurrentEpisode(video)
+      this.switchCurrentEpisodeId(video._id)
       this.$router.push({ name: 'player' })
     },
 
@@ -249,7 +249,7 @@ export default {
       'addMediaItem',
       'updateMedia',
       'deleteMedia',
-      'switchCurrentEpisode',
+      'switchCurrentEpisodeId',
     ]),
   },
 }
