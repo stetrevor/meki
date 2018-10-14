@@ -234,8 +234,6 @@ export default {
     switchSubtitle(newActiveSubtitleId, oldActiveSubtitleId) {
       const textTracks = this.$refs.video.textTracks
 
-      console.log(...arguments, 'switchSubtitle')
-
       if (oldActiveSubtitleId)
         textTracks.getTrackById(oldActiveSubtitleId).mode = 'hidden'
       if (newActiveSubtitleId)
