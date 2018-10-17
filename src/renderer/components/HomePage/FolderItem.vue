@@ -70,6 +70,7 @@ export default {
 @import '../../theme';
 
 .folder-item {
+  box-sizing: border-box;
   border-radius: 8px;
   padding-left: 16px;
   width: 300px;
