@@ -12,7 +12,7 @@
       </transition>
     </div>
 
-    <div class="folder-item__title">{{ folder.title }}</div>
+    <div class="folder-item__title">{{ mediaItem.title }}</div>
     <transition name="fade-out-in" 
                 mode="out-in">
       <div v-show="!selectionMode && hovered" 
@@ -52,7 +52,7 @@ export default {
       default: false,
     },
 
-    folder: {
+    mediaItem: {
       type: Object,
       required: true,
     },
