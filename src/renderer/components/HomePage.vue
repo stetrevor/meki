@@ -72,21 +72,26 @@
     </transition>
 
     <div class="home-page__content">
-      <section v-for="(items, tab) in currentMedia" 
-               :key="tab" 
+      <section v-for="(items, category) in currentMedia" 
+               v-if="items.length" 
+               :key="category" 
                class="home-page__media-section">
-        <component v-for="item in items.sort(sortMediaByTitle)" 
-                   :key="item._id" 
-                   :is="mediaItemComponents[item.mediaType]" 
-                   :media-item="item" 
-                   :selected="selectedItemIds.includes(item._id)" 
-                   :selection-mode="selectionMode"
-                   @media-item-selected="selectedItemIds.push(item._id)" 
-                   @media-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
-                   @media-item-open="open(item)"
-                   @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
-                   @media-item-show-in-folder="showItemInFolder(item)"
-                   @media-item-history="updateMedia([[item._id], { lastWatched: item.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+        <div class="home-page__media-section-header">{{ category }}</div>
+        
+        <div class="home-page__media-section-list">
+          <component v-for="item in items.sort(sortMediaByTitle)" 
+                     :key="item._id" 
+                     :is="mediaItemComponents[item.mediaType]" 
+                     :media-item="item" 
+                     :selected="selectedItemIds.includes(item._id)" 
+                     :selection-mode="selectionMode"
+                     @media-item-selected="selectedItemIds.push(item._id)" 
+                     @media-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
+                     @media-item-open="open(item)"
+                     @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
+                     @media-item-show-in-folder="showItemInFolder(item)"
+                     @media-item-history="updateMedia([[item._id], { lastWatched: item.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+        </div>
       </section>
     </div>
   </div>
@@ -411,10 +416,19 @@ export default {
 
   &__media-section {
     padding: 24px;
+  }
+
+  &__media-section-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
     grid-gap: 24px;
-    justify-content: center;
+  }
+
+  &__media-section-header {
+    @include theme-typography-headline3();
+    @include theme-text-color-on-primary-lighter();
+    text-transform: capitalize;
+    margin-bottom: 16px;
   }
 }
 </style>
