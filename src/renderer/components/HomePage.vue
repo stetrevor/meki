@@ -84,7 +84,7 @@
           :selection-mode="selectionMode"
           @media-item-selected="selectedItemIds.push(item._id)" 
           @media-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
-          @media-item-open="play(item)"
+          @media-item-open="open(item)"
           @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
           @media-item-show-in-folder="showItemInFolder(item)"
           @media-item-history="updateMedia([[item._id], { lastWatched: item.lastWatched ? 0 : new Date(), progress: 0 }])"/>
@@ -261,6 +261,16 @@ export default {
     play(video) {
       this.switchCurrentEpisodeId(video._id)
       this.$router.push({ name: 'player' })
+    },
+
+    open(item) {
+      switch (item.mediaType) {
+        case 'video':
+          this.play(item)
+          break
+        default:
+          break
+      }
     },
 
     sortVideosByTitle(v1, v2) {
