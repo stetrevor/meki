@@ -64,10 +64,6 @@ const getters = {
 }
 
 const mutations = {
-  RECEIVE_MEDIA(state, items) {
-    state.media = state.media.concat(items)
-  },
-
   ADD_MEDIA_ITEM(state, mediaItem) {
     state.media.push(mediaItem)
   },
@@ -105,7 +101,7 @@ const completeMediaData = mediaData => {
 const actions = {
   async getMedia({ commit }, query) {
     const media = await api.getMedia(query)
-    commit('RECEIVE_MEDIA', media)
+    commit('UPDATE_MEDIA', media)
   },
 
   async addMediaItem({ dispatch, commit }, mediaData) {
