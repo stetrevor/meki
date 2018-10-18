@@ -10,7 +10,9 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
+
+import path from 'path'
 
 import Vue from 'vue'
 import { mapActions } from 'vuex'
@@ -19,9 +21,18 @@ export default {
   name: 'Paw',
 
   created() {
+    const baseDir =
+      process.env.NODE_ENV === 'production'
+        ? path.join(remote.app.getPath('userData'), 'images')
+        : path.resolve(__dirname, '../../temp', 'images')
+
     ipcRenderer.send('server-address-request')
     ipcRenderer.on('server-address-response', (_, { address, port }) => {
       Vue.prototype.$serverAddress = `http://${address}:${port}/`
+
+      // Set thumbnail directory
+      Vue.prototype.$thumbnailDir = baseDir + '/'
+
       this.$router.push({ name: 'home' })
     })
 
