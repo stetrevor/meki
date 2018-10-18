@@ -72,40 +72,35 @@
     </transition>
 
     <div class="home-page__content">
-      <transition name="fade-out-in" 
-                  mode="out-in">
-        <div v-if="currentTab !== 'videos'" 
-             :key="currentTab"
-             class="home-page__media-list">
-          {{ currentTab }}
-        </div>
-        <div v-else 
-             :key="currentTab"
-             class="home-page__media-list">
-          <video-item v-for="video in videos.sort(sortVideosByTitle)" 
-                      :key="video._id"
-                      :video="video"
-                      :selected="selectedItemIds.includes(video._id)"
+      <section v-for="(items, tab) in currentMedia" 
+               :key="tab" 
+               class="home-page__media-section">
+        <component
+          v-for="item in items.sort(sortVideosByTitle)" 
+          :key="item._id" 
+          :is="mediaItemComponents[item.mediaType]" 
+          :media-item="item" 
+          :selected="selectedItemIds.includes(item._id)" 
                       :selection-mode="selectionMode"
-                      @video-item-selected="selectedItemIds.push(video._id)" 
-                      @video-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(video._id), 1)"
-                      @video-item-play="play(video)"/>
+          @item-selected="selectedItemIds.push(item._id)" 
+          @item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
+          @item-play="play(item)"/>
+      </section>
         </div>
-      </transition>
     </div>
-  </div>
 </template>
 
 <script>
 const { dialog, getCurrentWindow } = require('electron').remote
 
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import IconButton from './Base/IconButton'
 import FullscreenToggle from './Base/FullscreenToggle'
 import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
 import VideoItem from './HomePage/VideoItem'
+import FolderItem from './HomePage/FolderItem'
 import SelectionMenu from './HomePage/SelectionMenu'
 import AddMediaMenu from './HomePage/AddMediaMenu'
 
@@ -130,6 +125,7 @@ export default {
     NavBar,
     AddMediaButton,
     VideoItem,
+    FolderItem,
     SelectionMenu,
     AddMediaMenu,
   },
@@ -151,11 +147,16 @@ export default {
       private: { private: true },
     }
 
+    const mediaItemComponents = {
+      movie: 'MovieItem',
+      tvshow: 'TVShowItem',
+      video: 'VideoItem',
+      folder: 'FolderItem',
+    }
+
     return {
-      navItems: Object.keys(queries),
       queries,
       fetched: [],
-      currentTab: null,
       selectionMode: false,
       selectedItemIds: [],
       selectionMenu: false,
@@ -163,6 +164,7 @@ export default {
       favoriteSet: false,
       watchedSet: false,
       AddMediaMenuShow: false,
+      mediaItemComponents,
     }
   },
 
@@ -171,6 +173,7 @@ export default {
       tabs: state => state.HomePage.tabs,
       currentTab: state => state.HomePage.currentTab,
     }),
+    ...mapGetters(['currentMedia']),
   },
 
   methods: {
