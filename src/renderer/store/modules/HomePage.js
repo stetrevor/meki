@@ -4,6 +4,8 @@ import api from '../../api'
 
 const state = {
   media: [],
+  tabs: ['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private'],
+  currentTab: null,
 }
 
 const getters = {
@@ -32,6 +34,10 @@ const mutations = {
 
   DELETE_MEDIA(state, ids) {
     state.media = state.media.filter(({ _id }) => !ids.includes(_id))
+  },
+
+  SWITCH_TAB(state, tabName) {
+    state.currentTab = tabName
   },
 }
 
@@ -81,6 +87,10 @@ const actions = {
   async deleteMedia({ commit }, [ids, imagePaths]) {
     const [deletedIds, _] = await api.deleteMedia(ids, imagePaths)
     commit('DELETE_MEDIA', deletedIds)
+  },
+
+  switchTab({ commit }, tabName) {
+    commit('SWITCH_TAB', tabName)
   },
 }
 
