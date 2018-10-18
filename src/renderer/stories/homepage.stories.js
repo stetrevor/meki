@@ -1,4 +1,18 @@
 import { storiesOf } from '@storybook/vue'
+import { withKnobs, boolean } from '@storybook/addon-knobs'
+import { action } from '@storybook/addon-actions'
+
+import Vue from 'vue'
+
+import FolderItem from '../components/HomePage/FolderItem'
+import IconButton from '../components/Base/IconButton'
+import AddMediaMenu from '../components/HomePage/AddMediaMenu'
+
+Vue.component('FolderItem', FolderItem)
+Vue.component('IconButton', IconButton)
+Vue.component('AddMediaMenu', AddMediaMenu)
+
+import '../assets/icons/icon-add.svg'
 
 const amb = storiesOf('Home Page | Add Media Button', module)
 
@@ -62,6 +76,46 @@ video.add('VideoItem List', () => ({
     </div>
   </div>
   `,
+}))
+
+const folder = storiesOf('Home Page | Folder Item', module)
+
+folder.addDecorator(withKnobs)
+
+folder.add('FolderItem', () => {
+  const selectionMode = boolean('Selection Mode', false)
+  const selected = boolean('Selected', false)
+
+  return {
+    template: `
+    <folder-item :selection-mode="${selectionMode}"
+                :selected="${selected}"
+                :folder="{ title: 'A Very Long Folder Name That Will Cause Text Ellipsis To Show Up' }"/>
+    `,
+  }
+})
+
+const addMediaMenu = storiesOf('Home Page | Add Media Menu', module)
+
+addMediaMenu.add('AddMediaMenu', () => ({
+  template: `
+  <div class="theme-bg-color-primary-lighter" style="width: 100vw; height: 100vh; padding: 48px 0; display: flex; align-items: center; justify-content: center">
+      <icon-button icon="add" @click.native.stop @clicked="show = true"/>
+      <add-media-menu style="position: absolute" v-if="show" @add-media-type="addMediaType" @add-media-menu-dismiss="show = false"/>
+    </div>`,
+
+  data() {
+    return {
+      show: false,
+    }
+  },
+
+  methods: {
+    addMediaType(mediaType) {
+      this.show = true
+      action('add-media-type')(mediaType)
+    },
+  },
 }))
 
 const menu = storiesOf('Home Page | Selection Menu', module)

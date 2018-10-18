@@ -3,8 +3,19 @@
     <div class="home-page__sidebar" 
          @click="exitSelectionMode">
       <svg class="home-page__logo"><use xlink:href="#logo"/></svg>
-      <add-media-button class="home-page__amd" 
-                        @click.native="showAddMediaDialog"/>
+
+      <div class="home-page__add-media">
+        <add-media-button class="home-page__amd" 
+                          @click.native="AddMediaMenuShow = true" />
+        <transition name="fade-out-in" 
+                    mode="out-in">
+          <add-media-menu v-if="AddMediaMenuShow" 
+                          class="home-page__add-media-menu" 
+                          @add-media-type="showAddMediaDialog($event)" 
+                          @add-media-menu-dismiss="AddMediaMenuShow = false"/>
+        </transition>
+      </div>
+      
       <nav-bar :nav-items="navItems" 
                class="home-page__nav"
                @active-nav-item-changed="navItemChanged"/>
@@ -96,6 +107,7 @@ import NavBar from './HomePage/NavBar'
 import AddMediaButton from './HomePage/AddMediaButton'
 import VideoItem from './HomePage/VideoItem'
 import SelectionMenu from './HomePage/SelectionMenu'
+import AddMediaMenu from './HomePage/AddMediaMenu'
 
 import '../assets/logo.svg'
 import '../assets/icons/icon-settings.svg'
@@ -119,6 +131,7 @@ export default {
     AddMediaButton,
     VideoItem,
     SelectionMenu,
+    AddMediaMenu,
   },
 
   data() {
@@ -149,6 +162,7 @@ export default {
       selectAll: false,
       favoriteSet: false,
       watchedSet: false,
+      AddMediaMenuShow: false,
     }
   },
 
@@ -164,23 +178,48 @@ export default {
       this.getMedia(this.queries[item]).then(() => this.fetched.push(item))
     },
 
-    showAddMediaDialog() {
-      dialog.showOpenDialog(
-        getCurrentWindow(),
-        {
+    showAddMediaDialog(mediaType) {
+      const options = {
+        folder: {
+          title: 'Pick A Folder Containing .mp4 Files',
+          buttonLabel: 'Add Folder',
+          properties: ['openDirectory'],
+        },
+        video: {
           title: 'Pick A .mp4 File',
-          buttonLabel: 'Add Media',
+          buttonLabel: 'Add Video',
           filters: [{ name: 'Videos', extensions: ['mp4'] }],
           properties: ['openFile'],
         },
-        paths => {
-          if (paths) {
-            this.$nextTick(() =>
-              this.addMediaItem({ mediaType: 'video', filePath: paths[0] }),
+      }
+
+      switch (mediaType) {
+        case 'movie':
+          break
+        case 'tvshow':
+          break
+        case 'video':
+        case 'folder':
+          this.$nextTick().then(() => {
+            dialog.showOpenDialog(
+              getCurrentWindow(),
+              options[mediaType],
+              paths => {
+                if (paths) {
+                  this.$nextTick(() =>
+                    this.addMediaItem({
+                      mediaType: 'video',
+                      filePath: paths[0],
+                    }),
+                  )
+                }
+              },
             )
-          }
-        },
-      )
+          })
+          break
+        default:
+          break
+      }
     },
 
     showDeleteDialog() {
@@ -284,8 +323,16 @@ export default {
     justify-self: center;
   }
 
-  &__amd {
+  &__add-media {
+    position: relative;
     justify-self: center;
+  }
+
+  &__add-media-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
   }
 
   &__nav {
