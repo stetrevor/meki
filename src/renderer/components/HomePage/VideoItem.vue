@@ -37,17 +37,17 @@
         <div class="video-item__toolbar">
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
-                       @clicked="showInFolder"/>
+                       @clicked="$emit('media-item-show-in-folder')"/>
           <icon-button :toggled="!!mediaItem.lastWatched" 
                        :disabled="selectionMode"
                        icon="mark-watched"
                        icon-toggled="watched"
-                       @clicked="updateMedia([[mediaItem._id], { lastWatched: mediaItem.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+                       @clicked="$emit('media-item-history')"/>
           <icon-button :toggled="mediaItem.favorite" 
                        :disabled="selectionMode"
                        icon="favorite"
                        icon-toggled="favorited"
-                       @clicked="updateMedia([[mediaItem._id], { favorite: !mediaItem.favorite }])"/>
+                       @clicked="$emit('media-item-favorite')"/>
         </div>
       </div>
 
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { shell, remote } from 'electron'
+import { remote } from 'electron'
 
 import path from 'path'
 
@@ -165,12 +165,6 @@ export default {
         this.$emit('media-item-open')
       }
     },
-
-    showInFolder() {
-      shell.showItemInFolder(this.mediaItem.filePath)
-    },
-
-    ...mapActions(['updateMedia']),
   },
 }
 </script>
