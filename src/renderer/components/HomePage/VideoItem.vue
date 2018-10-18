@@ -66,12 +66,6 @@
 </template>
 
 <script>
-import { remote } from 'electron'
-
-import path from 'path'
-
-import { mapActions } from 'vuex'
-
 import IconButton from '../Base/IconButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
@@ -85,11 +79,6 @@ import '../../assets/icons/icon-watched.svg'
 import '../../assets/icons/icon-folder.svg'
 import '../../assets/icons/icon-play.svg'
 import '../../assets/icons/icon-selection-mode.svg'
-
-const base =
-  process.env.NODE_ENV === 'production'
-    ? path.join(remote.app.getPath('userData'), 'images')
-    : path.resolve(__dirname, '../../../../temp', 'images')
 
 export default {
   name: 'VideoItem',
@@ -134,7 +123,9 @@ export default {
   computed: {
     thumbnailPath() {
       return this.ready
-        ? this.$serverAddress + path.resolve(base, this.mediaItem.thumbnailPath)
+        ? this.$serverAddress +
+            this.$thumbnailDir +
+            this.mediaItem.thumbnailPath
         : ''
     },
 
