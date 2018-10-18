@@ -16,7 +16,7 @@
         </transition>
       </div>
       
-      <nav-bar :nav-items="navItems" 
+      <nav-bar :nav-items="tabs" 
                class="home-page__nav"
                @active-nav-item-changed="navItemChanged"/>
       <icon-button class="home-page__settings" 
@@ -167,12 +167,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['videos']),
+    ...mapState({
+      tabs: state => state.HomePage.tabs,
+      currentTab: state => state.HomePage.currentTab,
+    }),
   },
 
   methods: {
     navItemChanged(item) {
-      this.currentTab = item
+      this.switchTab(item)
+
       if (this.fetched.includes(item)) return
 
       this.getMedia(this.queries[item]).then(() => this.fetched.push(item))
@@ -289,6 +293,7 @@ export default {
       'updateMedia',
       'deleteMedia',
       'switchCurrentEpisodeId',
+      'switchTab',
     ]),
   },
 }
