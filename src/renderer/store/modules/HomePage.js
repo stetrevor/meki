@@ -68,10 +68,12 @@ const actions = {
     const mediaItem = await api.addMediaItem(data)
     commit('ADD_MEDIA_ITEM', mediaItem)
 
+    if (mediaData.mediaType === 'video') {
     const { _id, filePath } = mediaItem
     api.getVideoInfo({ _id, filePath }, updates => {
       dispatch('updateMedia', [[updates._id], updates])
     })
+    }
   },
 
   async updateMedia({ commit }, [ids, updates]) {
