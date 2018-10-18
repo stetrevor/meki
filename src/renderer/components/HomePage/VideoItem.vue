@@ -299,6 +299,7 @@ export default {
     grid-row: 1 / -1;
     display: grid;
     align-content: end;
+    z-index: 1;
   }
 
   &__toolbar * {
