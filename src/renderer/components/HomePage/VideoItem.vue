@@ -158,11 +158,11 @@ export default {
     mainActionHandler() {
       if (this.selectionMode) {
         const eventName = this.selected
-          ? 'video-item-deselected'
-          : 'video-item-selected'
+          ? 'media-item-deselected'
+          : 'media-item-selected'
         this.$emit(eventName)
       } else {
-        this.$emit('video-item-play')
+        this.$emit('media-item-open')
       }
     },
 
