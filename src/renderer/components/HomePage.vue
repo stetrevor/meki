@@ -82,16 +82,21 @@
           :media-item="item" 
           :selected="selectedItemIds.includes(item._id)" 
           :selection-mode="selectionMode"
-          @item-selected="selectedItemIds.push(item._id)" 
-          @item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
-          @item-play="play(item)"/>
+          @media-item-selected="selectedItemIds.push(item._id)" 
+          @media-item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
+          @media-item-open="play(item)"
+          @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
+          @media-item-show-in-folder="showItemInFolder(item)"
+          @media-item-history="setHistory(item)"/>
       </section>
     </div>
   </div>
 </template>
 
 <script>
-const { dialog, getCurrentWindow } = require('electron').remote
+import { shell, remote } from 'electron'
+
+const { dialog, getCurrentWindow } = remote
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -296,6 +301,10 @@ export default {
       this.selectedItemIds = []
       this.favoriteSet = false
       this.watchedSet = false
+    },
+
+    showItemInFolder(item) {
+      shell.showItemInFolder(item.filePath)
     },
 
     ...mapActions([
