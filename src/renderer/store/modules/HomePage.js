@@ -9,11 +9,57 @@ const state = {
 }
 
 const getters = {
+  movies(state) {
+    return state.media.filter(
+      mediaItem => mediaItem.mediaType === 'movie' && !mediaItem.private,
+    )
+  },
+
+  tvshows(state) {
+    return state.media.filter(
+      mediaItem => mediaItem.mediaType === 'tvshow' && !mediaItem.private,
+    )
+  },
+
+  folders(state) {
+    return state.media.filter(
+      mediaItem => mediaItem.mediaType === 'folder' && !mediaItem.private,
+    )
+  },
+
   videos(state) {
     return state.media.filter(
-      mediaItem =>
-        ['folder', 'video'].includes(mediaItem.mediaType) && !mediaItem.private,
+      mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
     )
+  },
+
+  currentMedia(state, getters) {
+    switch (state.currentTab) {
+      case 'recents':
+        return {
+          movies: getters.movies.filter(item => item.recentEpisodeId),
+          'tv shows': getters.tvshows.filter(item => item.recentEpisodeId),
+          folders: getters.folders.filter(item => item.recentEpisodeId),
+          videos: getters.videos.filter(item => item.recentEpisodeId),
+        }
+      case 'favorites':
+        return {
+          movies: getters.movies.filter(item => item.favorite),
+          'tv shows': getters.tvshows.filter(item => item.favorite),
+          folders: getters.folders.filter(item => item.favorite),
+          videos: getters.videos.filter(item => item.favorite),
+        }
+      case 'movies':
+        return { movies: getters.movies }
+      case 'tv shows':
+        return { 'tv shows': getters.tvshows }
+      case 'videos':
+        return { folders: getters.folders, videos: getters.videos }
+      case 'private':
+        break
+      default:
+        return []
+    }
   },
 }
 
@@ -68,10 +114,10 @@ const actions = {
     commit('ADD_MEDIA_ITEM', mediaItem)
 
     if (mediaData.mediaType === 'video') {
-    const { _id, filePath } = mediaItem
-    api.getVideoInfo({ _id, filePath }, updates => {
-      dispatch('updateMedia', [[updates._id], updates])
-    })
+      const { _id, filePath } = mediaItem
+      api.getVideoInfo({ _id, filePath }, updates => {
+        dispatch('updateMedia', [[updates._id], updates])
+      })
     }
   },
 
