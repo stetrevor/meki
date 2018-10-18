@@ -87,7 +87,7 @@
           @media-item-open="play(item)"
           @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
           @media-item-show-in-folder="showItemInFolder(item)"
-          @media-item-history="setHistory(item)"/>
+          @media-item-history="updateMedia([[item._id], { lastWatched: item.lastWatched ? 0 : new Date(), progress: 0 }])"/>
       </section>
     </div>
   </div>
