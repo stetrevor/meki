@@ -15,12 +15,9 @@
     <div class="folder-item__title">{{ mediaItem.title }}</div>
     <transition name="fade-out-in" 
                 mode="out-in">
-      <div v-show="!selectionMode && hovered" 
+      <div v-show="hovered || selectionMode" 
            class="folder-item__actions">
-        <icon-button class="folder-item__action-show-in-folder" 
-                     icon="folder"/>
-        <icon-button class="folder-item__action-favorite" 
-                     icon="favorite"/>
+        <icon-button v-show="!selectionMode && hovered" 
       </div>
     </transition>
 
