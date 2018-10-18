@@ -1,12 +1,14 @@
 <template>
   <div :class="['folder-item', { 'folder-item--selected': selected }]"
        @mouseenter="hovered = true" 
-       @mouseleave="hovered = false">
+       @mouseleave="hovered = false"
+       @click.self="!selectionMode && $emit('media-item-open', mediaItem)">
     <div class="folder-item__icon">
       <transition name="fade-out-in" 
                   mode="out-in">
         <base-icon v-if="selectionMode" 
-                   icon="checked"/>
+                   icon="checked" 
+                   @click.native="$emit(selected ? 'media-item-deselected' : 'media-item-selected')"/>
         <base-icon v-else 
                    icon="folder-filled"/>
       </transition>
@@ -18,6 +20,15 @@
       <div v-show="hovered || selectionMode" 
            class="folder-item__actions">
         <icon-button v-show="!selectionMode && hovered" 
+                     class="folder-item__action-show-in-folder" 
+                     icon="folder"
+                     @clicked="$emit('media-item-show-in-folder')"/>
+        <icon-button :disabled="selectionMode" 
+                     :toggled="mediaItem.favorite"
+                     class="folder-item__action-favorite"
+                     icon="favorite"
+                     icon-toggled="favorited" 
+                     @clicked="$emit('media-item-favorite')"/>
       </div>
     </transition>
 
