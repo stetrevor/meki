@@ -75,7 +75,7 @@
       <section v-for="(items, tab) in currentMedia" 
                :key="tab" 
                class="home-page__media-section">
-        <component v-for="item in items.sort(sortVideosByTitle)" 
+        <component v-for="item in items.sort(sortMediaByTitle)" 
                    :key="item._id" 
                    :is="mediaItemComponents[item.mediaType]" 
                    :media-item="item" 
@@ -270,17 +270,6 @@ export default {
         default:
           break
       }
-    },
-
-    sortVideosByTitle(v1, v2) {
-      const [t1, t2] = [v1.title, v2.title]
-      if (t1 == t2) return 0
-
-      if (typeof t1 === typeof t2) {
-        return t1 < t2 ? -1 : 1
-      }
-
-      return typeof a < typeof b ? -1 : 1
     },
 
     sortMediaByTitle(v1, v2) {
