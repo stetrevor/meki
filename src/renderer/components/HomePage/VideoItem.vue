@@ -22,56 +22,50 @@
                              @click.native="mainActionHandler"/>
     
         <div class="video-item__info">
-          <div class="video-item__title video-item__title--expanded">{{ video.title }}</div>
-          <progress-bar v-if="video.progress || video.lastWatched"
-                        :progress="video.progress || video.duration" 
-                        :max="video.duration" 
+          <div class="video-item__title video-item__title--expanded">{{ mediaItem.title }}</div>
+          <progress-bar v-if="mediaItem.progress || mediaItem.lastWatched"
+                        :progress="mediaItem.progress || mediaItem.duration" 
+                        :max="mediaItem.duration" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
-          <div v-if="video.progress || video.lastWatched"
+          <div v-if="mediaItem.progress || mediaItem.lastWatched"
                class="video-item__progress-message">{{ progressMsg }}</div>
-          <div class="video-item__duration">{{ video.duration | toTime }}</div>
-          <div class="video-item__date-added">Added on {{ video.createdAt | toDate }}</div>
+          <div class="video-item__duration">{{ mediaItem.duration | toTime }}</div>
+          <div class="video-item__date-added">Added on {{ mediaItem.createdAt | toDate }}</div>
         </div>
 
         <div class="video-item__toolbar">
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
-                       @clicked="showInFolder"/>
-          <icon-button :toggled="!!video.lastWatched" 
+                       @clicked="$emit('media-item-show-in-folder')"/>
+          <icon-button :toggled="!!mediaItem.lastWatched" 
                        :disabled="selectionMode"
                        icon="mark-watched"
                        icon-toggled="watched"
-                       @clicked="updateMedia([[video._id], { lastWatched: video.lastWatched ? 0 : new Date(), progress: 0 }])"/>
-          <icon-button :toggled="video.favorite" 
+                       @clicked="$emit('media-item-history')"/>
+          <icon-button :toggled="mediaItem.favorite" 
                        :disabled="selectionMode"
                        icon="favorite"
                        icon-toggled="favorited"
-                       @clicked="updateMedia([[video._id], { favorite: !video.favorite }])"/>
+                       @clicked="$emit('media-item-favorite')"/>
         </div>
       </div>
 
       <div v-else
            key="folded"
            class="video-item__folded" >
-        <progress-bar v-if="video.progress || video.lastWatched" 
+        <progress-bar v-if="mediaItem.progress || mediaItem.lastWatched" 
                       :colored="true" 
-                      :progress="video.progress || video.duration"
-                      :max="video.duration" 
+                      :progress="mediaItem.progress || mediaItem.duration"
+                      :max="mediaItem.duration" 
                       class="video-item__progress-bar"/>
-        <p class="video-item__title">{{ video.title }}</p>
+        <p class="video-item__title">{{ mediaItem.title }}</p>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { shell, remote } from 'electron'
-
-import path from 'path'
-
-import { mapActions } from 'vuex'
-
 import IconButton from '../Base/IconButton'
 import OverlayIconButton from '../Base/OverlayIconButton'
 import ProgressBar from '../Base/ProgressBar'
@@ -85,11 +79,6 @@ import '../../assets/icons/icon-watched.svg'
 import '../../assets/icons/icon-folder.svg'
 import '../../assets/icons/icon-play.svg'
 import '../../assets/icons/icon-selection-mode.svg'
-
-const base =
-  process.env.NODE_ENV === 'production'
-    ? path.join(remote.app.getPath('userData'), 'images')
-    : path.resolve(__dirname, '../../../../temp', 'images')
 
 export default {
   name: 'VideoItem',
@@ -119,7 +108,7 @@ export default {
       default: false,
     },
 
-    video: {
+    mediaItem: {
       type: Object,
       required: true,
     },
@@ -134,14 +123,16 @@ export default {
   computed: {
     thumbnailPath() {
       return this.ready
-        ? this.$serverAddress + path.resolve(base, this.video.thumbnailPath)
+        ? this.$serverAddress +
+            this.$thumbnailDir +
+            this.mediaItem.thumbnailPath
         : ''
     },
 
     progressMsg() {
-      const duration = this.video.duration
-      const progress = this.video.progress || 0
-      const lastWatched = this.video.lastWatched || 0
+      const duration = this.mediaItem.duration
+      const progress = this.mediaItem.progress || 0
+      const lastWatched = this.mediaItem.lastWatched || 0
       const secLeft = parseInt(duration - progress)
       const minLeft = parseInt((duration - progress) / 60)
       const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
@@ -150,7 +141,7 @@ export default {
     },
 
     ready() {
-      return !!(this.video.duration && this.video.thumbnailPath)
+      return !!(this.mediaItem.duration && this.mediaItem.thumbnailPath)
     },
   },
 
@@ -158,19 +149,13 @@ export default {
     mainActionHandler() {
       if (this.selectionMode) {
         const eventName = this.selected
-          ? 'video-item-deselected'
-          : 'video-item-selected'
+          ? 'media-item-deselected'
+          : 'media-item-selected'
         this.$emit(eventName)
       } else {
-        this.$emit('video-item-play')
+        this.$emit('media-item-open')
       }
     },
-
-    showInFolder() {
-      shell.showItemInFolder(this.video.filePath)
-    },
-
-    ...mapActions(['updateMedia']),
   },
 }
 </script>
@@ -299,6 +284,7 @@ export default {
     grid-row: 1 / -1;
     display: grid;
     align-content: end;
+    z-index: 1;
   }
 
   &__toolbar * {
