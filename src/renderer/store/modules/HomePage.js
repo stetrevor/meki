@@ -42,19 +42,18 @@ const mutations = {
 }
 
 const completeMediaData = mediaData => {
-  let data
-
   switch (mediaData.mediaType) {
+    case 'folder':
+      return Object.assign({}, mediaData, {
+        title: path.basename(mediaData.filePath),
+      })
     case 'video':
-      data = Object.assign({}, mediaData, {
+      return Object.assign({}, mediaData, {
         title: path.basename(mediaData.filePath, '.mp4'),
       })
-      break
     default:
-      break
+      return mediaData
   }
-
-  return data
 }
 
 const actions = {
