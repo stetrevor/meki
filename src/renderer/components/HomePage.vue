@@ -81,13 +81,13 @@
           :is="mediaItemComponents[item.mediaType]" 
           :media-item="item" 
           :selected="selectedItemIds.includes(item._id)" 
-                      :selection-mode="selectionMode"
+          :selection-mode="selectionMode"
           @item-selected="selectedItemIds.push(item._id)" 
           @item-deselected="selectedItemIds.splice(selectedItemIds.indexOf(item._id), 1)"
           @item-play="play(item)"/>
       </section>
-        </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -214,10 +214,7 @@ export default {
               paths => {
                 if (paths) {
                   this.$nextTick(() =>
-                    this.addMediaItem({
-                      mediaType: 'video',
-                      filePath: paths[0],
-                    }),
+                    this.addMediaItem({ mediaType, filePath: paths[0] }),
                   )
                 }
               },
@@ -262,6 +259,17 @@ export default {
     },
 
     sortVideosByTitle(v1, v2) {
+      const [t1, t2] = [v1.title, v2.title]
+      if (t1 == t2) return 0
+
+      if (typeof t1 === typeof t2) {
+        return t1 < t2 ? -1 : 1
+      }
+
+      return typeof a < typeof b ? -1 : 1
+    },
+
+    sortMediaByTitle(v1, v2) {
       const [t1, t2] = [v1.title, v2.title]
       if (t1 == t2) return 0
 
@@ -394,7 +402,7 @@ export default {
     overflow: scroll;
   }
 
-  &__media-list {
+  &__media-section {
     padding: 24px;
     display: grid;
     grid-template-columns: repeat(auto-fit, 300px);
