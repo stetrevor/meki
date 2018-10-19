@@ -25,29 +25,48 @@ const state = {
   queries,
 }
 
+function sortMediaByTitle(v1, v2) {
+  const [t1, t2] = [v1.title, v2.title]
+  if (t1 == t2) return 0
+
+  if (typeof t1 === typeof t2) {
+    return t1 < t2 ? -1 : 1
+  }
+
+  return typeof a < typeof b ? -1 : 1
+}
+
 const getters = {
   movies(state) {
-    return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'movie' && !mediaItem.private,
-    )
+    return state.media
+      .filter(
+        mediaItem => mediaItem.mediaType === 'movie' && !mediaItem.private,
+      )
+      .sort(sortMediaByTitle)
   },
 
   tvshows(state) {
-    return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'tvshow' && !mediaItem.private,
-    )
+    return state.media
+      .filter(
+        mediaItem => mediaItem.mediaType === 'tvshow' && !mediaItem.private,
+      )
+      .sort(sortMediaByTitle)
   },
 
   folders(state) {
-    return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'folder' && !mediaItem.private,
-    )
+    return state.media
+      .filter(
+        mediaItem => mediaItem.mediaType === 'folder' && !mediaItem.private,
+      )
+      .sort(sortMediaByTitle)
   },
 
   videos(state) {
-    return state.media.filter(
-      mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
-    )
+    return state.media
+      .filter(
+        mediaItem => mediaItem.mediaType === 'video' && !mediaItem.private,
+      )
+      .sort(sortMediaByTitle)
   },
 
   currentMedia(state, getters) {

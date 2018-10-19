@@ -76,7 +76,7 @@
         <div class="home-page__media-section-header">{{ category }}</div>
         
         <div class="home-page__media-section-list">
-          <component v-for="item in items.sort(sortMediaByTitle)" 
+          <component v-for="item in items" 
                      :key="item._id" 
                      :is="mediaItemComponents[item.mediaType]" 
                      :media-item="item" 
@@ -257,17 +257,6 @@ export default {
         default:
           break
       }
-    },
-
-    sortMediaByTitle(v1, v2) {
-      const [t1, t2] = [v1.title, v2.title]
-      if (t1 == t2) return 0
-
-      if (typeof t1 === typeof t2) {
-        return t1 < t2 ? -1 : 1
-      }
-
-      return typeof a < typeof b ? -1 : 1
     },
 
     exitSelectionMode() {
