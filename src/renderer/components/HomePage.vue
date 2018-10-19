@@ -135,22 +135,6 @@ export default {
   },
 
   data() {
-    const getQuery = mediaType => ({
-      mediaType: mediaType,
-      private: { $ne: true },
-    })
-
-    const queries = {
-      continue: {
-        recentEpisodeId: { $exists: true, $ne: null },
-      },
-      favorites: { favorite: true },
-      movies: getQuery('movie'),
-      'tv shows': getQuery('tvshow'),
-      videos: getQuery({ $in: ['folder', 'video'] }),
-      private: { private: true },
-    }
-
     const mediaItemComponents = {
       movie: 'MovieItem',
       tvshow: 'TVShowItem',
@@ -159,7 +143,6 @@ export default {
     }
 
     return {
-      queries,
       fetched: [],
       selectionMode: false,
       selectedItemIds: [],
@@ -175,6 +158,7 @@ export default {
     ...mapState({
       tabs: state => state.HomePage.tabs,
       currentTab: state => state.HomePage.currentTab,
+      queries: state => state.HomePage.queries,
     }),
     ...mapGetters(['currentMedia']),
   },

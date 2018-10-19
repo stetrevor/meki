@@ -2,10 +2,27 @@ import path from 'path'
 
 import api from '../../api'
 
+const getQuery = mediaType => ({
+  mediaType: mediaType,
+  private: { $ne: true },
+})
+
+const queries = {
+  continue: {
+    recentEpisodeId: { $exists: true, $ne: null },
+  },
+  favorites: { favorite: true },
+  movies: getQuery('movie'),
+  'tv shows': getQuery('tvshow'),
+  videos: getQuery({ $in: ['folder', 'video'] }),
+  private: { private: true },
+}
+
 const state = {
   media: [],
   tabs: ['continue', 'favorites', 'movies', 'tv shows', 'videos', 'private'],
   currentTab: null,
+  queries,
 }
 
 const getters = {
