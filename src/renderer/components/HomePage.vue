@@ -90,7 +90,7 @@
                      @media-item-open="open(item)"
                      @media-item-favorite="updateMedia([[item._id], { favorite: !item.favorite }])"
                      @media-item-show-in-folder="showItemInFolder(item)"
-                     @media-item-mark-as-complete="updateMedia([[item._id], { lastWatched: item.lastWatched ? 0 : new Date(), progress: 0 }])"/>
+                     @media-item-mark-as-complete="updateMedia([[item._id], { progress: item.duration }])"/>
         </div>
       </section>
     </div>
