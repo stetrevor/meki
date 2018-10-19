@@ -171,16 +171,14 @@ export default {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.duration ? 0 : this.progress
-      const lastWatched = this.progress === this.video.duration ? new Date() : 0
-      const volume = this.$refs.video.volume
+      const volume = this.$refs.video.volume * 100
 
       // Unload video
       this.$refs.video.src = ''
 
       this.updateMedia([[this.video._id], { progress, lastWatched }])
       this.setSoundMuted(this.videoMuted)
-      this.setSoundVolume(volume * 100)
+      this.setSoundVolume(volume)
 
       this.$router.push({ name: 'home' })
     },
