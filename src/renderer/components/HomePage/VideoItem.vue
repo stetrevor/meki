@@ -23,12 +23,12 @@
     
         <div class="video-item__info">
           <div class="video-item__title video-item__title--expanded">{{ mediaItem.title }}</div>
-          <progress-bar v-if="mediaItem.progress || mediaItem.lastWatched"
-                        :progress="mediaItem.progress || mediaItem.duration" 
+          <progress-bar v-if="mediaItem.progress"
+                        :progress="mediaItem.progress" 
                         :max="mediaItem.duration" 
                         :colored="true"
                         class="video-item__progress-bar video-item__progress-bar--expanded"/>
-          <div v-if="mediaItem.progress || mediaItem.lastWatched"
+          <div v-if="mediaItem.progress"
                class="video-item__progress-message">{{ progressMsg }}</div>
           <div class="video-item__duration">{{ mediaItem.duration | toTime }}</div>
           <div class="video-item__date-added">Added on {{ mediaItem.createdAt | toDate }}</div>
@@ -38,11 +38,9 @@
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
                        @clicked="$emit('media-item-show-in-folder')"/>
-          <icon-button :toggled="!!mediaItem.lastWatched" 
-                       :disabled="selectionMode"
-                       icon="mark-watched"
-                       icon-toggled="watched"
-                       @clicked="$emit('media-item-history')"/>
+          <icon-button v-if="!selectionMode && mediaItem.progress !== mediaItem.duration" 
+                       icon="mark-as-complete"
+                       @clicked="$emit('media-item-mark-as-complete')"/>
           <icon-button :toggled="mediaItem.favorite" 
                        :disabled="selectionMode"
                        icon="favorite"
@@ -54,9 +52,9 @@
       <div v-else
            key="folded"
            class="video-item__folded" >
-        <progress-bar v-if="mediaItem.progress || mediaItem.lastWatched" 
+        <progress-bar v-if="mediaItem.progress" 
                       :colored="true" 
-                      :progress="mediaItem.progress || mediaItem.duration"
+                      :progress="mediaItem.progress"
                       :max="mediaItem.duration" 
                       class="video-item__progress-bar"/>
         <p class="video-item__title">{{ mediaItem.title }}</p>
@@ -74,8 +72,7 @@ import { toTime } from '../../filters'
 
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
-import '../../assets/icons/icon-mark-watched.svg'
-import '../../assets/icons/icon-watched.svg'
+import '../../assets/icons/icon-mark-as-complete.svg'
 import '../../assets/icons/icon-folder.svg'
 import '../../assets/icons/icon-play.svg'
 import '../../assets/icons/icon-selection-mode.svg'
@@ -130,14 +127,12 @@ export default {
     },
 
     progressMsg() {
-      const duration = this.mediaItem.duration
-      const progress = this.mediaItem.progress || 0
-      const lastWatched = this.mediaItem.lastWatched || 0
+      const { progress, duration } = this.mediaItem
       const secLeft = parseInt(duration - progress)
       const minLeft = parseInt((duration - progress) / 60)
       const msg = minLeft ? `${minLeft}m Left` : `${secLeft}s Left`
 
-      return lastWatched ? 'Watched' : msg
+      return progress === duration ? 'Watched' : msg
     },
 
     ready() {

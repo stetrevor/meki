@@ -4,7 +4,7 @@ import api from '../../api'
 
 const state = {
   media: [],
-  tabs: ['recents', 'favorites', 'movies', 'tv shows', 'videos', 'private'],
+  tabs: ['continue', 'favorites', 'movies', 'tv shows', 'videos', 'private'],
   currentTab: null,
 }
 

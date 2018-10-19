@@ -159,7 +159,8 @@ export default {
   },
 
   mounted() {
-    this.progress = this.video.progress || 0
+    this.progress =
+      this.video.progress === this.video.duration ? 0 : this.video.progress || 0
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
     this.$refs.video.volume = this.volume / 100
@@ -170,16 +171,20 @@ export default {
     toTime,
 
     exit() {
-      const progress = this.progress === this.video.duration ? 0 : this.progress
-      const lastWatched = this.progress === this.video.duration ? new Date() : 0
-      const volume = this.$refs.video.volume
+      const progress = this.progress
+      const lastWatched = new Date()
+      const recentEpisodeId = this.video._id
+      const volume = this.$refs.video.volume * 100
 
       // Unload video
       this.$refs.video.src = ''
 
-      this.updateMedia([[this.video._id], { progress, lastWatched }])
+      this.updateMedia([
+        [this.video._id],
+        { progress, lastWatched, recentEpisodeId },
+      ])
       this.setSoundMuted(this.videoMuted)
-      this.setSoundVolume(volume * 100)
+      this.setSoundVolume(volume)
 
       this.$router.push({ name: 'home' })
     },
