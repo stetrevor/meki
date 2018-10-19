@@ -34,13 +34,14 @@
                      @click.native="exitSelectionMode"/>
         <div class="home-page__selection-toolbar-title">{{ selectedItemIds.length }} Selected</div>
         <icon-button :toggled="favoriteSet" 
+                     :disabled="!selectedItemIds.length"
                      icon="favorited"
                      icon-toggled="favorite"
                      @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
-          <icon-button v-show="selectedItemIds.length" 
+          <icon-button :disabled="!selectedItemIds.length" 
                        icon="delete"
                        @clicked="showDeleteDialog"/>
         </transition>
@@ -75,7 +76,7 @@
         <div class="home-page__media-section-header">{{ category }}</div>
         
         <div class="home-page__media-section-list">
-          <component v-for="item in items.sort(sortMediaByTitle)" 
+          <component v-for="item in items" 
                      :key="item._id" 
                      :is="mediaItemComponents[item.mediaType]" 
                      :media-item="item" 
@@ -134,22 +135,6 @@ export default {
   },
 
   data() {
-    const getQuery = mediaType => ({
-      mediaType: mediaType,
-      private: { $ne: true },
-    })
-
-    const queries = {
-      recents: {
-        recentEpisodeId: { $exists: true, $ne: null },
-      },
-      favorites: { favorite: true },
-      movies: getQuery('movie'),
-      'tv shows': getQuery('tvshow'),
-      videos: getQuery({ $in: ['folder', 'video'] }),
-      private: { private: true },
-    }
-
     const mediaItemComponents = {
       movie: 'MovieItem',
       tvshow: 'TVShowItem',
@@ -158,7 +143,6 @@ export default {
     }
 
     return {
-      queries,
       fetched: [],
       selectionMode: false,
       selectedItemIds: [],
@@ -174,6 +158,7 @@ export default {
     ...mapState({
       tabs: state => state.HomePage.tabs,
       currentTab: state => state.HomePage.currentTab,
+      queries: state => state.HomePage.queries,
     }),
     ...mapGetters(['currentMedia']),
   },
@@ -245,10 +230,14 @@ export default {
         },
         response => {
           if (response === 0) {
-            const imagePaths = this.videos
-              .filter(video => this.selectedItemIds.includes(video._id))
-              .map(video => video.thumbnailPath)
+            let imagePaths
+            if ('videos' in this.currentMedia) {
+              imagePaths = this.currentMedia['videos']
+                .filter(video => this.selectedItemIds.includes(video._id))
+                .map(video => video.thumbnailPath)
+            }
             this.deleteMedia([this.selectedItemIds, imagePaths])
+
             this.selectedItemIds = []
           }
         },
@@ -268,17 +257,6 @@ export default {
         default:
           break
       }
-    },
-
-    sortMediaByTitle(v1, v2) {
-      const [t1, t2] = [v1.title, v2.title]
-      if (t1 == t2) return 0
-
-      if (typeof t1 === typeof t2) {
-        return t1 < t2 ? -1 : 1
-      }
-
-      return typeof a < typeof b ? -1 : 1
     },
 
     exitSelectionMode() {

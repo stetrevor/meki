@@ -55,7 +55,7 @@ export default {
     return await media.update({ _id }, updates)
   },
 
-  async deleteMedia(ids, imagePaths) {
+  async deleteMedia(ids, imagePaths = []) {
     const numRemoved = await media.delete(
       { _id: { $in: ids } },
       { multi: true },
