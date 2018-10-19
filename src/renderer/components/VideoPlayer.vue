@@ -159,7 +159,8 @@ export default {
   },
 
   mounted() {
-    this.progress = this.video.progress || 0
+    this.progress =
+      this.video.progress === this.video.duration ? 0 : this.video.progress || 0
     this.seek(this.progress)
     this.$refs.video.muted = this.videoMuted = this.muted
     this.$refs.video.volume = this.volume / 100
