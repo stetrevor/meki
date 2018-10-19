@@ -42,7 +42,7 @@
                        :disabled="selectionMode"
                        icon="mark-watched"
                        icon-toggled="watched"
-                       @clicked="$emit('media-item-history')"/>
+                       @clicked="$emit('media-item-mark-as-complete')"/>
           <icon-button :toggled="mediaItem.favorite" 
                        :disabled="selectionMode"
                        icon="favorite"
