@@ -37,10 +37,6 @@
                      icon="favorited"
                      icon-toggled="favorite"
                      @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
-        <icon-button :toggled="watchedSet" 
-                     icon="watched"
-                     icon-toggled="mark-watched"
-                     @clicked="setWatched"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
@@ -120,8 +116,6 @@ import '../assets/icons/icon-selection-mode.svg'
 import '../assets/icons/icon-cancel.svg'
 import '../assets/icons/icon-favorite.svg'
 import '../assets/icons/icon-favorited.svg'
-import '../assets/icons/icon-mark-watched.svg'
-import '../assets/icons/icon-watched.svg'
 import '../assets/icons/icon-delete.svg'
 import '../assets/icons/icon-more.svg'
 
@@ -171,7 +165,6 @@ export default {
       selectionMenu: false,
       selectAll: false,
       favoriteSet: false,
-      watchedSet: false,
       AddMediaMenuShow: false,
       mediaItemComponents,
     }
@@ -288,22 +281,10 @@ export default {
       return typeof a < typeof b ? -1 : 1
     },
 
-    setWatched() {
-      const watchedIds = this.selectedItemIds.filter(
-        id => this.videos.find(video => video._id === id).lastWatched,
-      )
-      const ids = this.watchedSet
-        ? watchedIds
-        : this.selectedItemIds.filter(id => !watchedIds.includes(id))
-      this.updateMedia([ids, { lastWatched: this.watchedSet ? 0 : new Date() }])
-      this.watchedSet = !this.watchedSet
-    },
-
     exitSelectionMode() {
       this.selectionMode = false
       this.selectedItemIds = []
       this.favoriteSet = false
-      this.watchedSet = false
     },
 
     showItemInFolder(item) {
