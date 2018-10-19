@@ -54,8 +54,10 @@ const videoItem = {
   favorite: true, // When this field doesn't exist, it's false by default
   private: false, // Same as above
   duration: Math.random() * 120 * 60 * 60 * 1000, // (1)
-  progress: 0.3333 * 120 * 60 * 60 * 1000, // 0 if non exist
-  lastWatched: new Date(), // 0 if non exist
+  // 0 if non exist, and only this field will be used to track for progress
+  progress: 0.3333 * 120 * 60 * 60 * 1000,
+  // 0 if non exist, and this field will be used to sort which episode is last watched
+  lastWatched: new Date(),
   recentEpisodeId: _id1, // null if non exist
   defaultSubtitleId: _id2, // null if non exist
   subtitles: [
