@@ -173,12 +173,16 @@ export default {
     exit() {
       const progress = this.progress
       const lastWatched = new Date()
+      const recentEpisodeId = this.video._id
       const volume = this.$refs.video.volume * 100
 
       // Unload video
       this.$refs.video.src = ''
 
-      this.updateMedia([[this.video._id], { progress, lastWatched }])
+      this.updateMedia([
+        [this.video._id],
+        { progress, lastWatched, recentEpisodeId },
+      ])
       this.setSoundMuted(this.videoMuted)
       this.setSoundVolume(volume)
 
