@@ -34,13 +34,14 @@
                      @click.native="exitSelectionMode"/>
         <div class="home-page__selection-toolbar-title">{{ selectedItemIds.length }} Selected</div>
         <icon-button :toggled="favoriteSet" 
+                     :disabled="!selectedItemIds.length"
                      icon="favorited"
                      icon-toggled="favorite"
                      @clicked="updateMedia([selectedItemIds, { favorite: !favoriteSet }]); favoriteSet = !favoriteSet"/>
 
         <transition name="fade-out-in" 
                     mode="out-in">
-          <icon-button v-show="selectedItemIds.length" 
+          <icon-button :disabled="!selectedItemIds.length" 
                        icon="delete"
                        @clicked="showDeleteDialog"/>
         </transition>
