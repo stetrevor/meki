@@ -171,6 +171,8 @@ export default {
     toTime,
 
     exit() {
+      const progress = this.progress
+      const lastWatched = new Date()
       const volume = this.$refs.video.volume * 100
 
       // Unload video
