@@ -38,10 +38,8 @@
           <icon-button v-show="!selectionMode && hovered" 
                        icon="folder"
                        @clicked="$emit('media-item-show-in-folder')"/>
-          <icon-button :toggled="!!mediaItem.lastWatched" 
-                       :disabled="selectionMode"
-                       icon="mark-watched"
-                       icon-toggled="watched"
+          <icon-button v-if="!selectionMode && mediaItem.progress !== mediaItem.duration" 
+                       icon="mark-as-complete"
                        @clicked="$emit('media-item-mark-as-complete')"/>
           <icon-button :toggled="mediaItem.favorite" 
                        :disabled="selectionMode"
@@ -74,8 +72,7 @@ import { toTime } from '../../filters'
 
 import '../../assets/icons/icon-favorite.svg'
 import '../../assets/icons/icon-favorited.svg'
-import '../../assets/icons/icon-mark-watched.svg'
-import '../../assets/icons/icon-watched.svg'
+import '../../assets/icons/icon-mark-as-complete.svg'
 import '../../assets/icons/icon-folder.svg'
 import '../../assets/icons/icon-play.svg'
 import '../../assets/icons/icon-selection-mode.svg'
