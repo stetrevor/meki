@@ -35,7 +35,7 @@ const getters = {
 
   currentMedia(state, getters) {
     switch (state.currentTab) {
-      case 'recents':
+      case 'continue':
         return {
           movies: getters.movies.filter(item => item.recentEpisodeId),
           'tv shows': getters.tvshows.filter(item => item.recentEpisodeId),

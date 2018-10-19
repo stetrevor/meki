@@ -141,7 +141,7 @@ export default {
     })
 
     const queries = {
-      recents: {
+      continue: {
         recentEpisodeId: { $exists: true, $ne: null },
       },
       favorites: { favorite: true },
