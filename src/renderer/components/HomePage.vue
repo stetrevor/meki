@@ -246,10 +246,14 @@ export default {
         },
         response => {
           if (response === 0) {
-            const imagePaths = this.videos
-              .filter(video => this.selectedItemIds.includes(video._id))
-              .map(video => video.thumbnailPath)
+            let imagePaths
+            if ('videos' in this.currentMedia) {
+              imagePaths = this.currentMedia['videos']
+                .filter(video => this.selectedItemIds.includes(video._id))
+                .map(video => video.thumbnailPath)
+            }
             this.deleteMedia([this.selectedItemIds, imagePaths])
+
             this.selectedItemIds = []
           }
         },
