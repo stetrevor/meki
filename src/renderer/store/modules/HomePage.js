@@ -36,6 +36,14 @@ function sortMediaByTitle(v1, v2) {
   return typeof a < typeof b ? -1 : 1
 }
 
+function sortMediaByLastWatched(m1, m2) {
+  const [lastWatched1, lastWatched2] = [m1.lastWatched, m2.lastWatched]
+
+  if (lastWatched1 === lastWatched2) return 0
+
+  return lastWatched1 < lastWatched2 ? 1 : -1
+}
+
 const getters = {
   movies(state) {
     return state.media
@@ -73,10 +81,18 @@ const getters = {
     switch (state.currentTab) {
       case 'continue':
         return {
-          movies: getters.movies.filter(item => item.recentEpisodeId),
-          'tv shows': getters.tvshows.filter(item => item.recentEpisodeId),
-          folders: getters.folders.filter(item => item.recentEpisodeId),
-          videos: getters.videos.filter(item => item.recentEpisodeId),
+          movies: getters.movies
+            .filter(item => item.recentEpisodeId)
+            .sort(sortMediaByLastWatched),
+          'tv shows': getters.tvshows
+            .filter(item => item.recentEpisodeId)
+            .sort(sortMediaByLastWatched),
+          folders: getters.folders
+            .filter(item => item.recentEpisodeId)
+            .sort(sortMediaByLastWatched),
+          videos: getters.videos
+            .filter(item => item.recentEpisodeId)
+            .sort(sortMediaByLastWatched),
         }
       case 'favorites':
         return {
