@@ -5,6 +5,7 @@ Vue.use(Router)
 
 import SplashScreen from '@/components/SplashScreen'
 import HomePage from '@/components/HomePage'
+import MediaItemDetails from '@/components/MediaItemDetails'
 import VideoPlayer from '@/components/VideoPlayer'
 
 export default new Router({
@@ -18,6 +19,11 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: HomePage,
+    },
+    {
+      path: '/details',
+      name: 'details',
+      component: MediaItemDetails,
     },
     {
       path: 'player',
