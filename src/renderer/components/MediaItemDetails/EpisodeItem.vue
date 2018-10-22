@@ -6,7 +6,7 @@
       <base-icon :icon="episode.icon"/>
     </div>
 
-    <div class="episode-item__title">{{ episode.title }}</div>
+    <div :class="['episode-item__title', { 'episode-item__title--hovered': hovered }]">{{ episode.title }}</div>
 
     <div v-show="hovered" 
          class="episode-item__info">
@@ -121,7 +121,15 @@ export default {
   }
 
   &__title {
+    grid-column: 2 / -1;
     padding: 0 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &__title--hovered {
+    grid-column: 2 / 3;
   }
 
   &__info {
