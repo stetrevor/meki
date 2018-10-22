@@ -4,6 +4,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import FolderItemDetails from './MediaItemDetails/FolderItemDetails'
 
 export default {
@@ -11,25 +13,16 @@ export default {
 
   components: { FolderItemDetails },
 
-  // props: {
-  //   mediaItem: {
-  //     type: Object,
-  //     required: true,
-  //   },
-  // },
-
   data() {
     return {
       detailsComponents: {
         folder: FolderItemDetails,
       },
-
-      mediaItem: {
-        title: 'Folder Item Title A Bit Long',
-        favorite: true,
-        mediaType: 'folder',
-      },
     }
   },
+
+  computed: mapState({
+    mediaItem: state => state.MediaItemDetails.currentMediaItem,
+  }),
 }
 </script>
