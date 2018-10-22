@@ -251,6 +251,10 @@ export default {
 
     open(item) {
       switch (item.mediaType) {
+        case 'folder':
+          this.switchCurrentMediaItem(item)
+          this.$router.push({ name: 'details' })
+          break
         case 'video':
           this.play(item)
           break
@@ -276,6 +280,7 @@ export default {
       'deleteMedia',
       'switchCurrentEpisodeId',
       'switchTab',
+      'switchCurrentMediaItem',
     ]),
   },
 }
