@@ -3,7 +3,7 @@
        @mouseenter="hovered = true" 
        @mouseleave="hovered = false">
     <div class="episode-item__icon">
-      <base-icon :icon="episode.icon"/>
+      <base-icon :icon="episode.isDir ? 'folder-filled' : 'video'"/>
     </div>
 
     <div :class="['episode-item__title', { 'episode-item__title--hovered': hovered }]">{{ episode.title }}</div>
