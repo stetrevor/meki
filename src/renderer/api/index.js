@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron'
 import { promisify } from 'util'
 
 import db from '../db'
+import readdir from 'fs-readdir-with-file-types'
 
 let setupVideoInfo = false
 let setupDeleteImageFile = false
@@ -74,5 +75,17 @@ export default {
     }
 
     return [ids, numRemoved]
+  },
+
+  async getEpisodes(mediaItemId) {
+    return await media.find({ mediaItemId })
+  },
+
+  async addEpisode(episode) {
+    return await media.insert(episode)
+  },
+
+  async getFileList(dir) {
+    return await readdir(dir)
   },
 }
