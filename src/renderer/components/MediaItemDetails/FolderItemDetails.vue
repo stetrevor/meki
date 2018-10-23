@@ -18,15 +18,20 @@
       </div>
       
       <div class="folder-item-details__content">
-        <episode-item v-for="n in 20" 
-                      :episode="{ title: n, icon: n % 2 ? 'folder-filled':'video' }"
-                      :key="n"/>
+        <episode-item v-for="episode in fileListWithEpisodeInfo" 
+                      :episode="episode"
+                      :key="episode.name"
+                      @click.native="open(episode)"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
+import { PathFuncMixin } from '../../mixins'
+
 import IconButton from '../Base/IconButton'
 import EpisodeItem from './EpisodeItem'
 
@@ -35,11 +40,57 @@ export default {
 
   components: { IconButton, EpisodeItem },
 
+  mixins: [PathFuncMixin],
+
   props: {
     mediaItem: {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      currentDir: this.mediaItem.filePath,
+    }
+  },
+
+  computed: {
+    fileListWithEpisodeInfo() {
+      return this.fileList
+        .filter(entry => !entry.name.startsWith('.'))
+        .map(entry => {
+          const isDir = entry.isDirectory()
+          const title = entry.name
+          const info = this.episodes.find(episode =>
+            this.isSamePath(episode.filePath, this.currentDir, entry.name),
+          )
+          return { isDir, title, info }
+        })
+    },
+
+    ...mapGetters(['episodes', 'fileList']),
+  },
+
+  created() {
+    this.getEpisodes(this.mediaItem._id)
+    if (this.mediaItem.mediaType === 'folder') {
+      this.getFileList(this.mediaItem.filePath)
+    }
+  },
+
+  methods: {
+    open(episode) {
+      if (episode.isDir) {
+        console.log()
+        this.currentDir = this.pathJoin(this.currentDir, episode.title)
+        this.getFileList(this.currentDir)
+      } else {
+        // Open Media Player
+      }
+    },
+
+    ...mapActions(['getEpisodes', 'getFileList']),
   },
 }
 </script>
