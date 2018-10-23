@@ -1,4 +1,4 @@
-export function sortMediaByTitle(v1, v2) {
+export function alphanumSort(v1, v2) {
   const [t1, t2] = [v1.title, v2.title]
   if (t1 == t2) return 0
 

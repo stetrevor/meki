@@ -1,7 +1,7 @@
 import path from 'path'
 
 import api from '../../api'
-import { sortMediaByTitle } from '../utils'
+import { alphanumSort as sortMediaByTitle } from '../utils'
 
 const getQuery = mediaType => ({
   mediaType: mediaType,
