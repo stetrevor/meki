@@ -86,6 +86,12 @@ export default {
   },
 
   async getFileList(dir) {
-    return await readdir(dir)
+    const entries = await readdir(dir)
+
+    return entries.filter(
+      entry =>
+        (!entry.isDirectory() && entry.name.endsWith('.mp4')) ||
+        entry.isDirectory(),
+    )
   },
 }
