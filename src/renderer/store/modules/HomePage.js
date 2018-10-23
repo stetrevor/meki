@@ -1,7 +1,7 @@
 import path from 'path'
 
 import api from '../../api'
-import { alphanumSort as sortMediaByTitle } from '../utils'
+import { alphanumSort } from '../utils'
 
 const getQuery = mediaType => ({
   mediaType: mediaType,
@@ -24,6 +24,10 @@ const state = {
   tabs: ['continue', 'favorites', 'movies', 'tv shows', 'videos', 'private'],
   currentTab: null,
   queries,
+}
+
+function sortMediaByTitle(m1, m2) {
+  return alphanumSort(m1.title, m2.title)
 }
 
 function sortMediaByLastWatched(m1, m2) {

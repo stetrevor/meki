@@ -31,6 +31,10 @@ const mutations = {
   },
 }
 
+function sortFileName(entry1, entry2) {
+  return alphanumSort(entry1.name, entry2.name)
+}
+
 const actions = {
   switchCurrentMediaItem({ commit }, mediaItem) {
     commit('SWITCH_CURRENT_MEDIA_ITEM', mediaItem)
@@ -47,7 +51,7 @@ const actions = {
     const dirs = fileList.filter(entry => entry.isDirectory())
     const files = fileList.filter(entry => !entry.isDirectory())
 
-    const sorted = dirs.sort(alphanumSort).concat(files.sort(alphanumSort))
+    const sorted = dirs.sort(sortFileName).concat(files.sort(sortFileName))
     commit('RECEIVE_FILE_LIST', sorted)
   },
 }
