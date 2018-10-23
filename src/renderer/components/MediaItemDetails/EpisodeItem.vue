@@ -28,7 +28,7 @@
   </div>
 </template>
 
-.<script>
+<script>
 import BaseIcon from '../Base/BaseIcon'
 import IconButton from '../Base/IconButton'
 import ProgressBar from '../Base/ProgressBar'
