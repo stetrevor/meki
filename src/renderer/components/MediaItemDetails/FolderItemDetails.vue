@@ -6,6 +6,15 @@
                      @clicked="$router.go(-1)"/>
 
         <div class="folder-item-details__title">{{ mediaItem.title }}</div>
+
+        <icon-button v-show="currentDir !== mediaItem.filePath" 
+                     class="folder-item-details__header-action"
+                     icon="back-root"
+                     @clicked="backToRoot"/>
+        <icon-button v-show="currentDir !== mediaItem.filePath" 
+                     class="folder-item-details__header-action"
+                     icon="back-parent"
+                     @clicked="backToParent"/>
       
         <icon-button class="folder-item-details__header-action" 
                      icon="folder"
@@ -89,6 +98,16 @@ export default {
       }
     },
 
+    backToRoot() {
+      this.currentDir = this.mediaItem.filePath
+      this.getFileList(this.currentDir)
+    },
+
+    backToParent() {
+      this.currentDir = this.pathJoin(this.currentDir, '..')
+      this.getFileList(this.currentDir)
+    },
+
     ...mapActions(['getEpisodes', 'getFileList']),
   },
 }
@@ -117,7 +136,7 @@ export default {
     grid-row: 1 / 2;
     padding: 0 16px;
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: auto 1fr auto auto auto auto;
     grid-gap: 8px;
     align-items: center;
     border-bottom: 1px solid
