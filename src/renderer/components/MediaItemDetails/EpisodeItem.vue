@@ -8,7 +8,7 @@
 
     <div :class="['episode-item__title', { 'episode-item__title--hovered': hovered }]">{{ episode.title }}</div>
 
-    <div v-show="hovered" 
+      <div v-if="hovered && episode.info" 
          class="episode-item__info">
       <div class="episode-item__duration">{{ episode.duration | toTime }}</div>
       <progress-bar :progress="episode.progress" 
