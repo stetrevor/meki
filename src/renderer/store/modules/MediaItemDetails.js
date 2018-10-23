@@ -1,4 +1,5 @@
 import api from '../../api'
+import { alphanumSort } from '../utils'
 
 const state = {
   currentMediaItem: null,
@@ -42,7 +43,12 @@ const actions = {
 
   async getFileList({ commit }, dir) {
     const fileList = await api.getFileList(dir)
-    commit('RECEIVE_FILE_LIST', fileList)
+
+    const dirs = fileList.filter(entry => entry.isDirectory())
+    const files = fileList.filter(entry => !entry.isDirectory())
+
+    const sorted = dirs.sort(alphanumSort).concat(files.sort(alphanumSort))
+    commit('RECEIVE_FILE_LIST', sorted)
   },
 }
 
