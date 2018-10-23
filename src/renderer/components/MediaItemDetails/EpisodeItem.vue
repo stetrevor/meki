@@ -8,23 +8,26 @@
 
     <div :class="['episode-item__title', { 'episode-item__title--hovered': hovered }]">{{ episode.title }}</div>
 
+    <transition name="fade-out-in" 
+                mode="out-in">
       <div v-if="hovered && episode.info" 
-         class="episode-item__info">
-      <div class="episode-item__duration">{{ episode.duration | toTime }}</div>
-      <progress-bar :progress="episode.progress" 
-                    :max="episode.duration" 
-                    :colored="true"
-                    class="episode-item__progress"/>
-      <div class="episode-item__progress-message">{{ progressMsg }}</div>
+           class="episode-item__info">
+        <div class="episode-item__duration">{{ episode.duration | toTime }}</div>
+        <progress-bar :progress="episode.progress" 
+                      :max="episode.duration" 
+                      :colored="true"
+                      class="episode-item__progress"/>
+        <div class="episode-item__progress-message">{{ progressMsg }}</div>
 
-      <icon-button v-show="episode.progress !== episode.duration" 
-                   icon="mark-as-complete"
-                   @clicked="$emit('episode-item-mark-as-complete')"/>
-      <icon-button :toggled="episode.favorite" 
-                   icon="favorite"
-                   icon-toggled="favorited"
-                   @clicked="$emit('episode-item-favorite')"/>
-    </div>
+        <icon-button v-show="episode.progress !== episode.duration" 
+                     icon="mark-as-complete"
+                     @clicked="$emit('episode-item-mark-as-complete')"/>
+        <icon-button :toggled="episode.favorite" 
+                     icon="favorite"
+                     icon-toggled="favorited"
+                     @clicked="$emit('episode-item-favorite')"/>
+      </div>
+    </transition>
   </div>
 </template>
 
