@@ -82,7 +82,6 @@ export default {
   methods: {
     open(episode) {
       if (episode.isDir) {
-        console.log()
         this.currentDir = this.pathJoin(this.currentDir, episode.title)
         this.getFileList(this.currentDir)
       } else {
