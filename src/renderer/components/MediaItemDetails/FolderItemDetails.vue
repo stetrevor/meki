@@ -66,16 +66,14 @@ export default {
 
   computed: {
     fileListWithEpisodeInfo() {
-      return this.fileList
-        .filter(entry => !entry.name.startsWith('.'))
-        .map(entry => {
-          const isDir = entry.isDirectory()
-          const title = entry.name
-          const info = this.episodes.find(episode =>
-            this.isSamePath(episode.filePath, this.currentDir, entry.name),
-          )
-          return { isDir, title, info }
-        })
+      return this.fileList.map(entry => {
+        const isDir = entry.isDirectory()
+        const title = entry.name
+        const info = this.episodes.find(episode =>
+          this.isSamePath(episode.filePath, this.currentDir, entry.name),
+        )
+        return { isDir, title, info }
+      })
     },
 
     ...mapGetters(['episodes', 'fileList']),
