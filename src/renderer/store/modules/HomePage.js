@@ -1,6 +1,7 @@
 import path from 'path'
 
 import api from '../../api'
+import { alphanumSort } from '../utils'
 
 const getQuery = mediaType => ({
   mediaType: mediaType,
@@ -25,15 +26,8 @@ const state = {
   queries,
 }
 
-function sortMediaByTitle(v1, v2) {
-  const [t1, t2] = [v1.title, v2.title]
-  if (t1 == t2) return 0
-
-  if (typeof t1 === typeof t2) {
-    return t1 < t2 ? -1 : 1
-  }
-
-  return typeof a < typeof b ? -1 : 1
+function sortMediaByTitle(m1, m2) {
+  return alphanumSort(m1.title, m2.title)
 }
 
 function sortMediaByLastWatched(m1, m2) {

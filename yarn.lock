@@ -3025,6 +3025,10 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+currify@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/currify/-/currify-3.0.0.tgz#ec5b18fe65c2b3b08daba7f2a75a01063b2c89c2"
+
 custom-event@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/custom-event/-/custom-event-1.0.1.tgz#5d02a46850adf1b4a317946a3928fccb5bfd0425"
@@ -4438,6 +4442,12 @@ fs-minipass@^1.2.5:
   resolved "https://registry.yarnpkg.com/fs-minipass/-/fs-minipass-1.2.5.tgz#06c277218454ec288df77ada54a03b8702aacb9d"
   dependencies:
     minipass "^2.2.1"
+
+fs-readdir-with-file-types@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/fs-readdir-with-file-types/-/fs-readdir-with-file-types-1.0.2.tgz#ac9536a16a48ea12825bbc4a2cee47a79b900774"
+  dependencies:
+    currify "^3.0.0"
 
 fs-write-stream-atomic@^1.0.8:
   version "1.0.10"

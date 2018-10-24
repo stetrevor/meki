@@ -39,6 +39,7 @@
     "ffmpeg-static": "^2.3.0",
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
+    "fs-readdir-with-file-types": "^1.0.2",
     "hash.js": "^1.1.5",
     "nedb": "^1.8.0",
     "node-sass": "^4.9.3",
