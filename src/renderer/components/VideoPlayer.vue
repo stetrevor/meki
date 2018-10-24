@@ -103,17 +103,6 @@ import SubtitleMenu from './VideoPlayer/SubtitleMenu'
 
 import { toTime } from '../filters'
 
-import '../assets/icons/icon-back.svg'
-import '../assets/icons/icon-logo.svg'
-import '../assets/icons/icon-play-arrow.svg'
-import '../assets/icons/icon-pause.svg'
-import '../assets/icons/icon-volume.svg'
-import '../assets/icons/icon-muted.svg'
-import '../assets/icons/icon-subtitle.svg'
-import '../assets/icons/icon-fullscreen.svg'
-import '../assets/icons/icon-fullscreen-exit.svg'
-import '../assets/icons/icon-play.svg'
-
 export default {
   name: 'VideoPlayer',
 

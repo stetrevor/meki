@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import '../assets/logo.svg'
-
 export default {
   name: 'SplashScreen',
 }

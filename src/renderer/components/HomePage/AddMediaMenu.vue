@@ -14,11 +14,6 @@
 <script>
 import BaseIcon from '../Base/BaseIcon'
 
-import '../../assets/icons/icon-movie.svg'
-import '../../assets/icons/icon-tv.svg'
-import '../../assets/icons/icon-folder-filled.svg'
-import '../../assets/icons/icon-video.svg'
-
 export default {
   name: 'AddMediaMenu',
 

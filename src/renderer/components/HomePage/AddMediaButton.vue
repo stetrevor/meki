@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import '../../assets/icons/icon-add.svg'
-
 export default {
   name: 'AddMediaButton',
 }

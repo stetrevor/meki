@@ -13,9 +13,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 import IconButton from './IconButton'
 
-import '../../assets/icons/icon-fullscreen.svg'
-import '../../assets/icons/icon-fullscreen-exit.svg'
-
 export default {
   name: 'FullscreenToggle',
 

@@ -70,13 +70,6 @@ import ProgressBar from '../Base/ProgressBar'
 
 import { toTime } from '../../filters'
 
-import '../../assets/icons/icon-favorite.svg'
-import '../../assets/icons/icon-favorited.svg'
-import '../../assets/icons/icon-mark-as-complete.svg'
-import '../../assets/icons/icon-folder.svg'
-import '../../assets/icons/icon-play.svg'
-import '../../assets/icons/icon-selection-mode.svg'
-
 export default {
   name: 'VideoItem',
 

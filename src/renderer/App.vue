@@ -17,6 +17,13 @@ import path from 'path'
 import Vue from 'vue'
 import { mapActions } from 'vuex'
 
+function importAll(r) {
+  r.keys().forEach(r)
+}
+
+importAll(require.context('./assets/icons', false, /\.svg$/))
+importAll(require.context('./assets', false, /\.svg$/))
+
 export default {
   name: 'Paw',
 

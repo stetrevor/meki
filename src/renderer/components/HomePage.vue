@@ -110,16 +110,6 @@ import FolderItem from './HomePage/FolderItem'
 import SelectionMenu from './HomePage/SelectionMenu'
 import AddMediaMenu from './HomePage/AddMediaMenu'
 
-import '../assets/logo.svg'
-import '../assets/icons/icon-settings.svg'
-import '../assets/icons/icon-search.svg'
-import '../assets/icons/icon-selection-mode.svg'
-import '../assets/icons/icon-cancel.svg'
-import '../assets/icons/icon-favorite.svg'
-import '../assets/icons/icon-favorited.svg'
-import '../assets/icons/icon-delete.svg'
-import '../assets/icons/icon-more.svg'
-
 export default {
   name: 'HomePage',
 

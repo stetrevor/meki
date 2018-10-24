@@ -46,9 +46,6 @@ import { mapGetters, mapActions } from 'vuex'
 
 import IconButton from '../Base/IconButton'
 
-import '../../assets/icons/icon-checked.svg'
-import '../../assets/icons/icon-add.svg'
-
 export default {
   name: 'SubtitleMenu',
 
