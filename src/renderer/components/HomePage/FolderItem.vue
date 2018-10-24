@@ -39,11 +39,6 @@
 import BaseIcon from '../Base/BaseIcon'
 import IconButton from '../Base/IconButton'
 
-import '../../assets/icons/icon-folder-filled.svg'
-import '../../assets/icons/icon-checked.svg'
-import '../../assets/icons/icon-folder.svg'
-import '../../assets/icons/icon-favorite.svg'
-
 export default {
   name: 'FolderItem',
 
